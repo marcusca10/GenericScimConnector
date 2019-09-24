@@ -122,7 +122,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         [HttpPatch("{id}")]
         public IActionResult Patch()
         {
-            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
+            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status405MethodNotAllowed);
         }
     }
 }
