@@ -1,0 +1,1144 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ScimReferenceApi</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers.GroupsController">
+            <summary>
+            Api for Groups resource.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers.GroupsController.#ctor(Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ScimContext)">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers.GroupsController.Get">
+            <summary>
+            GET: api/Groups
+            Return list of all Groups from persistent storage.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers.GroupsController.Get(System.String)">
+            <summary>
+            GET: api/Groups/5
+            Return Group identified by id, if it exists.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers.GroupsController.Post(Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Group)">
+            <summary>
+            POST: api/Groups
+            Creates a new Group if the item has non-null unique displayname.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers.GroupsController.Put(System.String,Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Group)">
+            <summary>
+            PUT: api/Groups/5
+            Replace all values for given Group, if it exists.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers.GroupsController.Delete(System.String)">
+            <summary>
+            DELETE: api/Groups/5
+            Remove the given Group from persistent storage, if it exists.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers.KeyController">
+            <summary>
+            Class for handeling Key endpoint. 
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers.KeyController.POST(Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.User)">
+            <summary>
+            Response to HTTP POST. Generates a key and returns
+            TODO: remove or make secure.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers.UsersController">
+            <summary>
+            Api for Users resource.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers.UsersController.#ctor(Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ScimContext)">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers.UsersController.Get">
+            <summary>
+            GET: api/Users
+            Return list of all Users from persistent storage.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers.UsersController.Get(System.String)">
+            <summary>
+            GET: api/Users/5
+            Return User identified by given id. If not found, return Not Found status.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers.UsersController.Post(Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.User)">
+            <summary>
+            POST: api/Users
+            Create a new user if given item has non-null unique username.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers.UsersController.Put(System.String,Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.User)">
+            <summary>
+            PUT: api/Users/5
+            Replace all values for the given User, if it exists.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers.UsersController.Delete(System.String)">
+            <summary>
+            DELETE: api/Users/5
+            Remove the given User from persistent storage, if it exists.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Program">
+            <summary>
+            Main program.
+            
+            A reference implementation for https://tools.ietf.org/html/rfc7644 and https://tools.ietf.org/html/rfc7643
+            also look at: http://www.simplecloud.info/
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Program.Main(System.String[])">
+            <summary>
+            Entry point.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Program.CreateWebHostBuilder(System.String[])">
+            <summary>
+            Create web host builder.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames">
+            <summary>
+            Attribute names for DataContracts.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.AccountEnabled">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Active">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Addresses">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Attributes">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.AuthenticationSchemes">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Bulk">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.CaseExact">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.ChangePassword">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.ChangePollingInterval">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.ChangeWatermark">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.ChangeWatermarkLifetime">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Country">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.CostCenter">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Created">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Department">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Description">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Display">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.DisplayName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Division">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Documentation">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.ElectronicMailAddresses">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.EmployeeNumber">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Endpoint">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.EntityTag">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Expiry">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.ExtensionEnterpriseUser2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.ExternalIdentifier">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.FamilyName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Filter">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.GivenName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Formatted">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.HonorificPrefix">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.HonorificSuffix">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Identifier">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.IsDeleted">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.LastModified">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Locale">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Locality">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Location">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.MailEnabled">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.MailNickname">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Manager">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.ManagerId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.MaximumOperations">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.MaximumPayloadSize">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Members">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Metadata">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Mutability">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Nickname">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.NotBefore">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.OnPremisesSecurityIdentifier">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Organization">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Other">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Password">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Patch">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Path">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.PhoneNumbers">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Photos">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Plural">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.PostalCode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.PreferredLanguage">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Primary">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.ProfileUrl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.ProxyAddresses">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Region">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Roles">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Required">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.ResourceType">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Returned">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Schema">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Schemas">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.SecurityEnabled">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Sort">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Specification">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.StreetAddress">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Supported">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.TimeZone">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Title">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Type">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Uniqueness">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.UserName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.UserType">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Value">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Version">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Watermark">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.GroupAttributes.Member">
+            <summary>
+            Members, of a Group.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.GroupAttributes.Member.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.GroupAttributes.Member.TypeName">
+            <summary>
+            Get or set TypeName.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.GroupAttributes.Member.Value">
+            <summary>
+            Get or set Value.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Metadata">
+            <summary>
+            Metadata, of a Resource.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Metadata.Id">
+            <summary>
+            Get or set Id Primary Key for DataBase.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Metadata.ResourceType">
+            <summary>
+            Get or set ResourceType.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Metadata.Created">
+            <summary>
+            Get or set Created. The datetime the resource was added.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Metadata.LastModified">
+            <summary>
+            Get or set LastModified. The last datetime the resource was updated.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.TypedItem">
+            <summary>
+            TypedItem, for e.g., a Member
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.TypedItem.Id">
+            <summary>
+            Get or set Id.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.TypedItem.ItemType">
+            <summary>
+            Get or set ItemTye.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.TypedItem.Primary">
+            <summary>
+            Get or set Primary.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.TypedValue">
+            <summary>
+            Value of a TypedItem
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.TypedValue.Value">
+            <summary>
+            Get or set Value.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Address">
+            <summary>
+            Address, of a User.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Address.Home">
+            <summary>
+            Adress location home.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Address.Other">
+            <summary>
+            Adress location other.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Address.Untyped">
+             <summary>
+            Address location untyped.
+             </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Address.Work">
+            <summary>
+            Address location work.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Address.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Address.Country">
+            <summary>
+            Get or set country.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Address.Formatted">
+            <summary>
+            Get or set Formatted Address.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Address.Locality">
+            <summary>
+            Get or set Locality (for localizing lang, currency etc.)
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Address.PostalCode">
+            <summary>
+            Get or set PostalCode.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Address.Region">
+            <summary>
+            Get or set Region.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Address.StreetAddress">
+            <summary>
+            Get or set StreetAddress.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ElectronicMailAddress">
+            <summary>
+            Email, of a User.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ElectronicMailAddress.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ElectronicMailAddress.Home">
+            <summary>
+            home email.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ElectronicMailAddress.Other">
+            <summary>
+            other email.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ElectronicMailAddress.Work">
+            <summary>
+            work email.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Name">
+            <summary>
+            Name, of a User.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Name.Id">
+            <summary>
+            Get or set Id database primary key.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Name.Formatted">
+            <summary>
+            Get or set Formatted the full Name.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Name.FamilyName">
+            <summary>
+            Get or set Familyname (Last name).
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Name.GivenName">
+            <summary>
+            Get or set GivenName (First name).
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Name.HonorificPrefix">
+            <summary>
+            Get or set HonorificPrefix. e.g. Ms. Mr. Dr.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Name.HonorificSuffix">
+            <summary>
+            Get or set HonorificSuffix. e.g. II
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.PhoneNumber">
+            <summary>
+            Phone number, of a User.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.PhoneNumber.Fax">
+            <summary>
+            Phone type fax.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.PhoneNumber.Home">
+            <summary>
+            Phone type home.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.PhoneNumber.Mobile">
+            <summary>
+            Phone type mobile.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.PhoneNumber.Other">
+            <summary>
+            Phone type other.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.PhoneNumber.Pager">
+            <summary>
+            Phone type pager.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.PhoneNumber.Work">
+            <summary>
+            Phone type work.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.PhoneNumber.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Role">
+            <summary>
+            Class for tracking User Role by extedning TypedItem.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Role.Display">
+            <summary>
+            Get or set Display.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Role.Value">
+            <summary>
+            Get or set Value.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Group">
+            <summary>
+            Model for Core 2 Group.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Group.#ctor">
+            <summary>
+            Consructor.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Group.Metadata">
+            <summary>
+            Get or set Metadata.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Group.DisplayName">
+            <summary>
+            Get or set DisplayName.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Group.Members">
+            <summary>
+            Get or set Members.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ListResponse`1">
+            <summary>
+            List response, for a list of Resources.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ListResponse`1.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ListResponse`1.Identifier">
+            <summary>
+            Get or set Identifier.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ListResponse`1.TotalResults">
+            <summary>
+            Total Count of results.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ListResponse`1.StartIndex">
+            <summary>
+            Offset index (starts at 1)
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ListResponse`1.ItemsPerPage">
+            <summary>
+            Number of items returned by page
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ListResponse`1.Resources">
+            <summary>
+            The list of Resources being returned.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Resource">
+            <summary>
+            A Resource per RFC. An abstract class for objects to be synced across.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Resource.ExternalIdentifier">
+            <summary>
+            Get or set external identifier.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Resource.Identifier">
+            <summary>
+            Get or set Identifier for persistent storage lookups.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemaIdentifiers">
+            <summary>
+            Class for building Schema strings.
+            Should we take away 1.0 strings?
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemaIdentifiers.Extension">
+            <summary>
+            For adding extension to schema id.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemaIdentifiers.None">
+            <summary>
+            For adding none to schema id.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemaIdentifiers.PrefixTypes2">
+            <summary>
+            Prefix for scim.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemaIdentifiers.PrefixTypesActiveDirectory2">
+            <summary>
+            Active Directory prefix types 2.0
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemaIdentifiers.Changed">
+            <summary>
+            Schema Id for changed resource.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemaIdentifiers.Core2EnterpriseUser">
+            <summary>
+            Creates Schema Id string for core2 enterprise user.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemaIdentifiers.Core2EnterpriseUserDomainControllerServices">
+            <summary>
+            Schema Id for Core 2 enterprise user.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemaIdentifiers.Core2Group">
+            <summary>
+            Creates Schema Id for core 2 group.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemaIdentifiers.Core2ResourceType">
+            <summary>
+            Creates Id for Enterprise Resource.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemaIdentifiers.Core2ServiceConfiguration">
+            <summary>
+            Creates Id for core 2 service provider configuration.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemaIdentifiers.Core2User">
+            <summary>
+            Creates Scema Id for Core 2 User.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemaIdentifiers.WindowsAzureActiveDirectory2Group">
+            <summary>
+            For Atribute names.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemaIdentifiers.WindowsAzureActiveDirectory2User">
+            <summary>
+            For Atribute names.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemaIdentifiers.ListResponse">
+            <summary>
+            Schema Id for List Response for query resources.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Schematized">
+            <summary>
+            Abstract class to use for objects that have a Schema.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Schematized.#ctor">
+            <summary>
+            Schematized constructor.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Schematized.Schemas">
+            <summary>
+            Get schemas.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Schematized.AddSchema(System.String)">
+            <summary>
+            If the new schemaIdentifier is not null or already included it is added to the list.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Schematized.Is(System.String)">
+            <summary>
+            Checks the schemas to see if the passed scheme is included.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Schematized.OnInitialized">
+            <summary>
+            Sets schemasWrapper on construction.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ScimContext">
+            <summary>
+            Persistent storage context.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ScimContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ScimContext})">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ScimContext.Users">
+            <summary>
+            Get or set Users.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ScimContext.Groups">
+            <summary>
+            Get or set Groups.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Types">
+            <summary>
+            Types.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Types.Change">
+            <summary>
+            Change.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Types.Dynamic">
+            <summary>
+            Dynamic.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Types.Group">
+            <summary>
+            Group.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Types.ResourceType">
+            <summary>
+            ResourceType.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Types.Role">
+            <summary>
+            Role.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Types.ServiceProviderConfiguration">
+            <summary>
+            ServiceProviderConfig.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Types.User">
+            <summary>
+            User.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.User">
+            <summary>
+            Model of Core 2 User.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.User.UserName">
+            <summary>
+            Get or set user name.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.User.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.User.Active">
+            <summary>
+            Get or set Active.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.User.Addresses">
+            <summary>
+            Get or set Addresses.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.User.DisplayName">
+            <summary>
+            Get or set DisplayName, should be human readable.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.User.ElectronicMailAddresses">
+            <summary>
+            Get or set ElectronicMailAddresses, JSON name email.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.User.Metadata">
+            <summary>
+            Get or set Metadata.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.User.Name">
+            <summary>
+            Get or set Name.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.User.PhoneNumbers">
+            <summary>
+            Get or set PhoneNumbers.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.User.PreferredLanguage">
+            <summary>
+            Get or set PreferredLanguage.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.User.Roles">
+            <summary>
+            Get or set Roles.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.User.Title">
+            <summary>
+            Get or set Title
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.UserExtensions">
+            <summary>
+            User extentions for queyable items
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.UserExtensions.CompleteUsers(Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.ScimContext)">
+            <summary>
+            Returns fully populated Users 
+            </summary>
+        </member>
+        <member name="T:Microsoft.AzureAD.Provisioning.ScimReference.Api.Startup">
+            <summary>
+            Startup.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AzureAD.Provisioning.ScimReference.Api.Startup.Configuration">
+            <summary>
+            Configuration.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AzureAD.Provisioning.ScimReference.Api.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline. 
+            </summary>
+        </member>
+    </members>
+</doc>
