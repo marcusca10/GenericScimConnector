@@ -75,8 +75,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
 			_context.Groups.Add(item);
 			await _context.SaveChangesAsync().ConfigureAwait(false);
-            _log.LogInformation(item.DisplayName);
-            Response.ContentType = "application/scim+json";
+			Response.ContentType = "application/scim+json";
 			return CreatedAtAction(nameof(Get), new { id = item.DisplayName }, item);
 		}
 
@@ -94,8 +93,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
 			_context.Entry(item).State = EntityState.Modified;
 			await _context.SaveChangesAsync().ConfigureAwait(false);
-            _log.LogInformation(item.DisplayName);
-            Response.ContentType = "application/scim+json";
+			Response.ContentType = "application/scim+json";
 			return Ok(item);
 		}
 
@@ -115,8 +113,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
 			_context.Groups.Remove(Group);
 			await _context.SaveChangesAsync().ConfigureAwait(false);
-            _log.LogInformation(Group.DisplayName);
-            Response.ContentType = "application/scim+json";
+			Response.ContentType = "application/scim+json";
 			return NoContent();
 		}
         /// <summary>

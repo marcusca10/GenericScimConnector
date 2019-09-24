@@ -80,7 +80,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 		{
 			if (item.UserName == null)
 			{
-				return BadRequest(new { detail = "No Username" });
+				return BadRequest(new { detail = "No Username", status = "400" });
 			}
 
 			var Exists = _context.Users.Any(x => x.UserName == item.UserName);
@@ -111,12 +111,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 			}
 
 			var User = _context.Users
-				.Where(p => p.Identifier == item.Identifier).Include(u => u.Metadata)
-					.Include(u => u.Name)
+				.Where(p => p.Identifier == item.Identifier).Include("Metadata")
+					.Include("Name")
 					.Include("ElectronicMailAddresses")
-					.Include(u => u.PhoneNumbers)
-					.Include(u => u.Roles)
-					.Include(p => p.Addresses)
+					.Include("PhoneNumbers")
+					.Include("Roles")
+					.Include("Addresses")
 				.SingleOrDefault();
 
 			if (User == null)
@@ -153,7 +153,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
 			_context.Users.Remove(User);
 			await _context.SaveChangesAsync().ConfigureAwait(false);
-            _log.LogInformation(User.UserName);
+            _log.LogInformation(id);
             Response.ContentType = "application/scim+json";
 			return NoContent();
 		}
