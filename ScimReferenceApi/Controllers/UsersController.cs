@@ -153,7 +153,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
 			_context.Users.Remove(User);
 			await _context.SaveChangesAsync().ConfigureAwait(false);
-            _log.LogInformation(item.UserName);
+            _log.LogInformation(User.UserName);
             Response.ContentType = "application/scim+json";
 			return NoContent();
 		}
