@@ -6,6 +6,7 @@ using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -58,7 +59,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 		/// <summary>
 		/// This method gets called by the runtime. Use this method to configure the HTTP request pipeline. 
 		/// </summary>
-		public static void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		public static void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 		{
 			if (env.IsDevelopment())
 			{
@@ -69,7 +70,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 				app.UseHsts();
 			}
 
-			app.UseHttpsRedirection();
+            loggerFactory.AddFile("Logs/ScimApp-{Date}.txt");
+            app.UseHttpsRedirection();
 			app.UseAuthentication();
 			app.UseMvc();
 		}

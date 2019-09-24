@@ -2,28 +2,32 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
-	/// <summary>
-	/// Api for Users resource.
-	/// </summary>
-	[Route("api/Users")]
+
+    /// <summary>
+    /// Api for Users resource.
+    /// </summary>
+    [Route("api/Users")]
 	[ApiController]
 	[Authorize]
 	public class UsersController : ControllerBase
 	{
 		private readonly ScimContext _context;
+        private readonly ILogger<UsersController> _log;
 
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		public UsersController(ScimContext context)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public UsersController(ScimContext context, ILogger<UsersController> log)
 		{
 			_context = context;
+            _log = log;
 		}
 
 		/// <summary>
@@ -89,8 +93,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 			item.Metadata.LastModified = DateTime.Now;
 			_context.Users.Add(item);
 			await _context.SaveChangesAsync().ConfigureAwait(false);
-
-			Response.ContentType = "application/scim+json";
+            _log.LogInformation(item.UserName);
+            Response.ContentType = "application/scim+json";
 			return CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
 		}
 
@@ -129,7 +133,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 			User.Addresses = item.Addresses;
 			_context.Entry(User).CurrentValues.SetValues(item);
 			await _context.SaveChangesAsync().ConfigureAwait(false);
-			Response.ContentType = "application/scim+json";
+            _log.LogInformation(item.UserName);
+            Response.ContentType = "application/scim+json";
 			return Ok(User);
 		}
 
@@ -148,7 +153,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
 			_context.Users.Remove(User);
 			await _context.SaveChangesAsync().ConfigureAwait(false);
-			Response.ContentType = "application/scim+json";
+            _log.LogInformation(item.UserName);
+            Response.ContentType = "application/scim+json";
 			return NoContent();
 		}
 
