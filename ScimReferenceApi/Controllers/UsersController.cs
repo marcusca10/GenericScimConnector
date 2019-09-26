@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,7 +18,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
     /// </summary>
     [Route("api/Users")]
 	[ApiController]
-	[Authorize]
+	//[Authorize]
 	public class UsersController : ControllerBase
 	{
 		private readonly ScimContext _context;
@@ -162,9 +165,65 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         /// Method For PATCH User.
         /// </summary>
         [HttpPatch("{id}")]
-        public IActionResult Patch()
+        public IActionResult Patch(string id, [FromBody]PatchRequest2Compliant patchRequest)
         {
-            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
+
+
+
+            if (null == patchRequest)
+            {
+                string unsupportedPatchTypeName = patchRequest.GetType().FullName;
+                throw new NotSupportedException(unsupportedPatchTypeName);
+            }
+
+
+
+
+
+                var usertoModify =  _context.CompleteUsers().FirstOrDefault((user) => user.Identifier.Equals(id, StringComparison.Ordinal));
+                if (usertoModify != null)
+                {
+                    foreach (var op in patchRequest.Operations)
+                    {
+
+
+
+                        if (op is PatchOperation2SingleValued singleValued)
+                        {
+
+
+
+                            var patchOp = PatchOperation.Create(getOperationName(singleValued.OperationName), singleValued.Path.ToString(), singleValued.Value);
+
+
+
+                            usertoModify.Apply(patchOp);
+                        }
+                       /* else if (op is PatchOperation patchOp)
+                        {
+                            usertoModify.Apply(patchOp);
+                        }*/
+                    }
+                }
+
+            _context.SaveChanges();
+
+
+            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status405MethodNotAllowed);
+        }
+        private static OperationName getOperationName(string operationName)
+        {
+            switch (operationName.ToLower(CultureInfo.CurrentCulture))
+            {
+                case "add":
+                    return OperationName.Add;
+                case "remove":
+                    return OperationName.Remove;
+                case "replace":
+                    return OperationName.Replace;
+                default:
+                    throw new NotImplementedException("Invalid operatoin Name" + operationName);
+            }
         }
     }
 }
