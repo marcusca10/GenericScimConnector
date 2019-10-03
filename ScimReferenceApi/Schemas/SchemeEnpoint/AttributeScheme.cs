@@ -1,6 +1,7 @@
 ﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemeEnpoint;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
@@ -88,7 +89,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
 
             set
             {
-                this.dataType = (AttributeDataType)Enum.Parse(typeof(AttributeDataType), value);
+				var stringValue = value.Substring(0, 1).ToUpper(CultureInfo.CurrentCulture) + value.Substring(1).ToLower(CultureInfo.CurrentCulture);
+                this.dataType = (AttributeDataType)Enum.Parse(typeof(AttributeDataType), stringValue);
                 this.dataTypeValue = value;
             }
         }

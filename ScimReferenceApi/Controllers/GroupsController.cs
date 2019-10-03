@@ -33,8 +33,21 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<Group>>> Get()
 		{
-			Response.ContentType = "application/scim+json";
-			return Ok(await _context.Groups.ToListAsync().ConfigureAwait(false));
+            List<Group> groups = await _context.Groups.ToListAsync().ConfigureAwait(false);
+
+            string query = Request.QueryString.ToUriComponent();
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                groups = new FilterGroups(_context).FilterGen(query);
+            }
+            else
+            {
+                groups = await _context.Groups.ToListAsync().ConfigureAwait(false);
+            }
+
+
+            Response.ContentType = "application/scim+json";
+			return Ok(groups);
 		}
 
 		/// <summary>

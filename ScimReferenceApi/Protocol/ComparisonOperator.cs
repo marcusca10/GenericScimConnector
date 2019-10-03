@@ -53,6 +53,22 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         /// <summary>
         /// 
         /// </summary>
-        NotMatchesExpression
+        NotMatchesExpression,
+        /// <summary>
+        /// 
+        /// </summary>
+        StartsWith,
+        /// <summary>
+        /// 
+        /// </summary>
+        Exists,
+        /// <summary>
+        /// 
+        /// </summary>
+        LessThan,
+        /// <summary>
+        /// 
+        /// </summary>
+        EqualOrLessThan
     }
 }

@@ -183,6 +183,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             co,
             sw,
             ew,
+            pr,
             ge,
             gt,
             includes,
@@ -266,14 +267,29 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                     case ComparisonOperatorValue.ew:
                         this.filterOperator = ComparisonOperator.EndsWith;
                         break;
+                    case ComparisonOperatorValue.sw:
+                        this.filterOperator = ComparisonOperator.StartsWith;
+                        break;
+                    case ComparisonOperatorValue.co:
+                        this.filterOperator = ComparisonOperator.Includes;
+                        break;
                     case ComparisonOperatorValue.eq:
                         this.filterOperator = ComparisonOperator.Equals;
+                        break;
+                    case ComparisonOperatorValue.pr:
+                        this.filterOperator = ComparisonOperator.Exists;
                         break;
                     case ComparisonOperatorValue.ge:
                         this.filterOperator = ComparisonOperator.EqualOrGreaterThan;
                         break;
                     case ComparisonOperatorValue.gt:
                         this.filterOperator = ComparisonOperator.GreaterThan;
+                        break;
+                    case ComparisonOperatorValue.lt:
+                        this.filterOperator = ComparisonOperator.LessThan;
+                        break;
+                    case ComparisonOperatorValue.le:
+                        this.filterOperator = ComparisonOperator.EqualOrLessThan;
                         break;
                     case ComparisonOperatorValue.includes:
                         this.filterOperator = ComparisonOperator.Includes;
