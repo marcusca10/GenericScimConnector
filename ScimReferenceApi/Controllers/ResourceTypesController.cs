@@ -1,39 +1,36 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.IO;
-using Newtonsoft.Json;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	[Route("api/Schemas")]
+	[Route("api/ResourceType")]
 	[ApiController]
-	public class SchemasController : ControllerBase
-	{
+	public class ResourceTypesController : ControllerBase
+    {
 		/// <summary>
 		/// 
 		/// </summary>
-		public SchemasController()
+		public ResourceTypesController()
 		{
 		}
 		/// <summary>
 		/// 
 		/// </summary>
 		[HttpGet]
-#pragma warning disable CA1822 // Contoller methods must not be static
-		public ActionResult<IEnumerable<TypeScheme>> Get()
+#pragma warning disable CA1822 // Mark members as static do not mark static controler methods
+		public ActionResult<IEnumerable<Core2ResourceType>> Get()
 #pragma warning restore CA1822 // Mark members as static
 		{
-
-			
-			var schmea = System.IO.File.ReadAllText("./JsonConstants/ReferenceCodeSchema.json");
-			var items = JsonConvert.DeserializeObject<List<TypeScheme>>(schmea);
+			var schmea = System.IO.File.ReadAllText("./JsonConstants/resourceTypes.json");
+			var items = JsonConvert.DeserializeObject<List<Core2ResourceType>>(schmea);
 			return items;
 		}
 	}

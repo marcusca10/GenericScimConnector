@@ -33,7 +33,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 		/// Offset index (starts at 1)
 		/// </summary>
 		[DataMember(IsRequired = false, EmitDefaultValue = false)]
-		public int StartIndex { get; set; }
+		public int? StartIndex { get; set; }
 
 		/// <summary>
 		/// Number of items returned by page

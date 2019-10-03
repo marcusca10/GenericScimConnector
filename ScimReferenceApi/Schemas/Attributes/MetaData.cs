@@ -10,10 +10,19 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 	[DataContract]
 	public class Metadata
 	{
-		/// <summary>
-		/// Get or set Id Primary Key for persistant storage.
-		/// </summary>
-		[Key]
+        /// <summary>
+        /// 
+        /// </summary>
+        public object this[string propertyName]
+        {
+            get { return this.GetType().GetProperty(propertyName).GetValue(this, null); }
+            set { this.GetType().GetProperty(propertyName).SetValue(this, value, null); }
+        }
+
+        /// <summary>
+        /// Get or set Id Primary Key for persistant storage.
+        /// </summary>
+        [Key]
 		[ScaffoldColumn(false)]
 		public string Id { get; set; }
 

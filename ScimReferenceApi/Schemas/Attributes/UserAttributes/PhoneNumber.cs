@@ -8,10 +8,19 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 	[DataContract]
 	public sealed class PhoneNumber : TypedValue
 	{
-		/// <summary>
-		/// Phone type fax.
-		/// </summary>
-		public const string Fax = "fax";
+        /// <summary>
+        /// Reflection.
+        /// </summary>
+        public object this[string propertyName]
+        {
+            get { return this.GetType().GetProperty(propertyName).GetValue(this, null); }
+            set { this.GetType().GetProperty(propertyName).SetValue(this, value, null); }
+        }
+
+        /// <summary>
+        /// Phone type fax.
+        /// </summary>
+        public const string Fax = "fax";
 
 		/// <summary>
 		/// Phone type home.

@@ -70,6 +70,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 				app.UseHsts();
 			}
 
+
             loggerFactory.AddFile("Logs/ScimApp-{Date}.txt");
             app.UseHttpsRedirection();
 			app.UseAuthentication();

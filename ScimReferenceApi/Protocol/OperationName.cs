@@ -21,6 +21,18 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         /// <summary>
         /// 
         /// </summary>
-        Replace
+        Replace,
+        /// <summary>
+        /// Cover scim gap.
+        /// </summary>
+        add,
+        /// <summary>
+        /// Cover scim gap.
+        /// </summary>
+        remove,
+        /// <summary>
+        /// Cover scim gap.
+        /// </summary>
+        replace,
     }
 }

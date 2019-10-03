@@ -8,10 +8,18 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 	[DataContract]
 	public sealed class Address : TypedItem
 	{
-		/// <summary>
-		/// Adress location home.
-		/// </summary>
-		public const string Home = "home";
+        /// <summary>
+        /// 
+        /// </summary>
+        public object this[string propertyName]
+        {
+            get { return this.GetType().GetProperty(propertyName).GetValue(this, null); }
+            set { this.GetType().GetProperty(propertyName).SetValue(this, value, null); }
+        }
+        /// <summary>
+        /// Adress location home.
+        /// </summary>
+        public const string Home = "home";
 
 		/// <summary>
 		/// Adress location other.
