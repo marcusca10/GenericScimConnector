@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
 {
     /// <summary>
-    /// 
+    /// Abstract class to extend patch request.
     /// </summary>
-    /// <typeparam name="TOperation"></typeparam>
     [DataContract]
     public abstract class PatchRequest2Base<TOperation> : PatchRequestBase
          where TOperation : PatchOperationBase
@@ -20,7 +19,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
         private IReadOnlyCollection<TOperation> operationsWrapper;
 
         /// <summary>
-        /// 
+        /// Constructor.
         /// </summary>
         protected PatchRequest2Base()
         {
@@ -30,9 +29,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
         }
 
         /// <summary>
-        /// 
+        /// Constructor.
         /// </summary>
-        /// <param name="operations"></param>
         protected PatchRequest2Base(IReadOnlyCollection<TOperation> operations)
             : this()
         {
@@ -40,7 +38,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
         }
 
         /// <summary>
-        /// 
+        /// Get the collection of operations.
         /// </summary>
         public IReadOnlyCollection<TOperation> Operations
         {
@@ -51,9 +49,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
         }
 
         /// <summary>
-        /// 
+        /// Method for adding an operation to the collection.
         /// </summary>
-        /// <param name="operation"></param>
         public void AddOperation(TOperation operation)
         {
             if (null == operation)

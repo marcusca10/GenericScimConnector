@@ -5,6 +5,7 @@ using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -46,7 +47,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         public async Task<ActionResult<ListResponse<User>>> Get()
         {
 
-            List<User> users;
+            IList<User> users;
 
             string query = Request.QueryString.ToUriComponent();
             if (!string.IsNullOrWhiteSpace(query))
@@ -58,21 +59,53 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 users = await _context.CompleteUsers().ToListAsync().ConfigureAwait(false);
             }
 
+            NameValueCollection keyedValues = HttpUtility.ParseQueryString(query);
+            IEnumerable<string> keys = keyedValues.AllKeys;
+            string countString = keyedValues[QueryKeys.Count];
+            string startIndex = keyedValues[QueryKeys.StartIndex];
+
+            if (startIndex == null)
+            {
+                startIndex = "1";
+            }
+            if (countString == null)
+            {
+                countString = "10";
+            }
+
+            int start = int.Parse(startIndex, CultureInfo.InvariantCulture);
+            int count = int.Parse(countString, CultureInfo.InvariantCulture);
+            int total = users.Count;
+
+            users = users.OrderBy(d => d.UserName).Skip((start - 1) * count).Take(count).ToList();
+
+            var requested = Request.Query[QueryKeys.Attributes];
+            var exculted = Request.Query[QueryKeys.ExcludedAttributes];
+            var allwaysRetuned = new string[] { AttributeNames.Identifier, "identifier", AttributeNames.Schemas, AttributeNames.Schema, AttributeNames.Active };//TODO Read from schema 
+            users = users.Select(u =>
+                (User)ColumnsUtility.SelectColuns(requested, exculted, u, allwaysRetuned)).ToList();
+
 
             ListResponse<User> list = new ListResponse<User>()
             {
-                TotalResults = users.Count,
-                StartIndex = users.Any() ? 1 : (int?)null,
-                Resources = users
+                TotalResults = total,
+                StartIndex = users.Any() ? start : (int?)null,
+                Resources = users,
+                ItemsPerPage = count
             };
 
+			
+
+            Response.ContentType = "application/scim+json";
             if (list.Resources.Any())
             {
                 list.Identifier = Guid.NewGuid().ToString();
+                return list;
             }
-
-            Response.ContentType = "application/scim+json";
-            return Ok(list);
+            else
+            {
+                return Ok();
+            }
         }
 
         /// <summary>
@@ -229,5 +262,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                     throw new NotImplementedException("Invalid operatoin Name" + operationName);
             }
         }
-    }
+	
+
+	}
 }

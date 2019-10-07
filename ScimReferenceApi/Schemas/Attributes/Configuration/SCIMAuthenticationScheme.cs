@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Configuration
 {
     /// <summary>
-    /// 
+    /// Class for defining authentication.
     /// </summary>
     [DataContract]
     public sealed class SCIMAuthenticationScheme
@@ -37,7 +37,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Co
                     new Uri(SCIMAuthenticationScheme.SpecificationResourceValueOpenStandardForAuthenticationBearerToken));
 
         /// <summary>
-        /// 
+        /// Get or set AuthenticationType.
         /// </summary>
         [DataMember(Name = AttributeNames.Type)]
         public string AuthenticationType
@@ -47,7 +47,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Co
         }
 
         /// <summary>
-        /// 
+        /// Get or set the desciption.
         /// </summary>
         [DataMember(Name = AttributeNames.Description)]
         public string Description
@@ -57,7 +57,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Co
         }
 
         /// <summary>
-        /// 
+        /// Get or set the DocumentationResource.
         /// </summary>
         [DataMember(Name = AttributeNames.Documentation)]
         public Uri DocumentationResource
@@ -67,7 +67,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Co
         }
 
         /// <summary>
-        /// 
+        /// Get or set the Name.
         /// </summary>
         [DataMember(Name = AttributeNames.Name)]
         public string Name
@@ -77,7 +77,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Co
         }
 
         /// <summary>
-        /// 
+        /// Get ot set pimay.
         /// </summary>
         [DataMember(Name = AttributeNames.Primary)]
         public bool Primary
@@ -87,7 +87,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Co
         }
 
         /// <summary>
-        /// 
+        /// Get or set SpecificationResource.
         /// </summary>
         [DataMember(Name = AttributeNames.Specification)]
         public Uri SpecificationResource
@@ -97,9 +97,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Co
         }
 
         /// <summary>
-        /// 
+        /// Method fo making a SCIMAuthenticationScheme.
         /// </summary>
-        /// <returns></returns>
         public static SCIMAuthenticationScheme CreateOpenStandardForAuthorizationBearerTokenScheme()
         {
             SCIMAuthenticationScheme result =

@@ -220,8 +220,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                 if (value < 0)
                 {
                     string message =
-                           CultureInfo.InvariantCulture+
-                           "ExceptionInvalidFilterTemplate"+
+                           CultureInfo.InvariantCulture +
+                           "ExceptionInvalidFilterTemplate" +
                            this.Text;
                     throw new ArgumentOutOfRangeException(message, nameof(this.Group));
                 }
@@ -241,8 +241,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                 if (value < 0)
                 {
                     string message =
-                           CultureInfo.InvariantCulture+
-                           "ExceptionInvalidFilterTemplate"+
+                           CultureInfo.InvariantCulture +
+                           "ExceptionInvalidFilterTemplate" +
                            this.Text;
                     throw new ArgumentOutOfRangeException(message, nameof(this.Level));
                 }
@@ -544,8 +544,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             )
             {
                 string message =
-                        CultureInfo.InvariantCulture+
-                        "ExceptionInvalidFilterTemplate"+
+                        CultureInfo.InvariantCulture +
+                        "ExceptionInvalidFilterTemplate" +
                         this.Text;
                 throw new InvalidOperationException(message);
             }
@@ -555,8 +555,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             if (!Enum.TryParse<ComparisonOperatorValue>(@operator.Value, out ComparisonOperatorValue comparisonOperatorValue))
             {
                 string message =
-                        CultureInfo.InvariantCulture+
-                        "ExceptionInvalidFilterTemplate"+
+                        CultureInfo.InvariantCulture +
+                        "ExceptionInvalidFilterTemplate" +
                         this.Text;
                 throw new InvalidOperationException(message);
             }
@@ -566,7 +566,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             {
                 string message =
                         CultureInfo.InvariantCulture +
-                        "ExceptionInvalidFilterTemplate"+
+                        "ExceptionInvalidFilterTemplate" +
                         this.Text;
                 throw new InvalidOperationException(message);
             }
@@ -669,7 +669,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// ToString() override.
         /// </summary>
         public override string ToString()
         {
@@ -819,7 +819,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             }
 
             /// <summary>
-            /// 
+            /// Get DataType.
             /// </summary>
             public AttributeDataType DataType
             {

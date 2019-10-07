@@ -6,19 +6,21 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
     using System;
     using System.Runtime.Serialization;
-	/// <summary>
-	/// Class for stroing info about a resource.
-	/// </summary>
+
+    /// <summary>
+    /// Class for stroing info about a resource type endpoint.
+    /// </summary>
     [DataContract]
-    public sealed class Core2ResourceType: Schematized
+    public sealed class Core2ResourceType : Schematized
     {
         private Uri endpoint;
 
         [DataMember(Name = AttributeNames.Endpoint)]
         private string endpointValue;
-		/// <summary>
-		/// 
-		/// </summary>
+
+        /// <summary>
+        /// Get or set the identifier.
+        /// </summary>
         [DataMember(Name = AttributeNames.Identifier)]
         public string Identifier
         {
@@ -26,24 +28,26 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             set;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification="Serialized")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "Serialized")]
         [DataMember(Name = AttributeNames.Name)]
         private string name;
-		/// <summary>
-		/// 
-		/// </summary>
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public Core2ResourceType()
         {
             this.AddSchema(SchemaIdentifiers.Core2ResourceType);
             this.Metadata =
                 new Metadata()
-                    {
-                        ResourceType = Types.ResourceType
-                    };
+                {
+                    ResourceType = Types.ResourceType
+                };
         }
-		/// <summary>
-		/// 
-		/// </summary>
+
+        /// <summary>
+        /// Get or set the endpoint value.
+        /// </summary>
         public Uri Endpoint
         {
             get
@@ -72,18 +76,20 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                 this.endpointValue = value;
             }
         }
-		/// <summary>
-		/// 
-		/// </summary>
+
+        /// <summary>
+        /// Get or set metadata.
+        /// </summary>
         [DataMember(Name = AttributeNames.Metadata)]
         public Metadata Metadata
         {
             get;
             set;
         }
-		/// <summary>
-		/// 
-		/// </summary>
+
+        /// <summary>
+        /// Get or set schema.
+        /// </summary>
         [DataMember(Name = AttributeNames.Schema)]
         public string Schema
         {

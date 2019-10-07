@@ -6,115 +6,115 @@ using System.Runtime.Serialization;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
-	/// <summary>
-	/// Abstract class to use for objects that have a Schema.
-	/// </summary>
-	[DataContract]
-	public abstract class Schematized
-	{
-		[DataMember(Name = AttributeNames.Schemas, Order = 0)]
-		private List<string> schemas;
-		private IReadOnlyCollection<string> schemasWrapper;
-		private object schemasLock;
+    /// <summary>
+    /// Abstract class to use for objects that have a Schema.
+    /// </summary>
+    [DataContract]
+    public abstract class Schematized
+    {
+        [DataMember(Name = AttributeNames.Schemas, Order = 0)]
+        private List<string> schemas;
+        private IReadOnlyCollection<string> schemasWrapper;
+        private object schemasLock;
 
-		/// <summary>
-		/// Schematized constructor.
-		/// </summary>
-		protected Schematized()
-		{
-			this.OnInitialization();
-			this.OnInitialized();
-		}
+        /// <summary>
+        /// Schematized constructor.
+        /// </summary>
+        protected Schematized()
+        {
+            this.OnInitialization();
+            this.OnInitialized();
+        }
 
-		/// <summary>
-		/// Get schemas.
-		/// </summary>
-		public virtual IReadOnlyCollection<string> Schemas
-		{
-			get
-			{
-				return this.schemasWrapper;
-			}
-		}
+        /// <summary>
+        /// Get schemas.
+        /// </summary>
+        public virtual IReadOnlyCollection<string> Schemas
+        {
+            get
+            {
+                return this.schemasWrapper;
+            }
+        }
 
-		/// <summary>
-		/// If the new schemaIdentifier is not null or already included it is added to the list.
-		/// </summary>
-		public void AddSchema(string schemaIdentifier)
-		{
-			if (string.IsNullOrWhiteSpace(schemaIdentifier))
-			{
-				throw new ArgumentNullException(nameof(schemaIdentifier));
-			}
+        /// <summary>
+        /// If the new schemaIdentifier is not null or already included it is added to the list.
+        /// </summary>
+        public void AddSchema(string schemaIdentifier)
+        {
+            if (string.IsNullOrWhiteSpace(schemaIdentifier))
+            {
+                throw new ArgumentNullException(nameof(schemaIdentifier));
+            }
 
-			Func<bool> containsFunction =
-				new Func<bool>(
-					() =>
-						this
-						.schemas
-						.Any(
-							(string item) =>
-								string.Equals(
-									item,
-									schemaIdentifier,
-									StringComparison.OrdinalIgnoreCase)));
+            Func<bool> containsFunction =
+                new Func<bool>(
+                    () =>
+                        this
+                        .schemas
+                        .Any(
+                            (string item) =>
+                                string.Equals(
+                                    item,
+                                    schemaIdentifier,
+                                    StringComparison.OrdinalIgnoreCase)));
 
 
-			if (!containsFunction())
-			{
-				lock (this.schemasLock)
-				{
-					if (!containsFunction())
-					{
-						this.schemas.Add(schemaIdentifier);
-					}
-				}
-			}
-		}
+            if (!containsFunction())
+            {
+                lock (this.schemasLock)
+                {
+                    if (!containsFunction())
+                    {
+                        this.schemas.Add(schemaIdentifier);
+                    }
+                }
+            }
+        }
 
-		/// <summary>
-		/// Checks the schemas to see if the passed scheme is included.
-		/// </summary>
-		public bool Is(string scheme)
-		{
-			if (string.IsNullOrWhiteSpace(scheme))
-			{
-				throw new ArgumentNullException(nameof(scheme));
-			}
+        /// <summary>
+        /// Checks the schemas to see if the passed scheme is included.
+        /// </summary>
+        public bool Is(string scheme)
+        {
+            if (string.IsNullOrWhiteSpace(scheme))
+            {
+                throw new ArgumentNullException(nameof(scheme));
+            }
 
-			bool result =
-				this
-				.schemas
-				.Any(
-					(string item) =>
-						string.Equals(item, scheme, StringComparison.OrdinalIgnoreCase));
-			return result;
-		}
+            bool result =
+                this
+                .schemas
+                .Any(
+                    (string item) =>
+                        string.Equals(item, scheme, StringComparison.OrdinalIgnoreCase));
+            return result;
+        }
 
-		[OnDeserialized]
-		private void OnDeserialized(StreamingContext context)
-		{
-			this.OnInitialized();
-		}
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            this.OnInitialized();
+        }
 
-		[OnDeserializing]
-		private void OnDeserializing(StreamingContext context)
-		{
-			this.OnInitialization();
-		}
+        [OnDeserializing]
+        private void OnDeserializing(StreamingContext context)
+        {
+            this.OnInitialization();
+        }
 
-		private void OnInitialization()
-		{
-			this.schemasLock = new object();
-			this.schemas = new List<string>();
-		}
+        private void OnInitialization()
+        {
+            this.schemasLock = new object();
+            this.schemas = new List<string>();
+        }
 
-		/// <summary>
-		/// Sets schemasWrapper on construction.
-		/// </summary>
-		private void OnInitialized()
-		{
-			this.schemasWrapper = this.schemas.AsReadOnly();
-		}
-	}
+        /// <summary>
+        /// Sets schemasWrapper on construction.
+        /// </summary>
+        private void OnInitialized()
+        {
+            this.schemasWrapper = this.schemas.AsReadOnly();
+        }
+    }
 }

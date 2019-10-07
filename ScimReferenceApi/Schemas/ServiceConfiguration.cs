@@ -119,9 +119,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         }
 
         /// <summary>
-        /// 
+        /// Method for addina an authentication sheme.
         /// </summary>
-        /// <param name="authenticationScheme"></param>
         public void AddAuthenticationScheme(SCIMAuthenticationScheme authenticationScheme)
         {
             if (null == authenticationScheme)
