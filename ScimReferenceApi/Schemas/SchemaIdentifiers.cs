@@ -89,20 +89,6 @@
             Types.User;
 
         /// <summary>
-        /// For Atribute names.
-        /// </summary>
-        public const string WindowsAzureActiveDirectory2Group =
-            SchemaIdentifiers.PrefixTypesActiveDirectory2 +
-            Types.Group;
-
-        /// <summary>
-        /// For Atribute names.
-        /// </summary>
-        public const string WindowsAzureActiveDirectory2User =
-            SchemaIdentifiers.PrefixTypesActiveDirectory2 +
-            Types.User;
-
-        /// <summary>
         /// Schema Id for List Response for query resources.
         /// </summary>
         public const string ListResponse = "urn:ietf:params:scim:api:messages:2.0:ListResponse";

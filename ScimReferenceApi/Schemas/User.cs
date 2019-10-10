@@ -293,7 +293,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "None")]
         private static void PatchAddresses(this User user, PatchOperation operation)
         {
             if (null == operation)
@@ -776,6 +775,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     };
             }
 
+
+
             string value = operation.Value?.Single().Value;
             if
             (
@@ -824,6 +825,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
             result = electronicMailAddresses.Union(electronicMailAddresses).ToArray();
             return result;
+
+
         }
 
         private static void PatchName(this User user, PatchOperation operation)
@@ -968,7 +971,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             user.Name = name;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "None")]
         private static void PatchPhoneNumbers(this User user, PatchOperation operation)
         {
             if (null == operation)

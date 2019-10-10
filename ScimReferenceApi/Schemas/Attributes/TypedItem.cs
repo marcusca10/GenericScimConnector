@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
     /// <summary>
-    /// TypedItem, for e.g., a Member
+    /// TypedItem e.g. an email
     /// </summary>
     [DataContract]
     public abstract class TypedItem

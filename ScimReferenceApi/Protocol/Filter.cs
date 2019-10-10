@@ -375,7 +375,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         public static bool TryParse(string filterExpression, out IReadOnlyCollection<IFilter> filters)
         {
             string expression = filterExpression;//.Trim('"');
-            Regex.Replace(expression, "pr", "pr noval");
+
             try
             {
                 IReadOnlyCollection<IFilter> buffer = new FilterExpression(expression).ToFilters();

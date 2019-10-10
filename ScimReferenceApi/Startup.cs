@@ -75,6 +75,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();
+
         }
     }
 }

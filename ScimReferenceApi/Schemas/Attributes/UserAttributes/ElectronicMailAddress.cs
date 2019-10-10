@@ -16,7 +16,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         }
 
         /// <summary>
-        /// 
+        /// Reflection.
         /// </summary>
         public object this[string propertyName]
         {

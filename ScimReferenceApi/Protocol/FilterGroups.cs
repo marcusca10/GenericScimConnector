@@ -30,9 +30,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         /// </summary>
         /// <param name="query">Query portion of URI</param>
         /// <returns>AllGroups a list of the slected groups</returns>
-        public List<Group> FilterGen(string query)
+        public IEnumerable<Group> FilterGen(string query)
         {
-            List<Group> AllUsers = new List<Group>();
+            IEnumerable<Group> AllUsers = new List<Group>();
             NameValueCollection keyedValues = HttpUtility.ParseQueryString(query);
             IEnumerable<string> keys = keyedValues.AllKeys;
             foreach (string key in keys)
@@ -51,14 +51,14 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         /// <summary>
         /// Method for apply the logic of the genearted collection of filter lists.
         /// </summary>
-        public List<Group> GetGroups(string filterExpression)
+        public IEnumerable<Group> GetGroups(string filterExpression)
         {
             List<Group> AllGroups = new List<Group>();
             if (Filter.TryParse(filterExpression, out IReadOnlyCollection<IFilter> results))
             {
                 for (int i = 0; i < results.Count; i++)
                 {
-                    List<Group> groups = _context.Groups.ToList();
+                    IEnumerable<Group> groups = _context.Groups;
                     Filter currentFilter = (Filter)results.ElementAt(i);
                     while (currentFilter != null)
                     {

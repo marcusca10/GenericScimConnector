@@ -8,7 +8,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
     /// <summary>
     /// Class for hodling info about pagination.
     /// </summary>
-    public class PaginationParameters { 
+    public class PaginationParameters
+    {
         int? count;
         int? startIndex;
 
