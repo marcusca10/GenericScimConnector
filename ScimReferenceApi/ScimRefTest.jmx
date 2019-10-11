@@ -1,0 +1,1396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.1.1 r1855137">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Scim Refernce" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">https://scimreferenceapi19.azurewebsites.net/api/</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/users</stringProp>
+          <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </ConfigTestElement>
+        <hashTree/>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Accept</stringProp>
+              <stringProp name="Header.value">application/scim+json</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/scim+json</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get empty" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/users</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49586">200</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <ResultCollector guiclass="AssertionVisualizer" testclass="ResultCollector" testname="Assertion Results" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <url>true</url>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Post a user &quot;OMalley&quot;" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;userName&quot;: &quot;OMalley&quot;,&#xd;
+    &quot;active&quot;: true,&#xd;
+    &quot;addresses&quot;: [&#xd;
+        {&#xd;
+            &quot;country&quot;: &quot;Bermuda&quot;,&#xd;
+            &quot;formatted&quot;: &quot;9132 Jennifer Way Suite 040\nSouth Nancy, MI 55645&quot;,&#xd;
+            &quot;locality&quot;: &quot;West Mercedes&quot;,&#xd;
+            &quot;postalCode&quot;: &quot;99265&quot;,&#xd;
+            &quot;region&quot;: &quot;Montana&quot;,&#xd;
+            &quot;streetAddress&quot;: &quot;4939 Hess Fork&quot;,&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: false&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;country&quot;: null,&#xd;
+            &quot;formatted&quot;: &quot;18522 Lisa Unions\nEast Gregory, CT 52311&quot;,&#xd;
+            &quot;locality&quot;: null,&#xd;
+            &quot;postalCode&quot;: null,&#xd;
+            &quot;region&quot;: null,&#xd;
+            &quot;streetAddress&quot;: null,&#xd;
+            &quot;type&quot;: &quot;other&quot;,&#xd;
+            &quot;primary&quot;: false&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;displayName&quot;: &quot;Kimberly Baker&quot;,&#xd;
+    &quot;emails&quot;: [&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: true,&#xd;
+            &quot;value&quot;: &quot;anna33@example.com&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;other&quot;,&#xd;
+            &quot;primary&quot;: false,&#xd;
+            &quot;value&quot;: &quot;anna33@gmail.com&quot;&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;meta&quot;: {&#xd;
+        &quot;created&quot;: &quot;2019-09-18T18:15:26.5788954+00:00&quot;,&#xd;
+        &quot;lastModified&quot;: &quot;2019-09-18T18:15:26.5788976+00:00&quot;,&#xd;
+        &quot;resourceType&quot;: &quot;User&quot;&#xd;
+    },&#xd;
+    &quot;name&quot;: {&#xd;
+        &quot;formatted&quot;: &quot;Daniel Mcgee&quot;,&#xd;
+        &quot;familyName&quot;: &quot;OMalley&quot;,&#xd;
+        &quot;givenName&quot;: &quot;Darl&quot;,&#xd;
+        &quot;honorificPrefix&quot;: null,&#xd;
+        &quot;honorificSuffix&quot;: null&#xd;
+    },&#xd;
+    &quot;phoneNumbers&quot;: [&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;fax&quot;,&#xd;
+            &quot;primary&quot;: false,&#xd;
+            &quot;value&quot;: &quot;312-320-0500&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;mobile&quot;,&#xd;
+            &quot;primary&quot;: false,&#xd;
+            &quot;value&quot;: &quot;312-320-1707&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: true,&#xd;
+            &quot;value&quot;: &quot;312-320-0932&quot;&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;preferredLanguage&quot;: &quot;xh&quot;,&#xd;
+    &quot;roles&quot;: [],&#xd;
+    &quot;title&quot;: &quot;Site engineer&quot;,&#xd;
+    &quot;externalId&quot;: &quot;22fbc523-6032-4c5f-939d-5d4850cf3e52&quot;,&#xd;
+    &quot;schemas&quot;: [&#xd;
+        &quot;urn:ietf:params:scim:schemas:core:2.0:User&quot;&#xd;
+    ]&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/users</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49587">201</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion" enabled="true">
+            <stringProp name="JSON_PATH">$.id</stringProp>
+            <stringProp name="EXPECTED_VALUE"></stringProp>
+            <boolProp name="JSONVALIDATION">false</boolProp>
+            <boolProp name="EXPECT_NULL">false</boolProp>
+            <boolProp name="INVERT">false</boolProp>
+            <boolProp name="ISREGEX">true</boolProp>
+          </JSONPathAssertion>
+          <hashTree/>
+          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion" enabled="true">
+            <stringProp name="JSON_PATH">$.userName</stringProp>
+            <stringProp name="EXPECTED_VALUE">OMalley</stringProp>
+            <boolProp name="JSONVALIDATION">true</boolProp>
+            <boolProp name="EXPECT_NULL">false</boolProp>
+            <boolProp name="INVERT">false</boolProp>
+            <boolProp name="ISREGEX">true</boolProp>
+          </JSONPathAssertion>
+          <hashTree/>
+          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion" enabled="true">
+            <stringProp name="JSON_PATH">$.active</stringProp>
+            <stringProp name="EXPECTED_VALUE">true</stringProp>
+            <boolProp name="JSONVALIDATION">true</boolProp>
+            <boolProp name="EXPECT_NULL">false</boolProp>
+            <boolProp name="INVERT">false</boolProp>
+            <boolProp name="ISREGEX">true</boolProp>
+          </JSONPathAssertion>
+          <hashTree/>
+          <ResultCollector guiclass="AssertionVisualizer" testclass="ResultCollector" testname="Assertion Results" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <url>true</url>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">1stuserid</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.id</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <url>true</url>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="post emp1" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;userName&quot;: &quot;emp1&quot;,&#xd;
+    &quot;active&quot;: true,&#xd;
+    &quot;addresses&quot;: [&#xd;
+        {&#xd;
+            &quot;country&quot;: &quot;Bermuda&quot;,&#xd;
+            &quot;formatted&quot;: &quot;9132 Jennifer Way Suite 040\nSouth Nancy, MI 55645&quot;,&#xd;
+            &quot;locality&quot;: &quot;West Mercedes&quot;,&#xd;
+            &quot;postalCode&quot;: &quot;99265&quot;,&#xd;
+            &quot;region&quot;: &quot;Montana&quot;,&#xd;
+            &quot;streetAddress&quot;: &quot;4939 Hess Fork&quot;,&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: false&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;country&quot;: null,&#xd;
+            &quot;formatted&quot;: &quot;18522 Lisa Unions\nEast Gregory, CT 52311&quot;,&#xd;
+            &quot;locality&quot;: null,&#xd;
+            &quot;postalCode&quot;: null,&#xd;
+            &quot;region&quot;: null,&#xd;
+            &quot;streetAddress&quot;: null,&#xd;
+            &quot;type&quot;: &quot;other&quot;,&#xd;
+            &quot;primary&quot;: false&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;displayName&quot;: &quot;Kimberly Baker&quot;,&#xd;
+    &quot;emails&quot;: [&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: true,&#xd;
+            &quot;value&quot;: &quot;anna33@gmail.com&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: false,&#xd;
+            &quot;value&quot;: &quot;anna33@example.com&quot;&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;meta&quot;: {&#xd;
+        &quot;created&quot;: &quot;2019-09-18T18:15:26.5788954+00:00&quot;,&#xd;
+        &quot;lastModified&quot;: &quot;2019-09-18T18:15:26.5788976+00:00&quot;,&#xd;
+        &quot;resourceType&quot;: &quot;User&quot;&#xd;
+    },&#xd;
+    &quot;name&quot;: {&#xd;
+        &quot;formatted&quot;: &quot;Daniel Mcgee&quot;,&#xd;
+        &quot;familyName&quot;: &quot;Employee&quot;,&#xd;
+        &quot;givenName&quot;: &quot;Darl&quot;,&#xd;
+        &quot;honorificPrefix&quot;: null,&#xd;
+        &quot;honorificSuffix&quot;: null&#xd;
+    },&#xd;
+    &quot;phoneNumbers&quot;: [&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;fax&quot;,&#xd;
+            &quot;primary&quot;: false,&#xd;
+            &quot;value&quot;: &quot;312-320-0500&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;mobile&quot;,&#xd;
+            &quot;primary&quot;: false,&#xd;
+            &quot;value&quot;: &quot;312-320-1707&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: true,&#xd;
+            &quot;value&quot;: &quot;312-320-0932&quot;&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;preferredLanguage&quot;: &quot;xh&quot;,&#xd;
+    &quot;roles&quot;: [],&#xd;
+    &quot;title&quot;: &quot;Site engineer&quot;,&#xd;
+    &quot;externalId&quot;: &quot;22fbc523-6032-4c5f-939d-5d4850cf3e52&quot;,&#xd;
+    &quot;schemas&quot;: [&#xd;
+        &quot;urn:ietf:params:scim:schemas:core:2.0:User&quot;&#xd;
+    ]&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/users</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49587">201</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">2nduserid</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.id</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get all users" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/users</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion, 2 users" enabled="true">
+            <stringProp name="JSON_PATH">$.totalResults</stringProp>
+            <stringProp name="EXPECTED_VALUE">2</stringProp>
+            <boolProp name="JSONVALIDATION">true</boolProp>
+            <boolProp name="EXPECT_NULL">false</boolProp>
+            <boolProp name="INVERT">false</boolProp>
+            <boolProp name="ISREGEX">true</boolProp>
+          </JSONPathAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Post emp2" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;userName&quot;: &quot;emp2&quot;,&#xd;
+    &quot;active&quot;: true,&#xd;
+    &quot;addresses&quot;: [&#xd;
+        {&#xd;
+            &quot;country&quot;: &quot;Bermuda&quot;,&#xd;
+            &quot;formatted&quot;: &quot;9132 Jennifer Way Suite 040\nSouth Nancy, MI 55645&quot;,&#xd;
+            &quot;locality&quot;: &quot;West Mercedes&quot;,&#xd;
+            &quot;postalCode&quot;: &quot;99265&quot;,&#xd;
+            &quot;region&quot;: &quot;Montana&quot;,&#xd;
+            &quot;streetAddress&quot;: &quot;4939 Hess Fork&quot;,&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: false&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;country&quot;: null,&#xd;
+            &quot;formatted&quot;: &quot;18522 Lisa Unions\nEast Gregory, CT 52311&quot;,&#xd;
+            &quot;locality&quot;: null,&#xd;
+            &quot;postalCode&quot;: null,&#xd;
+            &quot;region&quot;: null,&#xd;
+            &quot;streetAddress&quot;: null,&#xd;
+            &quot;type&quot;: &quot;other&quot;,&#xd;
+            &quot;primary&quot;: false&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;displayName&quot;: &quot;Kimberly Baker&quot;,&#xd;
+    &quot;emails&quot;: [&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: true,&#xd;
+            &quot;value&quot;: &quot;anna33@gmail.com&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: false,&#xd;
+            &quot;value&quot;: &quot;anna33@example.com&quot;&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;meta&quot;: {&#xd;
+        &quot;created&quot;: &quot;2019-09-18T18:15:26.5788954+00:00&quot;,&#xd;
+        &quot;lastModified&quot;: &quot;2019-09-18T18:15:26.5788976+00:00&quot;,&#xd;
+        &quot;resourceType&quot;: &quot;User&quot;&#xd;
+    },&#xd;
+    &quot;name&quot;: {&#xd;
+        &quot;formatted&quot;: &quot;Daniel Mcgee&quot;,&#xd;
+        &quot;familyName&quot;: &quot;Employee&quot;,&#xd;
+        &quot;givenName&quot;: &quot;Darl&quot;,&#xd;
+        &quot;honorificPrefix&quot;: null,&#xd;
+        &quot;honorificSuffix&quot;: null&#xd;
+    },&#xd;
+    &quot;phoneNumbers&quot;: [&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;fax&quot;,&#xd;
+            &quot;primary&quot;: false,&#xd;
+            &quot;value&quot;: &quot;312-320-0500&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;mobile&quot;,&#xd;
+            &quot;primary&quot;: false,&#xd;
+            &quot;value&quot;: &quot;312-320-1707&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: true,&#xd;
+            &quot;value&quot;: &quot;312-320-0932&quot;&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;preferredLanguage&quot;: &quot;xh&quot;,&#xd;
+    &quot;roles&quot;: [],&#xd;
+    &quot;title&quot;: &quot;Site engineer&quot;,&#xd;
+    &quot;externalId&quot;: &quot;22fbc523-6032-4c5f-939d-5d4850cf3e52&quot;,&#xd;
+    &quot;schemas&quot;: [&#xd;
+        &quot;urn:ietf:params:scim:schemas:core:2.0:User&quot;&#xd;
+    ]&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/users</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49587">201</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">3rduserid</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.id</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Post emp3" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;userName&quot;: &quot;emp3&quot;,&#xd;
+    &quot;active&quot;: true,&#xd;
+    &quot;addresses&quot;: [&#xd;
+        {&#xd;
+            &quot;country&quot;: &quot;Bermuda&quot;,&#xd;
+            &quot;formatted&quot;: &quot;9132 Jennifer Way Suite 040\nSouth Nancy, MI 55645&quot;,&#xd;
+            &quot;locality&quot;: &quot;West Mercedes&quot;,&#xd;
+            &quot;postalCode&quot;: &quot;99265&quot;,&#xd;
+            &quot;region&quot;: &quot;Montana&quot;,&#xd;
+            &quot;streetAddress&quot;: &quot;4939 Hess Fork&quot;,&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: false&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;country&quot;: null,&#xd;
+            &quot;formatted&quot;: &quot;18522 Lisa Unions\nEast Gregory, CT 52311&quot;,&#xd;
+            &quot;locality&quot;: null,&#xd;
+            &quot;postalCode&quot;: null,&#xd;
+            &quot;region&quot;: null,&#xd;
+            &quot;streetAddress&quot;: null,&#xd;
+            &quot;type&quot;: &quot;other&quot;,&#xd;
+            &quot;primary&quot;: false&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;displayName&quot;: &quot;Kimberly Baker&quot;,&#xd;
+    &quot;emails&quot;: [&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: true,&#xd;
+            &quot;value&quot;: &quot;anna33@gmail.com&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: false,&#xd;
+            &quot;value&quot;: &quot;anna33@example.com&quot;&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;meta&quot;: {&#xd;
+        &quot;created&quot;: &quot;2019-09-18T18:15:26.5788954+00:00&quot;,&#xd;
+        &quot;lastModified&quot;: &quot;2019-09-18T18:15:26.5788976+00:00&quot;,&#xd;
+        &quot;resourceType&quot;: &quot;User&quot;&#xd;
+    },&#xd;
+    &quot;name&quot;: {&#xd;
+        &quot;formatted&quot;: &quot;Daniel Mcgee&quot;,&#xd;
+        &quot;familyName&quot;: &quot;Employee&quot;,&#xd;
+        &quot;givenName&quot;: &quot;Darl&quot;,&#xd;
+        &quot;honorificPrefix&quot;: null,&#xd;
+        &quot;honorificSuffix&quot;: null&#xd;
+    },&#xd;
+    &quot;phoneNumbers&quot;: [&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;fax&quot;,&#xd;
+            &quot;primary&quot;: false,&#xd;
+            &quot;value&quot;: &quot;312-320-0500&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;mobile&quot;,&#xd;
+            &quot;primary&quot;: false,&#xd;
+            &quot;value&quot;: &quot;312-320-1707&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: true,&#xd;
+            &quot;value&quot;: &quot;312-320-0932&quot;&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;preferredLanguage&quot;: &quot;xh&quot;,&#xd;
+    &quot;roles&quot;: [],&#xd;
+    &quot;title&quot;: &quot;Site engineer&quot;,&#xd;
+    &quot;externalId&quot;: &quot;22fbc523-6032-4c5f-939d-5d4850cf3e52&quot;,&#xd;
+    &quot;schemas&quot;: [&#xd;
+        &quot;urn:ietf:params:scim:schemas:core:2.0:User&quot;&#xd;
+    ]&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/users</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49587">201</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">4thuserid</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.id</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Post emp3" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;userName&quot;: &quot;emp3&quot;,&#xd;
+    &quot;active&quot;: true,&#xd;
+    &quot;addresses&quot;: [&#xd;
+        {&#xd;
+            &quot;country&quot;: &quot;Bermuda&quot;,&#xd;
+            &quot;formatted&quot;: &quot;9132 Jennifer Way Suite 040\nSouth Nancy, MI 55645&quot;,&#xd;
+            &quot;locality&quot;: &quot;West Mercedes&quot;,&#xd;
+            &quot;postalCode&quot;: &quot;99265&quot;,&#xd;
+            &quot;region&quot;: &quot;Montana&quot;,&#xd;
+            &quot;streetAddress&quot;: &quot;4939 Hess Fork&quot;,&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: false&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;country&quot;: null,&#xd;
+            &quot;formatted&quot;: &quot;18522 Lisa Unions\nEast Gregory, CT 52311&quot;,&#xd;
+            &quot;locality&quot;: null,&#xd;
+            &quot;postalCode&quot;: null,&#xd;
+            &quot;region&quot;: null,&#xd;
+            &quot;streetAddress&quot;: null,&#xd;
+            &quot;type&quot;: &quot;other&quot;,&#xd;
+            &quot;primary&quot;: false&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;displayName&quot;: &quot;Kimberly Baker&quot;,&#xd;
+    &quot;emails&quot;: [&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: true,&#xd;
+            &quot;value&quot;: &quot;anna33@gmail.com&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: false,&#xd;
+            &quot;value&quot;: &quot;anna33@example.com&quot;&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;meta&quot;: {&#xd;
+        &quot;created&quot;: &quot;2019-09-18T18:15:26.5788954+00:00&quot;,&#xd;
+        &quot;lastModified&quot;: &quot;2019-09-18T18:15:26.5788976+00:00&quot;,&#xd;
+        &quot;resourceType&quot;: &quot;User&quot;&#xd;
+    },&#xd;
+    &quot;name&quot;: {&#xd;
+        &quot;formatted&quot;: &quot;Daniel Mcgee&quot;,&#xd;
+        &quot;familyName&quot;: &quot;Employee&quot;,&#xd;
+        &quot;givenName&quot;: &quot;Darl&quot;,&#xd;
+        &quot;honorificPrefix&quot;: null,&#xd;
+        &quot;honorificSuffix&quot;: null&#xd;
+    },&#xd;
+    &quot;phoneNumbers&quot;: [&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;fax&quot;,&#xd;
+            &quot;primary&quot;: false,&#xd;
+            &quot;value&quot;: &quot;312-320-0500&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;mobile&quot;,&#xd;
+            &quot;primary&quot;: false,&#xd;
+            &quot;value&quot;: &quot;312-320-1707&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;type&quot;: &quot;work&quot;,&#xd;
+            &quot;primary&quot;: true,&#xd;
+            &quot;value&quot;: &quot;312-320-0932&quot;&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;preferredLanguage&quot;: &quot;xh&quot;,&#xd;
+    &quot;roles&quot;: [],&#xd;
+    &quot;title&quot;: &quot;Site engineer&quot;,&#xd;
+    &quot;externalId&quot;: &quot;22fbc523-6032-4c5f-939d-5d4850cf3e52&quot;,&#xd;
+    &quot;schemas&quot;: [&#xd;
+        &quot;urn:ietf:params:scim:schemas:core:2.0:User&quot;&#xd;
+    ]&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/users</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="51517">409</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">true</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion" enabled="true">
+            <stringProp name="JSON_PATH">$.detail</stringProp>
+            <stringProp name="EXPECTED_VALUE"></stringProp>
+            <boolProp name="JSONVALIDATION">false</boolProp>
+            <boolProp name="EXPECT_NULL">false</boolProp>
+            <boolProp name="INVERT">false</boolProp>
+            <boolProp name="ISREGEX">true</boolProp>
+          </JSONPathAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Patch user OMalley to newusername" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{ &quot;schemas&quot;:&#xd;
+       [&quot;urn:ietf:params:scim:api:messages:2.0:PatchOp&quot;],&#xd;
+     &quot;Operations&quot;:[&#xd;
+       {&#xd;
+        &quot;op&quot;:&quot;Replace&quot;,&#xd;
+        &quot;path&quot;:&quot;userName&quot;,&#xd;
+        &quot;value&quot;:&quot;newusername&quot;&#xd;
+       }]&#xd;
+   }</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/users/${1stuserid}</stringProp>
+          <stringProp name="HTTPSampler.method">PATCH</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49590">204</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get user 1" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/users/${1stuserid}</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion, check username changed" enabled="true">
+            <stringProp name="JSON_PATH">$.userName</stringProp>
+            <stringProp name="EXPECTED_VALUE">newusername</stringProp>
+            <boolProp name="JSONVALIDATION">true</boolProp>
+            <boolProp name="EXPECT_NULL">false</boolProp>
+            <boolProp name="INVERT">false</boolProp>
+            <boolProp name="ISREGEX">true</boolProp>
+          </JSONPathAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="paginate" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/Users?startIndex=1&amp;count=2</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion" enabled="true">
+            <stringProp name="JSON_PATH">$.totalResults</stringProp>
+            <stringProp name="EXPECTED_VALUE">4</stringProp>
+            <boolProp name="JSONVALIDATION">true</boolProp>
+            <boolProp name="EXPECT_NULL">false</boolProp>
+            <boolProp name="INVERT">false</boolProp>
+            <boolProp name="ISREGEX">true</boolProp>
+          </JSONPathAssertion>
+          <hashTree/>
+          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion" enabled="true">
+            <stringProp name="JSON_PATH">$.itemsPerPage</stringProp>
+            <stringProp name="EXPECTED_VALUE">2</stringProp>
+            <boolProp name="JSONVALIDATION">true</boolProp>
+            <boolProp name="EXPECT_NULL">false</boolProp>
+            <boolProp name="INVERT">false</boolProp>
+            <boolProp name="ISREGEX">true</boolProp>
+          </JSONPathAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="filter for username" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/Users?attributes=userName</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion" enabled="true">
+            <stringProp name="JSON_PATH">$.totalResults</stringProp>
+            <stringProp name="EXPECTED_VALUE">4</stringProp>
+            <boolProp name="JSONVALIDATION">true</boolProp>
+            <boolProp name="EXPECT_NULL">false</boolProp>
+            <boolProp name="INVERT">false</boolProp>
+            <boolProp name="ISREGEX">true</boolProp>
+          </JSONPathAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Filter" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/Users?filter=name.FamilyName eq Employee and (emails.Value co example.com or emails.Value co example.org)</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion" enabled="true">
+            <stringProp name="JSON_PATH">$.totalResults</stringProp>
+            <stringProp name="EXPECTED_VALUE">3</stringProp>
+            <boolProp name="JSONVALIDATION">true</boolProp>
+            <boolProp name="EXPECT_NULL">false</boolProp>
+            <boolProp name="INVERT">false</boolProp>
+            <boolProp name="ISREGEX">true</boolProp>
+          </JSONPathAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Group add" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;displayName&quot;: &quot;Group 1&quot;,&#xd;
+    &quot;externalId&quot;: &quot;015489ea-9410-4306-b583-9f002b2446f7&quot;,&#xd;
+    &quot;schemas&quot;: [&#xd;
+        &quot;urn:ietf:params:scim:schemas:core:2.0:Group&quot;&#xd;
+    ]&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/Groups</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49587">201</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">1stgroupid</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.id</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Group patch add member" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+	&quot;id&quot;: &quot;${1stgroupid}&quot;,&#xd;
+    &quot;Operations&quot;: [&#xd;
+        {&#xd;
+         &quot;op&quot;:&quot;add&quot;, &#xd;
+         &quot;path&quot;: &quot;members&quot;, &#xd;
+         &quot;value&quot;: &quot;string id 1&quot;&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;schemas&quot;: [&#xd;
+        &quot;urn:ietf:params:scim:api:messages:2.0:PatchOp&quot;&#xd;
+    ]&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/Groups/${1stgroupid}</stringProp>
+          <stringProp name="HTTPSampler.method">PATCH</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49590">204</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Group patch add member 2" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+	&quot;id&quot;: &quot;${1stgroupid}&quot;,&#xd;
+    &quot;Operations&quot;: [&#xd;
+        {&#xd;
+         &quot;op&quot;:&quot;add&quot;, &#xd;
+         &quot;path&quot;: &quot;members&quot;, &#xd;
+         &quot;value&quot;: &quot;string id 2&quot;&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;schemas&quot;: [&#xd;
+        &quot;urn:ietf:params:scim:api:messages:2.0:PatchOp&quot;&#xd;
+    ]&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/Groups/${1stgroupid}</stringProp>
+          <stringProp name="HTTPSampler.method">PATCH</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49590">204</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Group patch remove member 2" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+	&quot;id&quot;: &quot;${1stgroupid}&quot;,&#xd;
+    &quot;Operations&quot;: [&#xd;
+        {&#xd;
+            &quot;op&quot;: &quot;Remove&quot;,&#xd;
+            &quot;path&quot;: &quot;members&quot;,&#xd;
+            &quot;value&quot;: &quot;string id 2&quot;&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;schemas&quot;: [&#xd;
+        &quot;urn:ietf:params:scim:api:messages:2.0:PatchOp&quot;&#xd;
+    ]&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/Groups/${1stgroupid}</stringProp>
+          <stringProp name="HTTPSampler.method">PATCH</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49590">204</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Delete user 1" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/users/${1stuserid}</stringProp>
+          <stringProp name="HTTPSampler.method">DELETE</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49590">204</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Delete user 2 (emp1)" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/users/${2nduserid}</stringProp>
+          <stringProp name="HTTPSampler.method">DELETE</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49590">204</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Delete user 3(emp 2)" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/users/${3rduserid}</stringProp>
+          <stringProp name="HTTPSampler.method">DELETE</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49590">204</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Delete user 4(emp 3)" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/users/${4thuserid}</stringProp>
+          <stringProp name="HTTPSampler.method">DELETE</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49590">204</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Delete group 1" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">https://scimreferenceapi19.azurewebsites.net/api/Groups/${1stgroupid}</stringProp>
+          <stringProp name="HTTPSampler.method">DELETE</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49590">204</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

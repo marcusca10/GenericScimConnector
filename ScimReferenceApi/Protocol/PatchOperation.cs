@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 {
     /// <summary>
-    /// 
+    /// Class for patch operation.
     /// </summary>
     [DataContract]
     public sealed class PatchOperation : PatchOperationBase
@@ -21,7 +21,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         private IReadOnlyCollection<OperationValue> valuesWrapper;
 
         /// <summary>
-        /// 
+        /// Constructor.
         /// </summary>
         public PatchOperation()
         {
@@ -30,7 +30,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Constructor.
         /// </summary>
         public PatchOperation(OperationName operationName, string pathExpression)
             : base(operationName, pathExpression)
@@ -41,7 +41,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 
 
         /// <summary>
-        /// 
+        /// Get the operation values.
         /// </summary>
         public IReadOnlyCollection<OperationValue> Value
         {
@@ -52,7 +52,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Add a value to values collection.
         /// </summary>
         public void AddValue(OperationValue value)
         {
@@ -65,7 +65,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Method for making a Patchoperation.
         /// </summary>
         public static PatchOperation Create(OperationName operationName, string pathExpression, string value)
         {
@@ -118,9 +118,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// ToString override.
         /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
             string allValues = string.Join(Environment.NewLine, this.Value);

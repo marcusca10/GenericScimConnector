@@ -10,7 +10,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
 {
 
     /// <summary>
-    /// 
+    /// Class for attributes of the schema endpoint.
     /// </summary>
     [DataContract]
     public sealed class AttributeScheme
@@ -25,14 +25,14 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
         private string uniquenessValue;
 
         /// <summary>
-        /// 
+        /// Constructor
         /// </summary>
         public AttributeScheme()
         {
         }
 
         /// <summary>
-        /// 
+        /// Constructor.
         /// </summary>
         public AttributeScheme(string name, AttributeDataType type, bool plural)
         {
@@ -50,7 +50,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
         }
 
         /// <summary>
-        /// 
+        /// Get or set if the attribute is case exact.
         /// </summary>
         [DataMember(Name = AttributeNames.CaseExact)]
         public bool CaseExact
@@ -60,7 +60,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
         }
 
         /// <summary>
-        /// 
+        /// Get or set datatype.
         /// </summary>
         public AttributeDataType DataType
         {
@@ -78,9 +78,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Called upon serialization")]
         [DataMember(Name = AttributeNames.Type)]
-#pragma warning disable IDE0051 // Remove unused private members
         private string DataTypeValue
-#pragma warning restore IDE0051 // Remove unused private members
         {
             get
             {
@@ -89,14 +87,14 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
 
             set
             {
-				var stringValue = value.Substring(0, 1).ToUpper(CultureInfo.CurrentCulture) + value.Substring(1).ToLower(CultureInfo.CurrentCulture);
+                var stringValue = value.Substring(0, 1).ToUpper(CultureInfo.CurrentCulture) + value.Substring(1).ToLower(CultureInfo.CurrentCulture);
                 this.dataType = (AttributeDataType)Enum.Parse(typeof(AttributeDataType), stringValue);
                 this.dataTypeValue = value;
             }
         }
 
         /// <summary>
-        /// 
+        /// Get or set the description of the attribute.
         /// </summary>
         [DataMember(Name = AttributeNames.Description)]
         public string Description
@@ -106,7 +104,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
         }
 
         /// <summary>
-        /// 
+        /// Get or set the mutability of the attribute.
         /// </summary>
         public Mutability Mutability
         {
@@ -124,9 +122,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Called upon serialization")]
         [DataMember(Name = AttributeNames.Mutability)]
-#pragma warning disable IDE0051 // Remove unused private members
         private string MutabilityValue
-#pragma warning restore IDE0051 // Remove unused private members
         {
             get
             {
@@ -141,7 +137,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
         }
 
         /// <summary>
-        /// 
+        /// Get or set the attribute name.
         /// </summary>
         [DataMember(Name = AttributeNames.Name)]
         public string Name
@@ -151,7 +147,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
         }
 
         /// <summary>
-        /// 
+        /// Get or set Plural.
         /// </summary>
         [DataMember(Name = AttributeNames.Plural)]
         public bool Plural
@@ -161,7 +157,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
         }
 
         /// <summary>
-        /// 
+        /// Get or set if the attribute is required.
         /// </summary>
         [DataMember(Name = AttributeNames.Required)]
         public bool Required
@@ -171,7 +167,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
         }
 
         /// <summary>
-        /// 
+        /// Get or set if the attribute is returned.
         /// </summary>
         public Returned Returned
         {
@@ -189,9 +185,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Called upon serialization")]
         [DataMember(Name = AttributeNames.Returned)]
-#pragma warning disable IDE0051 // Remove unused private members
         private string ReturnedValue
-#pragma warning restore IDE0051 // Remove unused private members
         {
             get
             {
@@ -206,7 +200,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
         }
 
         /// <summary>
-        /// 
+        /// Get or set if the attribute must be unique.
         /// </summary>
         public Uniqueness Uniqueness
         {
@@ -224,9 +218,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Called upon serialization")]
         [DataMember(Name = AttributeNames.Uniqueness)]
-#pragma warning disable IDE0051 // Remove unused private members
         private string UniquenessValue
-#pragma warning restore IDE0051 // Remove unused private members
         {
             get
             {

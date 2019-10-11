@@ -11,19 +11,19 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
     /// Logging requires "Serilog.Extensions.Logging.File" Version="1.0.1"
     /// </summary>
     public static class Program
-	{
-		/// <summary>
-		/// Entry point.
-		/// </summary>
-		public static void Main(string[] args)
-		{
-			CreateWebHostBuilder(args).Build().Run();
-		}
-		/// <summary>
-		/// Create web host builder.
-		/// </summary>
-		public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-			WebHost.CreateDefaultBuilder(args)
-				.UseStartup<Startup>(); // use a startup class
-	}
+    {
+        /// <summary>
+        /// Entry point.
+        /// </summary>
+        public static void Main(string[] args)
+        {
+            CreateWebHostBuilder(args).Build().Run();
+        }
+        /// <summary>
+        /// Create web host builder.
+        /// </summary>
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>(); // use a startup class
+    }
 }

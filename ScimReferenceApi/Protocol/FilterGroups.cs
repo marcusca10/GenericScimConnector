@@ -10,14 +10,14 @@ using System.Web;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
     /// <summary>
-    /// 
+    /// Class for generating alist of Groups based on the filter expression in a GET.
     /// </summary>
     public class FilterGroups
     {
 
         private readonly ScimContext _context;
         /// <summary>
-        /// 
+        /// Constructor.
         /// </summary>
         public FilterGroups(ScimContext context)
         {
@@ -30,9 +30,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         /// </summary>
         /// <param name="query">Query portion of URI</param>
         /// <returns>AllGroups a list of the slected groups</returns>
-        public List<Group> FilterGen(string query)
+        public IEnumerable<Group> FilterGen(string query)
         {
-            List<Group> AllUsers = new List<Group>();
+            IEnumerable<Group> AllUsers = new List<Group>();
             NameValueCollection keyedValues = HttpUtility.ParseQueryString(query);
             IEnumerable<string> keys = keyedValues.AllKeys;
             foreach (string key in keys)
@@ -40,25 +40,25 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                 if (string.Equals(key, QueryKeys.Filter, StringComparison.OrdinalIgnoreCase))
                 {
                     string filterExpression = keyedValues[key];
-                    AllUsers = GetUsers(filterExpression);
+                    AllUsers = GetGroups(filterExpression);
 
                 }
             }
             return AllUsers;
         }
 
-        
+
         /// <summary>
-        /// 
+        /// Method for apply the logic of the genearted collection of filter lists.
         /// </summary>
-        public List<Group> GetUsers(string filterExpression)
+        public IEnumerable<Group> GetGroups(string filterExpression)
         {
             List<Group> AllGroups = new List<Group>();
             if (Filter.TryParse(filterExpression, out IReadOnlyCollection<IFilter> results))
             {
                 for (int i = 0; i < results.Count; i++)
                 {
-                    List<Group> groups = _context.Groups.ToList();
+                    IEnumerable<Group> groups = _context.Groups;
                     Filter currentFilter = (Filter)results.ElementAt(i);
                     while (currentFilter != null)
                     {
@@ -69,7 +69,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                         if (charLocation > 0)
                         {
                             attribute = attribute.Substring(0, charLocation);
-                            propName = fullAttribute.Substring(charLocation+1, fullAttribute.Length-(charLocation+1));
+                            propName = fullAttribute.Substring(charLocation + 1, fullAttribute.Length - (charLocation + 1));
                         }
 
 
@@ -81,7 +81,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                             switch (attribute)
                             {
                                 case AttributeNames.Schema:
-                                    groups = groups.Where(p => p.Schemas.Any(s=>s.Equals(value ?? String.Empty, StringComparison.InvariantCultureIgnoreCase))).ToList();
+                                    groups = groups.Where(p => p.Schemas.Any(s => s.Equals(value ?? String.Empty, StringComparison.InvariantCultureIgnoreCase))).ToList();
                                     break;
                                 case AttributeNames.DisplayName:
                                     groups = groups.Where(p => p.DisplayName.Equals(value ?? String.Empty, StringComparison.InvariantCultureIgnoreCase)).ToList(); ;
@@ -166,7 +166,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                             switch (attribute)
                             {
                                 case AttributeNames.Schema:
-                                    groups = groups.Where(p => p.Schemas.Any(s=> !string.IsNullOrWhiteSpace(s))).ToList();
+                                    groups = groups.Where(p => p.Schemas.Any(s => !string.IsNullOrWhiteSpace(s))).ToList();
                                     break;
                                 case AttributeNames.DisplayName:
                                     groups = groups.Where(p => !string.IsNullOrWhiteSpace(p.DisplayName)).ToList(); ;

@@ -7,111 +7,111 @@ using System.Runtime.Serialization;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
-	/// <summary>
-	/// Model of Core 2 User.
-	/// </summary>
-	[DataContract]
-	public class User : Resource
-	{
-		/// <summary>
-		/// Get or set user name.
-		/// </summary>
-		[DataMember(Name = AttributeNames.UserName)]
-		public virtual string UserName { get; set; }
+    /// <summary>
+    /// Model of Core 2 User.
+    /// </summary>
+    [DataContract]
+    public class User : Resource
+    {
+        /// <summary>
+        /// Get or set user name.
+        /// </summary>
+        [DataMember(Name = AttributeNames.UserName)]
+        public virtual string UserName { get; set; }
 
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		public User()
-		{
-			this.AddSchema(SchemaIdentifiers.Core2User);
-			this.Metadata =
-				new Metadata()
-				{
-					ResourceType = Types.User,
-				};
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public User()
+        {
+            this.AddSchema(SchemaIdentifiers.Core2User);
+            this.Metadata =
+                new Metadata()
+                {
+                    ResourceType = Types.User,
+                };
 
-			Active = true;
-		}
+            Active = true;
+        }
 
-		/// <summary>
-		/// Get or set Active.
-		/// </summary>
-		[DataMember(Name = AttributeNames.Active)]
-		public virtual bool Active { get; set; }
+        /// <summary>
+        /// Get or set Active.
+        /// </summary>
+        [DataMember(Name = AttributeNames.Active)]
+        public virtual bool Active { get; set; }
 
-		/// <summary>
-		/// Get or set Addresses.
-		/// </summary>
-		[DataMember(Name = AttributeNames.Addresses, IsRequired = false, EmitDefaultValue = false)]
-		public virtual IEnumerable<Address> Addresses { get; set; }
+        /// <summary>
+        /// Get or set Addresses.
+        /// </summary>
+        [DataMember(Name = AttributeNames.Addresses, IsRequired = false, EmitDefaultValue = false)]
+        public virtual IEnumerable<Address> Addresses { get; set; }
 
-		/// <summary>
-		/// Get or set DisplayName, should be human readable.
-		/// </summary>
-		[DataMember(Name = AttributeNames.DisplayName, IsRequired = false, EmitDefaultValue = false)]
-		public virtual string DisplayName { get; set; }
+        /// <summary>
+        /// Get or set DisplayName, should be human readable.
+        /// </summary>
+        [DataMember(Name = AttributeNames.DisplayName, IsRequired = false, EmitDefaultValue = false)]
+        public virtual string DisplayName { get; set; }
 
-		/// <summary>
-		/// Get or set ElectronicMailAddresses, JSON name email.
-		/// </summary>
-		[DataMember(Name = AttributeNames.ElectronicMailAddresses, IsRequired = false, EmitDefaultValue = false)]
-		public virtual IEnumerable<ElectronicMailAddress> ElectronicMailAddresses { get; set; }
+        /// <summary>
+        /// Get or set ElectronicMailAddresses, JSON name email.
+        /// </summary>
+        [DataMember(Name = AttributeNames.ElectronicMailAddresses, IsRequired = false, EmitDefaultValue = false)]
+        public virtual IEnumerable<ElectronicMailAddress> ElectronicMailAddresses { get; set; }
 
-		/// <summary>
-		/// Get or set Metadata.
-		/// </summary>
-		[DataMember(Name = AttributeNames.Metadata)]
-		public virtual Metadata Metadata { get; set; }
+        /// <summary>
+        /// Get or set Metadata.
+        /// </summary>
+        [DataMember(Name = AttributeNames.Metadata)]
+        public virtual Metadata Metadata { get; set; }
 
-		/// <summary>
-		/// Get or set Name.
-		/// </summary>
-		[DataMember(Name = AttributeNames.Name, IsRequired = false, EmitDefaultValue = false)]
-		public virtual Name Name { get; set; }
+        /// <summary>
+        /// Get or set Name.
+        /// </summary>
+        [DataMember(Name = AttributeNames.Name, IsRequired = false, EmitDefaultValue = false)]
+        public virtual Name Name { get; set; }
 
-		/// <summary>
-		/// Get or set PhoneNumbers.
-		/// </summary>
-		[DataMember(Name = AttributeNames.PhoneNumbers, IsRequired = false, EmitDefaultValue = false)]
-		public virtual IEnumerable<PhoneNumber> PhoneNumbers { get; set; }
+        /// <summary>
+        /// Get or set PhoneNumbers.
+        /// </summary>
+        [DataMember(Name = AttributeNames.PhoneNumbers, IsRequired = false, EmitDefaultValue = false)]
+        public virtual IEnumerable<PhoneNumber> PhoneNumbers { get; set; }
 
-		/// <summary>
-		/// Get or set PreferredLanguage.
-		/// </summary>
-		[DataMember(Name = AttributeNames.PreferredLanguage, IsRequired = false, EmitDefaultValue = false)]
-		public virtual string PreferredLanguage { get; set; }
+        /// <summary>
+        /// Get or set PreferredLanguage.
+        /// </summary>
+        [DataMember(Name = AttributeNames.PreferredLanguage, IsRequired = false, EmitDefaultValue = false)]
+        public virtual string PreferredLanguage { get; set; }
 
-		/// <summary>
-		/// Get or set Roles.
-		/// </summary>
-		[DataMember(Name = AttributeNames.Roles, IsRequired = false, EmitDefaultValue = false)]
-		public virtual IEnumerable<Role> Roles { get; set; }
+        /// <summary>
+        /// Get or set Roles.
+        /// </summary>
+        [DataMember(Name = AttributeNames.Roles, IsRequired = false, EmitDefaultValue = false)]
+        public virtual IEnumerable<Role> Roles { get; set; }
 
-		/// <summary>
-		/// Get or set Title
-		/// </summary>
-		[DataMember(Name = AttributeNames.Title, IsRequired = false, EmitDefaultValue = false)]
-		public virtual string Title { get; set; }
-	}
+        /// <summary>
+        /// Get or set Title
+        /// </summary>
+        [DataMember(Name = AttributeNames.Title, IsRequired = false, EmitDefaultValue = false)]
+        public virtual string Title { get; set; }
+    }
 
-	/// <summary>
-	/// User extentions for queyable items
-	/// </summary>
-	public static class UserExtensions
-	{
-		/// <summary>
-		/// Returns fully populated Users 
-		/// </summary>
-		public static IQueryable<User> CompleteUsers(this ScimContext context)
-		{
-			return context.Users.Include("Metadata")
-					.Include("Name")
-					.Include("ElectronicMailAddresses")
-					.Include("PhoneNumbers")
-					.Include("Roles")
-					.Include("Addresses");
-		}
+    /// <summary>
+    /// User extentions for queyable items
+    /// </summary>
+    public static class UserExtensions
+    {
+        /// <summary>
+        /// Returns fully populated Users 
+        /// </summary>
+        public static IQueryable<User> CompleteUsers(this ScimContext context)
+        {
+            return context.Users.Include("Metadata")
+                    .Include("Name")
+                    .Include("ElectronicMailAddresses")
+                    .Include("PhoneNumbers")
+                    .Include("Roles")
+                    .Include("Addresses");
+        }
 
 
         /// <summary>
@@ -293,7 +293,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "None")]
         private static void PatchAddresses(this User user, PatchOperation operation)
         {
             if (null == operation)
@@ -483,10 +482,134 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     }
                     address.StreetAddress = value;
                 }
+                if
+                (
+                    string.Equals(
+                        Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Formatted,
+                        operation.Path.ValuePath.AttributePath,
+                        StringComparison.Ordinal)
+                )
+                {
+                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    if
+                    (
+                            value != null
+                        && OperationName.Remove == operation.Name
+                        && string.Equals(value, address.Formatted, StringComparison.OrdinalIgnoreCase)
+                    )
+                    {
+                        value = null;
+                    }
+                    address.Formatted = value;
+                }
             }
 
             if (string.Equals(Address.Other, subAttribute.ComparisonValue, StringComparison.Ordinal))
             {
+                if
+                (
+                    string.Equals(
+                        Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Country,
+                        operation.Path.ValuePath.AttributePath,
+                        StringComparison.Ordinal)
+                )
+                {
+                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    if
+                    (
+                            value != null
+                        && OperationName.Remove == operation.Name
+                        && string.Equals(value, address.Country, StringComparison.OrdinalIgnoreCase)
+                    )
+                    {
+                        value = null;
+                    }
+                    address.Country = value;
+                }
+
+                if
+                (
+                    string.Equals(
+                        Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Locality,
+                        operation.Path.ValuePath.AttributePath,
+                        StringComparison.Ordinal)
+                )
+                {
+                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    if
+                    (
+                            value != null
+                        && OperationName.Remove == operation.Name
+                        && string.Equals(value, address.Locality, StringComparison.OrdinalIgnoreCase)
+                    )
+                    {
+                        value = null;
+                    }
+                    address.Locality = value;
+                }
+
+                if
+                (
+                    string.Equals(
+                        Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.PostalCode,
+                        operation.Path.ValuePath.AttributePath,
+                        StringComparison.Ordinal)
+                )
+                {
+                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    if
+                    (
+                            value != null
+                        && OperationName.Remove == operation.Name
+                        && string.Equals(value, address.PostalCode, StringComparison.OrdinalIgnoreCase)
+                    )
+                    {
+                        value = null;
+                    }
+                    address.PostalCode = value;
+                }
+
+                if
+                (
+                    string.Equals(
+                        Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Region,
+                        operation.Path.ValuePath.AttributePath,
+                        StringComparison.Ordinal)
+                )
+                {
+                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    if
+                    (
+                            value != null
+                        && OperationName.Remove == operation.Name
+                        && string.Equals(value, address.Region, StringComparison.OrdinalIgnoreCase)
+                    )
+                    {
+                        value = null;
+                    }
+                    address.Region = value;
+                }
+
+                if
+                (
+                    string.Equals(
+                        Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.StreetAddress,
+                        operation.Path.ValuePath.AttributePath,
+                        StringComparison.Ordinal)
+                )
+                {
+                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    if
+                    (
+                            value != null
+                        && OperationName.Remove == operation.Name
+                        && string.Equals(value, address.StreetAddress, StringComparison.OrdinalIgnoreCase)
+                    )
+                    {
+                        value = null;
+                    }
+                    address.StreetAddress = value;
+                }
                 if
                 (
                     string.Equals(
@@ -652,6 +775,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     };
             }
 
+
+
             string value = operation.Value?.Single().Value;
             if
             (
@@ -700,6 +825,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
             result = electronicMailAddresses.Union(electronicMailAddresses).ToArray();
             return result;
+
+
         }
 
         private static void PatchName(this User user, PatchOperation operation)
@@ -802,6 +929,29 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                 }
                 name.FamilyName = value;
             }
+            if
+            (
+                string.Equals(
+                    Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Formatted,
+                    operation.Path.ValuePath.AttributePath,
+                    StringComparison.OrdinalIgnoreCase)
+            )
+            {
+                value = operation.Value != null ? operation.Value.Single().Value : null;
+                if
+                (
+                        value != null
+                    && OperationName.Remove == operation.Name
+                    && string.Equals(value, name.Formatted, StringComparison.OrdinalIgnoreCase)
+                )
+                {
+                    value = null;
+                }
+                name.Formatted = value;
+            }
+
+
+
 
             if (string.IsNullOrWhiteSpace(name.FamilyName) && string.IsNullOrWhiteSpace(name.GivenName))
             {
@@ -821,7 +971,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             user.Name = name;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "None")]
         private static void PatchPhoneNumbers(this User user, PatchOperation operation)
         {
             if (null == operation)

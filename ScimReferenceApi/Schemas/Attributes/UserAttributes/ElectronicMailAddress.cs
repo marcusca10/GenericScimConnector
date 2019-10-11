@@ -2,21 +2,21 @@
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
-	/// <summary>
-	/// Email, of a User.
-	/// </summary>
-	[DataContract]
-	public sealed class ElectronicMailAddress : TypedValue
-	{
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		public ElectronicMailAddress()
-		{
-		}
+    /// <summary>
+    /// Email, of a User.
+    /// </summary>
+    [DataContract]
+    public sealed class ElectronicMailAddress : TypedValue
+    {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public ElectronicMailAddress()
+        {
+        }
 
         /// <summary>
-        /// 
+        /// Reflection.
         /// </summary>
         public object this[string propertyName]
         {
@@ -30,14 +30,14 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         /// </summary>
         public const string Home = "home";
 
-		/// <summary>
-		/// other email.
-		/// </summary>
-		public const string Other = "other";
+        /// <summary>
+        /// other email.
+        /// </summary>
+        public const string Other = "other";
 
-		/// <summary>
-		/// work email.
-		/// </summary>
-		public const string Work = "work";
-	}
+        /// <summary>
+        /// work email.
+        /// </summary>
+        public const string Work = "work";
+    }
 }

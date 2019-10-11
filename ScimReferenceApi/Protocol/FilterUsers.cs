@@ -30,35 +30,40 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         /// </summary>
         /// <param name="query">Query portion of URI</param>
         /// <returns>AllUsers a list of the slected users</returns>
-        public List<User> FilterGen(string query)
+        public IEnumerable<User> FilterGen(string query)
         {
-            List<User> AllUsers = new List<User>();
+            IEnumerable<User> AllUsers = new List<User>();
             NameValueCollection keyedValues = HttpUtility.ParseQueryString(query);
             IEnumerable<string> keys = keyedValues.AllKeys;
-            foreach (string key in keys)
-            {
-                if (string.Equals(key, QueryKeys.Filter, StringComparison.OrdinalIgnoreCase))
-                {
-                    string filterExpression = keyedValues[key];
-                    AllUsers = GetUsers(filterExpression);
 
-                }
+            string filterExpression = keyedValues[QueryKeys.Filter];
+
+
+            if (filterExpression != null)
+            {
+                AllUsers = GetUsers(filterExpression);
+
             }
+            else
+            {
+                AllUsers = _context.CompleteUsers().AsEnumerable();
+            }
+
             return AllUsers;
         }
 
-        
+
         /// <summary>
         /// 
         /// </summary>
-        public List<User> GetUsers(string filterExpression)
+        public IEnumerable<User> GetUsers(string filterExpression)
         {
             List<User> AllUsers = new List<User>();
             if (Filter.TryParse(filterExpression, out IReadOnlyCollection<IFilter> results))
             {
                 for (int i = 0; i < results.Count; i++)
                 {
-                    List<User> users = _context.CompleteUsers().ToList();
+                    IEnumerable<User> users = _context.CompleteUsers();
                     Filter currentFilter = (Filter)results.ElementAt(i);
                     while (currentFilter != null)
                     {
@@ -333,7 +338,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                             switch (attribute)
                             {
                                 case AttributeNames.Metadata:
-                                    users = users.Where(p=>(DateTime)p.Metadata[propName]> DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
+                                    users = users.Where(p => (DateTime)p.Metadata[propName] > DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
                                     break;
                                 default:
                                     break;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 {
     /// <summary>
-    /// 
+    /// Instantiable class extension of Ipath
     /// </summary>
     public sealed class Path : IPath
     {
@@ -54,7 +54,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Get or set the path of the value.
         /// </summary>
         public string AttributePath
         {
@@ -69,7 +69,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Get or set the SchemaIdentifier.
         /// </summary>
         public string SchemaIdentifier
         {
@@ -78,7 +78,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Get or set the subattributes.
         /// </summary>
         public IReadOnlyCollection<IFilter> SubAttributes
         {
@@ -87,7 +87,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Get or set the path of the value.
         /// </summary>
         public IPath ValuePath
         {
@@ -96,10 +96,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Method for creating a new path.
         /// </summary>
-        /// <param name="pathExpression"></param>
-        /// <returns></returns>
         public static IPath Create(string pathExpression)
         {
             if (string.IsNullOrWhiteSpace(pathExpression))
@@ -110,8 +108,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             if (!Path.TryParse(pathExpression, out IPath result))
             {
                 string exceptionMessage =
-                        CultureInfo.InvariantCulture+
-                        "ExceptionInvalidPathTemplate"+
+                        CultureInfo.InvariantCulture +
+                        "ExceptionInvalidPathTemplate" +
                         pathExpression;
                 throw new ArgumentException(exceptionMessage);
             }
@@ -155,7 +153,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Method for converting a path string to a path class.
         /// </summary>
         public static bool TryParse(string pathExpression, out IPath path)
         {
@@ -213,7 +211,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// ToString override.
         /// </summary>
         public override string ToString()
         {

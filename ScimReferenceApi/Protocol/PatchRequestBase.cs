@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
 {
     /// <summary>
-    /// 
+    /// Abstract class for PatchRequestBase
     /// </summary>
     [DataContract]
     public abstract class PatchRequestBase : Schematized

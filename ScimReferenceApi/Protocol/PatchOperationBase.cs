@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 {
     /// <summary>
-    /// 
+    /// Class for holding the patch operation.
     /// </summary>
     [DataContract]
     public abstract class PatchOperationBase : IPatchOperationBase
@@ -23,17 +23,15 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         private string pathExpression;
 
         /// <summary>
-        /// 
+        /// Constructor.
         /// </summary>
         protected PatchOperationBase()
         {
         }
 
         /// <summary>
-        /// 
+        /// Constructor.
         /// </summary>
-        /// <param name="operationName"></param>
-        /// <param name="pathExpression"></param>
         protected PatchOperationBase(OperationName operationName, string pathExpression)
         {
             if (string.IsNullOrWhiteSpace(pathExpression))
@@ -46,7 +44,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Get or set the op name.
         /// </summary>
         public OperationName Name
         {
@@ -62,7 +60,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             }
         }
 
-        
+
         /// <summary>
         /// It's the value of 'op' parameter within the json of request body.
         /// </summary>
@@ -86,7 +84,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Get or set the path of the attribute to patched.
         /// </summary>
         public IPath Path
         {
@@ -108,9 +106,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// ToString overrride.
         /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
             string result =

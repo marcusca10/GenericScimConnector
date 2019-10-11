@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 {
     /// <summary>
-    /// 
+    /// Class for storing information on a filter and invoking the filterExpression .ToFilters().
     /// </summary>
     public sealed class Filter : IFilter
     {
@@ -18,7 +19,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         private const string EncodingSpacePer2396 = "+";
 
         /// <summary>
-        /// 
+        /// Name for null string.
         /// </summary>
         public const string NullValue = "null";
 
@@ -54,7 +55,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Constructor.
         /// </summary>
         public Filter(string attributePath, ComparisonOperator filterOperator, string comparisonValue)
         {
@@ -75,7 +76,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Constructor.
         /// </summary>
         public Filter(IFilter other)
             : this(other?.AttributePath, other.FilterOperator, other?.ComparisonValue)
@@ -119,7 +120,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Refrence to the next filter in a list of ands.
         /// </summary>
         public IFilter AdditionalFilter
         {
@@ -137,7 +138,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Value to be checked by expresion.
         /// </summary>
         public string ComparisonValue
         {
@@ -160,7 +161,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Get comparisonValueEncoded.
         /// </summary>
         public string ComparisonValueEncoded
         {
@@ -171,7 +172,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Get or Set the data type of the value being operated with.
         /// </summary>
         public AttributeDataType? DataType
         {
@@ -188,7 +189,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Get or set the operator to apply to the vaule.
         /// </summary>
         public ComparisonOperator FilterOperator
         {
@@ -221,7 +222,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Method for serializing the filter and the list of ands.
         /// </summary>
         public string Serialize()
         {
@@ -311,7 +312,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// ToString() override.
         /// </summary>
         public override string ToString()
         {
@@ -320,7 +321,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Method for turing the colletion of filter lists into a string.
         /// </summary>
         public static string ToString(IReadOnlyCollection<IFilter> filters)
         {
@@ -369,14 +370,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         }
 
         /// <summary>
-        /// 
+        /// Method for trying to generate the collection of filter lists from the URI querry.
         /// </summary>
-        /// <param name="filterExpression"></param>
-        /// <param name="filters"></param>
-        /// <returns></returns>
         public static bool TryParse(string filterExpression, out IReadOnlyCollection<IFilter> filters)
         {
             string expression = filterExpression;//.Trim('"');
+
             try
             {
                 IReadOnlyCollection<IFilter> buffer = new FilterExpression(expression).ToFilters();

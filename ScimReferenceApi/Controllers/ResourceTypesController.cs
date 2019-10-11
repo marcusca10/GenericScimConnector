@@ -8,30 +8,31 @@ using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	[Route("api/ResourceType")]
-	[ApiController]
-	public class ResourceTypesController : ControllerBase
+    /// <summary>
+    /// Class for the ResourceTypes endpoint.
+    /// </summary>
+    [Route("api/ResourceTypes")]
+    [ApiController]
+    public class ResourceTypesController : ControllerBase
     {
-		/// <summary>
-		/// 
-		/// </summary>
-		public ResourceTypesController()
-		{
-		}
-		/// <summary>
-		/// 
-		/// </summary>
-		[HttpGet]
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public ResourceTypesController()
+        {
+        }
+
+        /// <summary>
+        /// HTTP GET to return json file.
+        /// </summary>
+        [HttpGet]
 #pragma warning disable CA1822 // Mark members as static do not mark static controler methods
-		public ActionResult<IEnumerable<Core2ResourceType>> Get()
+        public ActionResult<IEnumerable<Core2ResourceType>> Get()
 #pragma warning restore CA1822 // Mark members as static
-		{
-			var schmea = System.IO.File.ReadAllText("./JsonConstants/resourceTypes.json");
-			var items = JsonConvert.DeserializeObject<List<Core2ResourceType>>(schmea);
-			return items;
-		}
-	}
+        {
+            var schmea = System.IO.File.ReadAllText("./JsonConstants/resourceTypes.json");
+            var items = JsonConvert.DeserializeObject<List<Core2ResourceType>>(schmea);
+            return items;
+        }
+    }
 }

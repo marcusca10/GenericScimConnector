@@ -1,10 +1,10 @@
 ﻿namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
-	/// <summary>
-	/// Attribute names for DataContracts.
-	/// </summary>
-	public static class AttributeNames
-	{
+    /// <summary>
+    /// Attribute names for DataContracts.
+    /// </summary>
+    public static class AttributeNames
+    {
         /// <summary>
         /// AccountEnabled.
         /// </summary>
@@ -434,5 +434,5 @@
         /// Watermark
         /// </summary>
         public const string Watermark = "watermark";
-	}
+    }
 }

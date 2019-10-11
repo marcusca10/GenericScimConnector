@@ -10,19 +10,18 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
 {
     /// <summary>
-    /// 
+    /// Patch operation extension for ops with only one value.
     /// </summary>
     [DataContract]
     public sealed class PatchOperation2SingleValued : PatchOperationBase
     {
         private const string Template = "{0}: [{1}]";
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "The serialized value is consumed.")]
         [DataMember(Name = AttributeNames.Value, Order = 2)]
         private string valueValue;
 
         /// <summary>
-        /// 
+        /// Constructor.
         /// </summary>
         public PatchOperation2SingleValued()
         {
@@ -30,7 +29,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
         }
 
         /// <summary>
-        /// 
+        /// Constructor.
         /// </summary>
         public PatchOperation2SingleValued(OperationName operationName, string pathExpression, string value)
             : base(operationName, pathExpression)
@@ -44,7 +43,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
         }
 
         /// <summary>
-        /// 
+        /// Get the value.
         /// </summary>
         public string Value
         {
@@ -66,9 +65,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
         }
 
         /// <summary>
-        /// 
+        /// ToString overrride.
         /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
             string operation = base.ToString();

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
     /// <summary>
-    /// 
+    /// Me endpoint with rfc known but not implemented.
     /// </summary>
     [Route("api/Me")]
     [ApiController]
@@ -18,7 +18,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         private readonly ScimContext _context;
         private readonly ILogger<UsersController> _log;
         /// <summary>
-        /// 
+        /// Constructor.
         /// </summary>
         public MeController(ScimContext context, ILogger<UsersController> log)
         {
@@ -27,7 +27,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// HTTP GET.
         /// </summary>
         [HttpGet]
         public IActionResult Get()
@@ -36,16 +36,16 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// HTTP POST.
         /// </summary>
-        /// <returns></returns>
         [HttpPost]
         public IActionResult Post()
         {
             return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
         }
+
         /// <summary>
-        /// 
+        /// HTTP PUT.
         /// </summary>
         [HttpPut("{id}")]
         public IActionResult Put()
@@ -54,7 +54,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// HTTP DELETE.
         /// </summary>
         [HttpDelete("{id}")]
         public IActionResult Delete()
@@ -63,7 +63,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// HTTP PATCH.
         /// </summary>
         [HttpPatch("{id}")]
         public IActionResult Patch()

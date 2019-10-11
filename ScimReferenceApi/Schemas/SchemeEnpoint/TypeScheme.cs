@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
     /// <summary>
-    /// 
+    /// Class for scheme type at schema endpoint.
     /// </summary>
     [DataContract]
     public sealed class TypeScheme
@@ -22,7 +22,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         private object thisLock;
 
         /// <summary>
-        /// 
+        /// Constructor.
         /// </summary>
         public TypeScheme()
         {
@@ -31,7 +31,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         }
 
         /// <summary>
-        /// 
+        /// Get the attributes.
         /// </summary>
         public IReadOnlyCollection<AttributeScheme> Attributes
         {
@@ -42,7 +42,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         }
 
         /// <summary>
-        /// 
+        /// Get or set the scheme description.
         /// </summary>
         [DataMember(Name = AttributeNames.Description)]
         public string Description
@@ -52,7 +52,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         }
 
         /// <summary>
-        /// 
+        /// Get or set the Identifier.
         /// </summary>
         [DataMember(Name = AttributeNames.Identifier)]
         public string Identifier
@@ -62,7 +62,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         }
 
         /// <summary>
-        /// 
+        /// Get or set the Name.
         /// </summary>
         [DataMember(Name = AttributeNames.Name)]
         public string Name
@@ -72,9 +72,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         }
 
         /// <summary>
-        /// 
+        /// Method for adding an attribute.
         /// </summary>
-        /// <param name="attribute"></param>
         public void AddAttribute(AttributeScheme attribute)
         {
             if (null == attribute)
