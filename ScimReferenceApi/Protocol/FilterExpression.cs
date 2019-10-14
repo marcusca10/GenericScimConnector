@@ -612,7 +612,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             }
 
             string nextExpression = remainder.Substring(indexNextFilter);
-            int indexClosingBracket = remainder.IndexOf(FilterExpression.BracketClose);
+            int indexClosingBracket = remainder.IndexOf(FilterExpression.BracketClose, StringComparison.Ordinal);
             int nextExpressionLevel;
             int nextExpressionGroup;
             if (indexClosingBracket >= 0 && indexClosingBracket < indexLogicalOperator)
@@ -749,7 +749,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             }
             else
             {
-                int index = input.IndexOf(FilterExpression.Space);
+                int index = input.IndexOf(FilterExpression.Space, StringComparison.Ordinal);
                 if (index >= 0)
                 {
                     // If unquoted string comparison values were to be rejected, 

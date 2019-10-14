@@ -32,7 +32,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 #pragma warning restore CA1822 // Mark members as static
         {
 
-
             var schmea = System.IO.File.ReadAllText("./JsonConstants/ReferenceCodeSchema.json");
             var items = JsonConvert.DeserializeObject<List<TypeScheme>>(schmea);
             return items;

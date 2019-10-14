@@ -27,7 +27,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
     //[Authorize]
     public class UsersController : ControllerBase
     {
-        private readonly ScimContext _context;
+		private readonly ScimContext _context;
         private readonly ILogger<UsersController> _log;
 
         /// <summary>
@@ -68,10 +68,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             {
                 startIndex = "1";
             }
-            //if (countString == null)
-            //{
-            //	countString = "10";
-            //}
 
             int start = int.Parse(startIndex, CultureInfo.InvariantCulture);
 
@@ -85,11 +81,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 users = users.Take(count.Value);
             }
             var requested = Request.Query[QueryKeys.Attributes];
-            var exculted = Request.Query[QueryKeys.ExcludedAttributes];
+            var exculded = Request.Query[QueryKeys.ExcludedAttributes];
             var allwaysRetuned = new string[] { AttributeNames.Identifier, "identifier", AttributeNames.Schemas, AttributeNames.Schema, AttributeNames.Active };//TODO Read from schema 
             users = users.Select(u =>
-                (User)ColumnsUtility.SelectColuns(requested, exculted, u, allwaysRetuned)).ToList();
-
+                (User)ColumnsUtility.SelectColumns(requested, exculded, u, allwaysRetuned)).ToList();
+            //TODO: always includes meta but of default values, likely from user constructor?
 
             ListResponse<User> list = new ListResponse<User>()
             {
@@ -140,7 +136,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             var attributes = searchRequest.attributes?.ToArray() ?? Array.Empty<string>();
             var exculdedattribes = searchRequest.excludedAttributes?.ToArray() ?? Array.Empty<string>();
             users = users.Select(u =>
-                (User)ColumnsUtility.SelectColuns(attributes, exculdedattribes, u, allwaysRetuned));
+                (User)ColumnsUtility.SelectColumns(attributes, exculdedattribes, u, allwaysRetuned));
             int totalResults = users.Count();
             if (searchRequest.startIndex.HasValue)
             {
@@ -160,6 +156,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             ListResponse<User> list = new ListResponse<User>()
             {
+                Identifier = Guid.NewGuid().ToString(),
                 TotalResults = totalResults,
                 StartIndex = searchRequest.startIndex ?? null,
                 Resources = users,
@@ -173,37 +170,54 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         /// Create a new user if given item has non-null unique username.
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult<User>> Post(User item)
-        {
-            if (item.UserName == null)
-            {
-                ErrorResponse badRequestError = new ErrorResponse("No Username", "400");
-                badRequestError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
-                return BadRequest(badRequestError);
-            }
+        public async Task<ActionResult<User>> Post(JObject body)
+		{
+			User item = BuildUser(body);
+			if (item.UserName == null)
+			{
+				ErrorResponse badRequestError = new ErrorResponse("No Username", "400");
+				badRequestError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
+				return BadRequest(badRequestError);
+			}
 
-            var Exists = _context.Users.Any(x => x.UserName == item.UserName);
-            if (Exists == true)
-            {
-                ErrorResponse conflictError = new ErrorResponse("Username already exists", "409");
-                conflictError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
-                return Conflict(conflictError);
-            }
+			var Exists = _context.Users.Any(x => x.UserName == item.UserName);
+			if (Exists == true)
+			{
+				ErrorResponse conflictError = new ErrorResponse("Username already exists", "409");
+				conflictError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
+				return Conflict(conflictError);
+			}
 
-            item.Metadata.Created = DateTime.Now;
-            item.Metadata.LastModified = DateTime.Now;
-            _context.Users.Add(item);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
-            _log.LogInformation(item.UserName);
-            Response.ContentType = "application/scim+json";
-            return CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
-        }
+			item.Metadata.Created = DateTime.Now;
+			item.Metadata.LastModified = DateTime.Now;
+			_context.Users.Add(item);
+			await _context.SaveChangesAsync().ConfigureAwait(false);
+			_log.LogInformation(item.UserName);
+			Response.ContentType = "application/scim+json";
+			return CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
+		}
 
-        /// <summary>
-        /// PUT: api/Users/5
-        /// Replace all values for the given User, if it exists.
-        /// </summary>
-        [HttpPut("{id}")]
+		private static User BuildUser(JObject body)
+		{
+			var shemas = body["schemas"].Children();
+			User item;
+			if (shemas.Contains(SchemaIdentifiers.Core2EnterpriseUser))
+			{
+				item = body.ToObject<EnterpriseUser>();
+			}
+			else
+			{
+				item = body.ToObject<User>();
+			}
+
+			return item;
+		}
+
+		/// <summary>
+		/// PUT: api/Users/5
+		/// Replace all values for the given User, if it exists.
+		/// </summary>
+		[HttpPut("{id}")]
         public async Task<ActionResult<User>> Put(string id, User item)
         {
 
@@ -214,13 +228,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return BadRequest(badRequestError);
             }
 
-            var User = _context.Users
-                .Where(p => p.Identifier == id).Include("Metadata")
-                    .Include("Name")
-                    .Include("ElectronicMailAddresses")
-                    .Include("PhoneNumbers")
-                    .Include("Roles")
-                    .Include("Addresses")
+            var User = _context.CompleteUsers()
+                .Where(p => p.Identifier == id)
                 .SingleOrDefault();
 
             if (User == null)
@@ -273,8 +282,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         public IActionResult Patch(string id, [FromBody]PatchRequest2Compliant patchRequest)
         {
 
-
-
             if (null == patchRequest)
             {
                 string unsupportedPatchTypeName = patchRequest.GetType().FullName;
@@ -303,6 +310,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
         }
+
         private static OperationName getOperationName(string operationName)
         {
             switch (operationName.ToLower(CultureInfo.CurrentCulture))
@@ -317,7 +325,5 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                     throw new NotImplementedException("Invalid operatoin Name" + operationName);
             }
         }
-
-
     }
 }

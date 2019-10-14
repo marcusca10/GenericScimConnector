@@ -27,8 +27,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.GroupAttribut
         /// <summary>
         /// Get or set TypeName.
         /// </summary>
-        [DataMember(Name = AttributeNames.Type, IsRequired = false)]
-        public string TypeName { get; set; }
+        [DataMember(Name = AttributeNames.DisplayName, IsRequired = false)]
+        public string DisplayName { get; set; }
 
         /// <summary>
         /// Get or set Value.

@@ -51,7 +51,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 groups = await _context.Groups.ToListAsync().ConfigureAwait(false);
             }
 
-
             NameValueCollection keyedValues = HttpUtility.ParseQueryString(query);
             IEnumerable<string> keys = keyedValues.AllKeys;
             string countString = keyedValues[QueryKeys.Count];
@@ -66,7 +65,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             int? count = null;
             int total = groups.Count();
 
-
             groups = groups.OrderBy(d => d.DisplayName).Skip(start - 1);
 
             if (countString != null)
@@ -75,13 +73,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 groups = groups.Take(count.Value);
             }
 
-
-
             var requested = Request.Query[QueryKeys.Attributes];
             var exculted = Request.Query[QueryKeys.ExcludedAttributes];
             var allwaysRetuned = new string[] { AttributeNames.Identifier, "identifier", AttributeNames.Schemas, AttributeNames.Schema, AttributeNames.Active };
             groups = groups.Select(u =>
-                (Group)ColumnsUtility.SelectColuns(requested, exculted, u, allwaysRetuned)).ToList();
+                (Group)ColumnsUtility.SelectColumns(requested, exculted, u, allwaysRetuned)).ToList();
 
             Response.ContentType = "application/scim+json";
 
@@ -99,7 +95,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             list.Identifier = Guid.NewGuid().ToString();
             return list;
-
 
         }
 
@@ -121,10 +116,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             var requested = Request.Query[QueryKeys.Attributes];
             var exculted = Request.Query[QueryKeys.ExcludedAttributes];
             var allwaysRetuned = new string[] { AttributeNames.Identifier, "identifier", AttributeNames.Schemas, AttributeNames.Schema, AttributeNames.Active };
-            Group = (Group)ColumnsUtility.SelectColuns(requested, exculted, Group, allwaysRetuned);
+            Group = (Group)ColumnsUtility.SelectColumns(requested, exculted, Group, allwaysRetuned);
             Response.ContentType = "application/scim+json";
             return Group;
         }
+
         /// <summary>
         /// Search endpoint send 
         /// </summary>
@@ -138,7 +134,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             var attributes = searchRequest.attributes?.ToArray() ?? Array.Empty<string>();
             var exculdedattribes = searchRequest.excludedAttributes?.ToArray() ?? Array.Empty<string>();
             groups = groups.Select(g =>
-                (Group)ColumnsUtility.SelectColuns(attributes, exculdedattribes, g, allwaysRetuned)).ToList();
+                (Group)ColumnsUtility.SelectColumns(attributes, exculdedattribes, g, allwaysRetuned)).ToList();
             if (searchRequest.startIndex.HasValue)
             {
                 if (searchRequest.startIndex > 1)
@@ -163,7 +159,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             };
             return list;
         }
-
 
         /// <summary>
         /// POST: api/Groups
@@ -237,6 +232,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             Response.ContentType = "application/scim+json";
             return NoContent();
         }
+
         /// <summary>
         /// Method For PATCH Group.
         /// </summary>
@@ -268,7 +264,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
         }
-
 
         private static OperationName getOperationName(string operationName)
         {

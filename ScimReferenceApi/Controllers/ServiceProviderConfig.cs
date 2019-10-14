@@ -33,7 +33,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         [HttpGet]
         public ActionResult<ServiceConfiguration> Get()
         {
-            var config = new ServiceConfiguration(false, true, false, false, true, false);
+            var config = new ServiceConfiguration(false, false, true, false, true, false);
             config.DocumentationResource = "http://example.com/help/scim.html";
             config.AddAuthenticationScheme(SCIMAuthenticationScheme.CreateOpenStandardForAuthorizationBearerTokenScheme());
             return Ok(config);

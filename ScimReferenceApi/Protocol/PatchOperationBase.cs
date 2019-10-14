@@ -60,7 +60,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             }
         }
 
-
         /// <summary>
         /// It's the value of 'op' parameter within the json of request body.
         /// </summary>

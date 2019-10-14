@@ -14,6 +14,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         /// Get or set the operation name.
         /// </summary>
         OperationName Name { get; set; }
+
         /// <summary>
         /// Get or set the path of the attribute to be changed.
         /// </summary>
