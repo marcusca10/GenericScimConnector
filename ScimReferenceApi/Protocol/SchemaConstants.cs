@@ -14,6 +14,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         /// PathInterface.
         /// </summary>
         public const string PathInterface = "scim";
+
         /// <summary>
         /// SeparatorSchemaIdentifierAttribute.
         /// </summary>

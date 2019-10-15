@@ -39,7 +39,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             this.OnInitialized();
         }
 
-
         /// <summary>
         /// Get the operation values.
         /// </summary>

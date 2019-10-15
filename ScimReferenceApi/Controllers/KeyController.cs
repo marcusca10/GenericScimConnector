@@ -15,7 +15,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
     {
         /// <summary>
         /// Response to HTTP POST. Generates a key and returns
-        /// TODO: remove or make secure.
+        /// TODO: make secure.
         /// </summary>
         /// <returns></returns>
         [HttpPost]

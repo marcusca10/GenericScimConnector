@@ -11,7 +11,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
     /// Class for extending a user to add enterprise attributes.
     /// </summary>
     [DataContract]
-    public abstract class EnterpriseUser : User
+    public  class EnterpriseUser : User
     {
         /// <summary>
         /// Constructor.
@@ -42,14 +42,5 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             set;
         }
 
-        /// <summary>
-        /// Get or set the extension.
-        /// </summary>
-        [DataMember(Name = AttributeNames.ExtensionEnterpriseUser2)]
-        public ExtensionAttributeEnterpriseUser EnterpriseExtension
-        {
-            get;
-            set;
-        }
     }
 }

@@ -10,20 +10,20 @@ using System.Web;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
     /// <summary>
-    /// 
+    /// Class for generating alist of Users based on the filter expression in a GET.
     /// </summary>
     public class FilterUsers
     {
 
         private readonly ScimContext _context;
+
         /// <summary>
-        /// 
+        /// Constructor.
         /// </summary>
         public FilterUsers(ScimContext context)
         {
             _context = context;
         }
-
 
         /// <summary>
         /// Method for filtering retruned results based on URI input.
@@ -37,7 +37,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             IEnumerable<string> keys = keyedValues.AllKeys;
 
             string filterExpression = keyedValues[QueryKeys.Filter];
-
 
             if (filterExpression != null)
             {
@@ -54,7 +53,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
 
         /// <summary>
-        /// 
+        /// Method for apply the logic of the genearted collection of filter lists.
         /// </summary>
         public IEnumerable<User> GetUsers(string filterExpression)
         {
@@ -76,7 +75,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                             attribute = attribute.Substring(0, charLocation);
                             propName = fullAttribute.Substring(charLocation + 1, fullAttribute.Length - (charLocation + 1));
                         }
-
 
                         var value = currentFilter.ComparisonValue;
                         var filterOp = currentFilter.FilterOperator;
@@ -384,6 +382,5 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             AllUsers = AllUsers.GroupBy(p => new { p.Identifier }).Select(o => o.FirstOrDefault()).ToList();
             return AllUsers;
         }
-
     }
 }

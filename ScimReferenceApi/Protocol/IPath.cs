@@ -14,14 +14,17 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         /// Get the path to the attribue.
         /// </summary>
         string AttributePath { get; }
+
         /// <summary>
         /// Get the schema id.
         /// </summary>
         string SchemaIdentifier { get; }
+
         /// <summary>
         /// Get the list of sub attributes of the path.
         /// </summary>
         IReadOnlyCollection<IFilter> SubAttributes { get; }
+
         /// <summary>
         /// Path to the value.
         /// </summary>

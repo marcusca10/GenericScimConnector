@@ -20,9 +20,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
         /// <param name="projectedUser"></param>
         /// <param name="allwaysRetuned"></param>
         /// <returns></returns>
-        public static Resource SelectColuns(IReadOnlyCollection<string> requestedAttributes, IReadOnlyCollection<string> excludedAttributes, Resource projectedUser, string[] allwaysRetuned)
+        public static Resource SelectColumns(IReadOnlyCollection<string> requestedAttributes, IReadOnlyCollection<string> excludedAttributes, Resource projectedUser, string[] allwaysRetuned)
         {
-
+            //TODO: always includes meta but of default values, likely from user constructor?
             if (!requestedAttributes.Any() && !excludedAttributes.Any())
             {
                 return projectedUser;

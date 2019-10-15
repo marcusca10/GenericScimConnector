@@ -16,6 +16,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
     {
 
         private readonly ScimContext _context;
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -23,7 +24,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         {
             _context = context;
         }
-
 
         /// <summary>
         /// Method for filtering retruned results based on URI input.
@@ -46,7 +46,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             }
             return AllUsers;
         }
-
 
         /// <summary>
         /// Method for apply the logic of the genearted collection of filter lists.
@@ -71,7 +70,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                             attribute = attribute.Substring(0, charLocation);
                             propName = fullAttribute.Substring(charLocation + 1, fullAttribute.Length - (charLocation + 1));
                         }
-
 
                         var value = currentFilter.ComparisonValue;
                         var filterOp = currentFilter.FilterOperator;
@@ -229,6 +227,5 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             AllGroups = AllGroups.GroupBy(p => new { p.Identifier }).Select(o => o.FirstOrDefault()).ToList();
             return AllGroups;
         }
-
     }
 }

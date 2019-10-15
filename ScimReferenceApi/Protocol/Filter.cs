@@ -154,7 +154,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                 string encodedValue = this.comparisonValue;
                 foreach (KeyValuePair<string, string> encoding in Filter.ReservedCharacterEncodingsPerRfc2396.Value)
                 {
-                    encodedValue = encodedValue.Replace(encoding.Key, encoding.Value);
+                    encodedValue = encodedValue.Replace(encoding.Key, encoding.Value, StringComparison.CurrentCulture);
                 }
                 this.comparisonValueEncoded = encodedValue;
             }
@@ -214,7 +214,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                 new Dictionary<string, string>(Filter.ReservedCharactersPerRfc3986.Value.Length);
             foreach (char character in Filter.ReservedCharactersPerRfc3986.Value)
             {
-                string from = character.ToString();
+                string from = character.ToString(CultureInfo.InvariantCulture);
                 string to = HttpUtility.UrlEncode(from);
                 result.Add(from, to);
             }
@@ -337,7 +337,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                 Filter clone = new Filter(filter);
                 clone.ComparisonValue = placeholder;
                 string currentFilter = clone.Serialize();
-                string encodedFilter = HttpUtility.UrlEncode(currentFilter).Replace(placeholder, filter.ComparisonValueEncoded);
+                string encodedFilter = HttpUtility.UrlEncode(currentFilter).Replace(placeholder, filter.ComparisonValueEncoded, StringComparison.InvariantCulture);
                 if (string.IsNullOrWhiteSpace(allFilters))
                 {
                     allFilters =

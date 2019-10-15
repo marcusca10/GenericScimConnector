@@ -37,9 +37,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         }
 
         /// <summary>
-        /// 
+        /// ToString override.
         /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
             string result =

@@ -43,5 +43,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         /// </summary>
         [DataMember(Name = AttributeNames.LastModified)]
         public DateTime LastModified { get; set; }
+
+        /// <summary>
+        /// Get or set location. The uri for the resource.
+        /// </summary>
+        public string location { get; set; }
     }
 }
