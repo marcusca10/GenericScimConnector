@@ -71,6 +71,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             int start = int.Parse(startIndex, CultureInfo.InvariantCulture);
 
+            if(start<1)
+            {
+                start = 1;
+            }
+
             int total = users.Count();
             int? count = null;
 
@@ -80,12 +85,13 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 count = int.Parse(countString, CultureInfo.CurrentCulture);
                 users = users.Take(count.Value);
             }
+
             var requested = Request.Query[QueryKeys.Attributes];
             var exculded = Request.Query[QueryKeys.ExcludedAttributes];
             var allwaysRetuned = new string[] { AttributeNames.Identifier, "identifier", AttributeNames.Schemas, AttributeNames.Schema, AttributeNames.Active };//TODO Read from schema 
             users = users.Select(u =>
                 (User)ColumnsUtility.SelectColumns(requested, exculded, u, allwaysRetuned)).ToList();
-            //TODO: always includes meta but of default values, likely from user constructor?
+
 
             ListResponse<User> list = new ListResponse<User>()
             {
@@ -100,7 +106,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             Response.ContentType = "application/scim+json";
 
-            list.Identifier = Guid.NewGuid().ToString();
             return list;
         }
 
@@ -156,7 +161,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             ListResponse<User> list = new ListResponse<User>()
             {
-                Identifier = Guid.NewGuid().ToString(),
                 TotalResults = totalResults,
                 StartIndex = searchRequest.startIndex ?? null,
                 Resources = users,

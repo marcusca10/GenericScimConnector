@@ -22,7 +22,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
         /// <returns></returns>
         public static Resource SelectColumns(IReadOnlyCollection<string> requestedAttributes, IReadOnlyCollection<string> excludedAttributes, Resource projectedUser, string[] allwaysRetuned)
         {
-
+            //TODO: always includes meta but of default values, likely from user constructor?
             if (!requestedAttributes.Any() && !excludedAttributes.Any())
             {
                 return projectedUser;

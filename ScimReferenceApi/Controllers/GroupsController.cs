@@ -62,6 +62,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             }
 
             int start = int.Parse(startIndex, CultureInfo.InvariantCulture);
+
+            if (start < 1)
+            {
+                start = 1;
+            }
+
             int? count = null;
             int total = groups.Count();
 
@@ -93,7 +99,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             }
 
 
-            list.Identifier = Guid.NewGuid().ToString();
             return list;
 
         }
@@ -201,7 +206,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 BadRequestError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
                 return NotFound(BadRequestError);
             }
-            Group group = _context.Groups.Include(g => g.Members).FirstOrDefault(g => g.Identifier.Equals(id, StringComparison.CurrentCulture));
+            Group group = _context.CompleteGroups().FirstOrDefault(g => g.Identifier.Equals(id, StringComparison.CurrentCulture));
             group.DisplayName = item.DisplayName;
             group.Members = item.Members;
             group.Metadata.LastModified = DateTime.Now;

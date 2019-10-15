@@ -1,4 +1,5 @@
 ﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -18,11 +19,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             this.AddSchema(SchemaIdentifiers.ListResponse);
         }
 
-        /// <summary>
-        /// Get or set Identifier.
-        /// </summary>
-        [DataMember(Name = AttributeNames.Identifier)]
-        public string Identifier { get; set; }
 
         /// <summary>
         /// Total Count of results.
