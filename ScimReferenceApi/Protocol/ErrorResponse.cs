@@ -10,7 +10,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
     /// <summary>
     /// Class for holding an error.
     /// </summary>
-    public class ErrorResponse :Schematized
+    public class ErrorResponse : Schematized
     {
 
         /// <summary>

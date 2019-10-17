@@ -138,175 +138,175 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
 
 
-       /* private static void PatchMembers(this Group group, PatchOperation operation)
-        {
-            if (null == operation)
-            {
-                return;
-            }
+        /* private static void PatchMembers(this Group group, PatchOperation operation)
+         {
+             if (null == operation)
+             {
+                 return;
+             }
 
-            if
-            (
-                !string.Equals(
-                    Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Members,
-                    operation.Path.AttributePath,
-                    StringComparison.OrdinalIgnoreCase)
-            )
-            {
-                return;
-            }
+             if
+             (
+                 !string.Equals(
+                     Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Members,
+                     operation.Path.AttributePath,
+                     StringComparison.OrdinalIgnoreCase)
+             )
+             {
+                 return;
+             }
 
-            if (null == operation.Path.ValuePath )
-            {
-                return;
-            }
+             if (null == operation.Path.ValuePath )
+             {
+                 return;
+             }
 
-            if (string.IsNullOrWhiteSpace(operation.Path.ValuePath.AttributePath))
-            {
-                return;
-            }
+             if (string.IsNullOrWhiteSpace(operation.Path.ValuePath.AttributePath))
+             {
+                 return;
+             }
 
-            IFilter subAttribute = operation.Path.SubAttributes.SingleOrDefault();
-            if (null == subAttribute)
-            {
-                return;
-            }
+             IFilter subAttribute = operation.Path.SubAttributes.SingleOrDefault();
+             if (null == subAttribute)
+             {
+                 return;
+             }
 
-            if
-            (
-                    (
-                            operation.Value != null
-                        && operation.Value.Count != 1
-                    )
-                || (
-                            null == operation.Value
-                        && operation.Name != OperationName.Remove
-                    )
-            )
-            {
-                return;
-            }
+             if
+             (
+                     (
+                             operation.Value != null
+                         && operation.Value.Count != 1
+                     )
+                 || (
+                             null == operation.Value
+                         && operation.Name != OperationName.Remove
+                     )
+             )
+             {
+                 return;
+             }
 
-            if
-            (
-                !string.Equals(
-                    Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Value,
-                    subAttribute.AttributePath,
-                    StringComparison.OrdinalIgnoreCase)
-            )
-            {
-                return;
-            }
+             if
+             (
+                 !string.Equals(
+                     Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Value,
+                     subAttribute.AttributePath,
+                     StringComparison.OrdinalIgnoreCase)
+             )
+             {
+                 return;
+             }
 
-            Member address;
-            Member addressExisting;
-            if (group.Members != null)
-            {
-                addressExisting =
-                    address =
-                        group
-                        .Members
-                        .SingleOrDefault(
-                            (Member item) =>
-                                string.Equals(subAttribute.ComparisonValue, item.Value, StringComparison.Ordinal));
-            }
-            else
-            {
-                addressExisting = null;
-                address =
-                    new Member()
-                    {
-                        Value = subAttribute.ComparisonValue
-                    };
-            }
+             Member address;
+             Member addressExisting;
+             if (group.Members != null)
+             {
+                 addressExisting =
+                     address =
+                         group
+                         .Members
+                         .SingleOrDefault(
+                             (Member item) =>
+                                 string.Equals(subAttribute.ComparisonValue, item.Value, StringComparison.Ordinal));
+             }
+             else
+             {
+                 addressExisting = null;
+                 address =
+                     new Member()
+                     {
+                         Value = subAttribute.ComparisonValue
+                     };
+             }
 
-            string value;
-            //if (string.Equals("value", subAttribute.ComparisonValue, StringComparison.Ordinal))
-            //{
-                if
-                (
-                    string.Equals(
-                        Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Value,
-                        operation.Path.ValuePath.AttributePath,
-                        StringComparison.Ordinal)
-                )
-                {
-                    value = operation.Value != null ? operation.Value.Single().Value : null;
-                    if
-                    (
-                            value != null
-                        && OperationName.Remove == operation.Name
-                        && string.Equals(value, address.Value, StringComparison.OrdinalIgnoreCase)
-                    )
-                    {
-                        value = null;
-                    }
-                    address.Value = value;
-                }
+             string value;
+             //if (string.Equals("value", subAttribute.ComparisonValue, StringComparison.Ordinal))
+             //{
+                 if
+                 (
+                     string.Equals(
+                         Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Value,
+                         operation.Path.ValuePath.AttributePath,
+                         StringComparison.Ordinal)
+                 )
+                 {
+                     value = operation.Value != null ? operation.Value.Single().Value : null;
+                     if
+                     (
+                             value != null
+                         && OperationName.Remove == operation.Name
+                         && string.Equals(value, address.Value, StringComparison.OrdinalIgnoreCase)
+                     )
+                     {
+                         value = null;
+                     }
+                     address.Value = value;
+                 }
 
-                if
-                (
-                    string.Equals(
-                        Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.DisplayName,
-                        operation.Path.ValuePath.AttributePath,
-                        StringComparison.Ordinal)
-                )
-                {
-                    value = operation.Value != null ? operation.Value.Single().Value : null;
-                    if
-                    (
-                            value != null
-                        && OperationName.Remove == operation.Name
-                        && string.Equals(value, address.DisplayName, StringComparison.OrdinalIgnoreCase)
-                    )
-                    {
-                        value = null;
-                    }
-                    address.DisplayName = value;
-                }
+                 if
+                 (
+                     string.Equals(
+                         Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.DisplayName,
+                         operation.Path.ValuePath.AttributePath,
+                         StringComparison.Ordinal)
+                 )
+                 {
+                     value = operation.Value != null ? operation.Value.Single().Value : null;
+                     if
+                     (
+                             value != null
+                         && OperationName.Remove == operation.Name
+                         && string.Equals(value, address.DisplayName, StringComparison.OrdinalIgnoreCase)
+                     )
+                     {
+                         value = null;
+                     }
+                     address.DisplayName = value;
+                 }
 
-                
-            //}
 
-            if
-            (
-                    string.IsNullOrWhiteSpace(address.Value)
-                && string.IsNullOrWhiteSpace(address.DisplayName)
-            )
-            {
-                if (addressExisting != null)
-                {
-                    group.Members =
-                        group
-                        .Members
-                        .Where(
-                            (Member item) =>
-                                !string.Equals(subAttribute.ComparisonValue, item.Value, StringComparison.Ordinal))
-                        .ToArray();
-                }
+             //}
 
-                return;
-            }
+             if
+             (
+                     string.IsNullOrWhiteSpace(address.Value)
+                 && string.IsNullOrWhiteSpace(address.DisplayName)
+             )
+             {
+                 if (addressExisting != null)
+                 {
+                     group.Members =
+                         group
+                         .Members
+                         .Where(
+                             (Member item) =>
+                                 !string.Equals(subAttribute.ComparisonValue, item.Value, StringComparison.Ordinal))
+                         .ToArray();
+                 }
 
-            if (addressExisting != null)
-            {
-                return;
-            }
+                 return;
+             }
 
-            IEnumerable<Member> addresses =
-                new Member[]
-                    {
-                        address
-                    };
-            if (null == group.Members)
-            {
-                group.Members = addresses;
-            }
-            else
-            {
-                group.Members = group.Members.Union(addresses).ToArray();
-            }
-        }*/
+             if (addressExisting != null)
+             {
+                 return;
+             }
+
+             IEnumerable<Member> addresses =
+                 new Member[]
+                     {
+                         address
+                     };
+             if (null == group.Members)
+             {
+                 group.Members = addresses;
+             }
+             else
+             {
+                 group.Members = group.Members.Union(addresses).ToArray();
+             }
+         }*/
 
 
 

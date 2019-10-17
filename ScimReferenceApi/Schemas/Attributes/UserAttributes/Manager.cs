@@ -13,17 +13,17 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Us
     [DataContract]
     public sealed class Manager
     {
-		/// <summary>
-		/// Identiier for simple type
-		/// </summary>
-		[Key]
-		[DataMember]
-		[ScaffoldColumn(false)]
-		public string Id { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		[DataMember(Name = AttributeNames.Value)]
+        /// <summary>
+        /// Identiier for simple type
+        /// </summary>
+        [Key]
+        [DataMember]
+        [ScaffoldColumn(false)]
+        public string Id { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [DataMember(Name = AttributeNames.Value)]
         public string Value
         {
             get;

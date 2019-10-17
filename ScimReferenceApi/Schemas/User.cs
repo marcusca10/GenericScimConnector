@@ -110,7 +110,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     .Include("ElectronicMailAddresses")
                     .Include("PhoneNumbers")
                     .Include("Roles")
-					.Include("Manager")
+                    .Include("Manager")
                     .Include("Addresses");
         }
 

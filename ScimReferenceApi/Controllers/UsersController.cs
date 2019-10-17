@@ -27,7 +27,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
     //[Authorize]
     public class UsersController : ControllerBase
     {
-		private readonly ScimContext _context;
+        private readonly ScimContext _context;
         private readonly ILogger<UsersController> _log;
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             int start = int.Parse(startIndex, CultureInfo.InvariantCulture);
 
-            if(start<1)
+            if (start < 1)
             {
                 start = 1;
             }
@@ -175,59 +175,65 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         /// </summary>
         [HttpPost]
         public async Task<ActionResult<User>> Post(JObject body)
-		{
-			User item = BuildUser(body);
-			if (item.UserName == null)
-			{
-				ErrorResponse badRequestError = new ErrorResponse("No Username", "400");
-				badRequestError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
-				return BadRequest(badRequestError);
-			}
+        {
+            User item = BuildUser(body);
+            if (item.UserName == null)
+            {
+                ErrorResponse badRequestError = new ErrorResponse("No Username", "400");
+                badRequestError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
+                return BadRequest(badRequestError);
+            }
 
-			var Exists = _context.Users.Any(x => x.UserName == item.UserName);
-			if (Exists == true)
-			{
-				ErrorResponse conflictError = new ErrorResponse("Username already exists", "409");
-				conflictError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
-				return Conflict(conflictError);
-			}
+            var Exists = _context.Users.Any(x => x.UserName == item.UserName);
+            if (Exists == true)
+            {
+                ErrorResponse conflictError = new ErrorResponse("Username already exists", "409");
+                conflictError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
+                return Conflict(conflictError);
+            }
 
-			item.Metadata.Created = DateTime.Now;
-			item.Metadata.LastModified = DateTime.Now;
-			_context.Users.Add(item);
-			await _context.SaveChangesAsync().ConfigureAwait(false);
-			_log.LogInformation(item.UserName);
-			Response.ContentType = "application/scim+json";
-			return CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
-		}
+            item.Metadata.Created = DateTime.Now;
+            item.Metadata.LastModified = DateTime.Now;
+            _context.Users.Add(item);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+            _log.LogInformation(item.UserName);
+            Response.ContentType = "application/scim+json";
+            return CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
+        }
 
-		private static User BuildUser(JObject body)
-		{
-			var shemas = body["schemas"].Children();
-			User item;
-			if (shemas.Contains(SchemaIdentifiers.Core2EnterpriseUser))
-			{
-				item = body.ToObject<EnterpriseUser>();
-			}
-			else
-			{
-				item = body.ToObject<User>();
-			}
+        private static User BuildUser(JObject body)
+        {
+            var shemas = body["schemas"].Children();
+            User item;
+            if (shemas.Contains(SchemaIdentifiers.Core2EnterpriseUser))
+            {
+                item = body.ToObject<EnterpriseUser>();
+            }
+            else
+            {
+                item = body.ToObject<User>();
+            }
 
-			return item;
-		}
+            return item;
+        }
 
-		/// <summary>
-		/// PUT: api/Users/5
-		/// Replace all values for the given User, if it exists.
-		/// </summary>
-		[HttpPut("{id}")]
+        /// <summary>
+        /// PUT: api/Users/5
+        /// Replace all values for the given User, if it exists.
+        /// </summary>
+        [HttpPut("{id}")]
         public async Task<ActionResult<User>> Put(string id, User item)
         {
 
             if (id != item.Identifier)
             {
                 ErrorResponse badRequestError = new ErrorResponse("Attribute 'id' is read only", "400");
+                badRequestError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
+                return BadRequest(badRequestError);
+            }
+            if (item.UserName == null)
+            {
+                ErrorResponse badRequestError = new ErrorResponse("No Username", "400");
                 badRequestError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
                 return BadRequest(badRequestError);
             }

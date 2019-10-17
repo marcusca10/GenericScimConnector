@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using System.Linq;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
@@ -7,16 +9,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
     /// Name, of a User.
     /// </summary>
     [DataContract]
-    public sealed class Name
+    public sealed class Name : AttributeObject
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public object this[string propertyName]
-        {
-            get { return this.GetType().GetProperty(propertyName).GetValue(this, null); }
-            set { this.GetType().GetProperty(propertyName).SetValue(this, value, null); }
-        }
+
         /// <summary>
         /// Get or set Id persistant storage primary key.
         /// </summary>
