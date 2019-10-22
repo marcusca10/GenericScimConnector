@@ -4,6 +4,7 @@ using Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -48,7 +49,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             }
             else
             {
-                groups = await _context.Groups.ToListAsync().ConfigureAwait(false);
+                groups = await _context.CompleteGroups().ToListAsync().ConfigureAwait(false);
             }
 
             NameValueCollection keyedValues = HttpUtility.ParseQueryString(query);
@@ -81,9 +82,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             var requested = Request.Query[QueryKeys.Attributes];
             var exculted = Request.Query[QueryKeys.ExcludedAttributes];
-            var allwaysRetuned = new string[] { AttributeNames.Identifier, "identifier", AttributeNames.Schemas, AttributeNames.Schema, AttributeNames.Active };
+            var allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };
             groups = groups.Select(u =>
-                (Group)ColumnsUtility.SelectColumns(requested, exculted, u, allwaysRetuned)).ToList();
+                ColumnsUtility.SelectColumns(requested, exculted, u, allwaysRetuned)).ToList();
 
             Response.ContentType = "application/scim+json";
 
@@ -120,8 +121,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             }
             var requested = Request.Query[QueryKeys.Attributes];
             var exculted = Request.Query[QueryKeys.ExcludedAttributes];
-            var allwaysRetuned = new string[] { AttributeNames.Identifier, "identifier", AttributeNames.Schemas, AttributeNames.Schema, AttributeNames.Active };
-            Group = (Group)ColumnsUtility.SelectColumns(requested, exculted, Group, allwaysRetuned);
+            var allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };
+            Group = ColumnsUtility.SelectColumns(requested, exculted, Group, allwaysRetuned);
             Response.ContentType = "application/scim+json";
             return Group;
         }
@@ -135,11 +136,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         {
             var filterGroups = new FilterGroups(_context);
             IEnumerable<Group> groups = filterGroups.GetGroups(searchRequest.filter);
-            var allwaysRetuned = new string[] { AttributeNames.Identifier, "identifier", AttributeNames.Schemas, AttributeNames.Schema, AttributeNames.Active };//TODO Read from schema 
+            var allwaysRetuned = new string[] { AttributeNames.Identifier, "identifier", AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };//TODO Read from schema 
             var attributes = searchRequest.attributes?.ToArray() ?? Array.Empty<string>();
             var exculdedattribes = searchRequest.excludedAttributes?.ToArray() ?? Array.Empty<string>();
             groups = groups.Select(g =>
-                (Group)ColumnsUtility.SelectColumns(attributes, exculdedattribes, g, allwaysRetuned)).ToList();
+                ColumnsUtility.SelectColumns(attributes, exculdedattribes, g, allwaysRetuned)).ToList();
             if (searchRequest.startIndex.HasValue)
             {
                 if (searchRequest.startIndex > 1)
@@ -185,8 +186,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return NotFound(conflictError);
             }
 
-            item.Metadata.Created = DateTime.Now;
-            item.Metadata.LastModified = DateTime.Now;
+            item.meta.Created = DateTime.Now;
+            item.meta.LastModified = DateTime.Now;
             _context.Groups.Add(item);
             await _context.SaveChangesAsync().ConfigureAwait(false);
             Response.ContentType = "application/scim+json";
@@ -209,7 +210,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             Group group = _context.CompleteGroups().FirstOrDefault(g => g.Identifier.Equals(id, StringComparison.CurrentCulture));
             group.DisplayName = item.DisplayName;
             group.Members = item.Members;
-            group.Metadata.LastModified = DateTime.Now;
+            group.meta.LastModified = DateTime.Now;
             group.ExternalIdentifier = item.ExternalIdentifier;
             await _context.SaveChangesAsync().ConfigureAwait(false);
             Response.ContentType = "application/scim+json";
@@ -242,10 +243,21 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         /// Method For PATCH Group.
         /// </summary>
         [HttpPatch("{id}")]
-        public IActionResult Patch(string id, [FromBody]PatchRequest2Compliant patchRequest)
+        public IActionResult Patch(string id, JObject body)//[FromBody]PatchRequest2Compliant patchRequest)
         {
+            PatchRequest2Compliant patchRequest = null;
+            PatchRequest2Legacy patchLegacy = null;
+            try
+            {
+                patchRequest = body.ToObject<PatchRequest2Compliant>();
+            }
+            catch (Newtonsoft.Json.JsonException) { }
+            if (patchRequest == null)
+            {
+                patchLegacy = body.ToObject<PatchRequest2Legacy>();
+            }
 
-            if (null == patchRequest)
+            if (null == patchRequest && null == patchLegacy)
             {
                 string unsupportedPatchTypeName = patchRequest.GetType().FullName;
                 throw new NotSupportedException(unsupportedPatchTypeName);
@@ -255,13 +267,23 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             if (groupToModify != null)
             {
-                foreach (var op in patchRequest.Operations)
+                if (patchRequest != null)
                 {
-                    if (op is PatchOperation2SingleValued singleValued)
+                    foreach (var op in patchRequest.Operations)
                     {
-                        var patchOp = PatchOperation.Create(getOperationName(singleValued.OperationName), singleValued.Path.ToString(), singleValued.Value);
+
+                        var patchOp = PatchOperation.Create(getOperationName(op.OperationName), op.Path.ToString(), op.Value);
                         groupToModify.Apply(patchOp);
-                        groupToModify.Metadata.LastModified = DateTime.Now;
+                        groupToModify.meta.LastModified = DateTime.Now;
+
+                    }
+                }
+                if (patchLegacy != null)
+                {
+                    foreach (var op in patchLegacy.Operations)
+                    {
+                        groupToModify.Apply(op);
+                        groupToModify.meta.LastModified = DateTime.Now;
                     }
                 }
             }

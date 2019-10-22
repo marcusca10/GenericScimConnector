@@ -28,4 +28,27 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
         {
         }
     }
+
+    /// <summary>
+    /// Instance of pathRequestLegacy
+    /// </summary>
+    [DataContract]
+    public sealed class PatchRequest2Legacy : PatchRequest2Base<PatchOperation>
+    {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public PatchRequest2Legacy()
+        {
+        }
+        /// <summary>
+        /// Constuctor
+        /// </summary>
+        /// <param name="operations"></param>
+        public PatchRequest2Legacy(IReadOnlyCollection<PatchOperation> operations)
+            : base(operations)
+        {
+        }
+    }
+
 }

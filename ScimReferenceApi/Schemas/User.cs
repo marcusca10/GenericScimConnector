@@ -16,7 +16,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         /// <summary>
         /// Get or set user name.
         /// </summary>
-        [DataMember(Name = AttributeNames.UserName)]
+        [DataMember(Name = AttributeNames.UserName, EmitDefaultValue =false)]
         public virtual string UserName { get; set; }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         public User()
         {
             this.AddSchema(SchemaIdentifiers.Core2User);
-            this.Metadata =
+            this.meta =
                 new Metadata()
                 {
                     ResourceType = Types.User,
@@ -62,7 +62,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         /// Get or set Metadata.
         /// </summary>
         [DataMember(Name = AttributeNames.Metadata)]
-        public virtual Metadata Metadata { get; set; }
+        public virtual Metadata meta { get; set; }
 
         /// <summary>
         /// Get or set Name.
@@ -105,7 +105,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         /// </summary>
         public static IQueryable<User> CompleteUsers(this ScimContext context)
         {
-            return context.Users.Include("Metadata")
+            return context.Users.Include("meta")
                     .Include("Name")
                     .Include("ElectronicMailAddresses")
                     .Include("PhoneNumbers")
@@ -137,7 +137,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                 case AttributeNames.Active:
                     if (operation.Name != OperationName.Remove)
                     {
-                        value = operation.Value.SingleOrDefault();
+                        value = operation.Value.SingleOrDefault().ToObject<OperationValue>();
                         bool active = default(bool);
                         if (value != null && !string.IsNullOrWhiteSpace(value.Value) && bool.TryParse(value.Value, out active))
                         {
@@ -151,7 +151,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     break;
 
                 case AttributeNames.DisplayName:
-                    value = operation.Value.SingleOrDefault();
+                    value = operation.Value.SingleOrDefault().ToObject<OperationValue>();
 
                     if (OperationName.Remove == operation.Name)
                     {
@@ -180,7 +180,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     break;
 
                 case AttributeNames.ExternalIdentifier:
-                    value = operation.Value.SingleOrDefault();
+                    value = operation.Value.SingleOrDefault().ToObject<OperationValue>();
 
                     if (OperationName.Remove == operation.Name)
                     {
@@ -214,7 +214,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     break;
 
                 case AttributeNames.PreferredLanguage:
-                    value = operation.Value.SingleOrDefault();
+                    value = operation.Value.SingleOrDefault().ToObject<OperationValue>();
 
                     if (OperationName.Remove == operation.Name)
                     {
@@ -243,7 +243,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     break;
 
                 case AttributeNames.Title:
-                    value = operation.Value.SingleOrDefault();
+                    value = operation.Value.SingleOrDefault().ToObject<OperationValue>();
 
                     if (OperationName.Remove == operation.Name)
                     {
@@ -268,7 +268,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     break;
 
                 case AttributeNames.UserName:
-                    value = operation.Value.SingleOrDefault();
+                    value = operation.Value.SingleOrDefault().ToObject<OperationValue>();
 
                     if (OperationName.Remove == operation.Name)
                     {
@@ -374,6 +374,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     {
                         ItemType = subAttribute.ComparisonValue
                     };
+
             }
 
             string value;
@@ -387,7 +388,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                         StringComparison.Ordinal)
                 )
                 {
-                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    value = operation.Value != null ? GetSingleValue(operation) : null;
                     if
                     (
                             value != null
@@ -408,7 +409,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                         StringComparison.Ordinal)
                 )
                 {
-                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    value = operation.Value != null ? GetSingleValue(operation) : null;
                     if
                     (
                             value != null
@@ -429,7 +430,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                         StringComparison.Ordinal)
                 )
                 {
-                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    value = operation.Value != null ? GetSingleValue(operation) : null;
                     if
                     (
                             value != null
@@ -450,7 +451,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                         StringComparison.Ordinal)
                 )
                 {
-                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    value = operation.Value != null ? GetSingleValue(operation) : null;
                     if
                     (
                             value != null
@@ -471,7 +472,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                         StringComparison.Ordinal)
                 )
                 {
-                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    value = operation.Value != null ? GetSingleValue(operation) : null;
                     if
                     (
                             value != null
@@ -491,7 +492,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                         StringComparison.Ordinal)
                 )
                 {
-                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    value = operation.Value != null ? GetSingleValue(operation) : null;
                     if
                     (
                             value != null
@@ -515,7 +516,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                         StringComparison.Ordinal)
                 )
                 {
-                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    value = operation.Value != null ? GetSingleValue(operation) : null;
                     if
                     (
                             value != null
@@ -536,7 +537,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                         StringComparison.Ordinal)
                 )
                 {
-                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    value = operation.Value != null ? GetSingleValue(operation) : null;
                     if
                     (
                             value != null
@@ -557,7 +558,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                         StringComparison.Ordinal)
                 )
                 {
-                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    value = operation.Value != null ? GetSingleValue(operation) : null;
                     if
                     (
                             value != null
@@ -578,7 +579,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                         StringComparison.Ordinal)
                 )
                 {
-                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    value = operation.Value != null ? GetSingleValue(operation) : null;
                     if
                     (
                             value != null
@@ -599,7 +600,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                         StringComparison.Ordinal)
                 )
                 {
-                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    value = operation.Value != null ? GetSingleValue(operation) : null;
                     if
                     (
                             value != null
@@ -619,7 +620,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                         StringComparison.Ordinal)
                 )
                 {
-                    value = operation.Value != null ? operation.Value.Single().Value : null;
+                    value = operation.Value != null ? GetSingleValue(operation) : null;
                     if
                     (
                             value != null
@@ -677,6 +678,18 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             }
         }
 
+        private static string GetSingleValue(PatchOperation operation)
+        {
+            var item = operation.Value.First();
+            switch (item.Type)
+            {
+                case Newtonsoft.Json.Linq.JTokenType.String:
+                    return item.ToString();
+                case Newtonsoft.Json.Linq.JTokenType.Object:
+                default:
+                    return item["value"].ToString();
+            }
+        }
 
         private static void PatchElectronicMailAddresses(this User user, PatchOperation operation)
         {
@@ -778,7 +791,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
 
 
-            string value = operation.Value?.Single().Value;
+            string value = operation.Value?.Single()["value"].ToString();
             if
             (
                     value != null
@@ -897,7 +910,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     StringComparison.OrdinalIgnoreCase)
             )
             {
-                value = operation.Value != null ? operation.Value.Single().Value : null;
+                value = operation.Value != null ? GetSingleValue(operation) : null;
                 if
                 (
                         value != null
@@ -918,7 +931,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     StringComparison.OrdinalIgnoreCase)
             )
             {
-                value = operation.Value != null ? operation.Value.Single().Value : null;
+                value = operation.Value != null ? GetSingleValue(operation) : null;
                 if
                 (
                         value != null
@@ -938,7 +951,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     StringComparison.OrdinalIgnoreCase)
             )
             {
-                value = operation.Value != null ? operation.Value.Single().Value : null;
+                value = operation.Value != null ? GetSingleValue(operation) : null;
                 if
                 (
                         value != null
@@ -1065,7 +1078,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     };
             }
 
-            string value = operation.Value != null ? operation.Value.Single().Value : null;
+            string value = operation.Value != null ? GetSingleValue(operation) : null;
             if
             (
                     value != null
@@ -1187,7 +1200,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     };
             }
 
-            string value = operation.Value?.Single().Value;
+            string value = operation.Value?.Single()["value"].ToString();
             if
             (
                     value != null

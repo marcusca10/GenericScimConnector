@@ -32,7 +32,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         /// <returns>AllGroups a list of the slected groups</returns>
         public IEnumerable<Group> FilterGen(string query)
         {
-            IEnumerable<Group> AllUsers = new List<Group>();
+            IEnumerable<Group> AllGroups = new List<Group>();
             NameValueCollection keyedValues = HttpUtility.ParseQueryString(query);
             IEnumerable<string> keys = keyedValues.AllKeys;
             foreach (string key in keys)
@@ -40,11 +40,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                 if (string.Equals(key, QueryKeys.Filter, StringComparison.OrdinalIgnoreCase))
                 {
                     string filterExpression = keyedValues[key];
-                    AllUsers = GetGroups(filterExpression);
+                    AllGroups = GetGroups(filterExpression);
 
                 }
             }
-            return AllUsers;
+            return AllGroups;
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             {
                 for (int i = 0; i < results.Count; i++)
                 {
-                    IEnumerable<Group> groups = _context.Groups;
+                    IEnumerable<Group> groups = _context.CompleteGroups();
                     Filter currentFilter = (Filter)results.ElementAt(i);
                     while (currentFilter != null)
                     {
@@ -181,7 +181,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                             switch (attribute)
                             {
                                 case AttributeNames.Metadata:
-                                    groups = groups.Where(p => (DateTime)p.Metadata[propName] > DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
+                                    groups = groups.Where(p => (DateTime)p.meta[propName] > DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
                                     break;
                                 default:
                                     break;
@@ -192,7 +192,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                             switch (attribute)
                             {
                                 case AttributeNames.Metadata:
-                                    groups = groups.Where(p => (DateTime)p.Metadata[propName] >= DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
+                                    groups = groups.Where(p => (DateTime)p.meta[propName] >= DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
                                     break;
                                 default:
                                     break;
@@ -203,7 +203,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                             switch (attribute)
                             {
                                 case AttributeNames.Metadata:
-                                    groups = groups.Where(p => (DateTime)p.Metadata[propName] < DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
+                                    groups = groups.Where(p => (DateTime)p.meta[propName] < DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
                                     break;
                                 default:
                                     break;
@@ -214,7 +214,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                             switch (attribute)
                             {
                                 case AttributeNames.Metadata:
-                                    groups = groups.Where(p => (DateTime)p.Metadata[propName] <= DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
+                                    groups = groups.Where(p => (DateTime)p.meta[propName] <= DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
                                     break;
                                 default:
                                     break;

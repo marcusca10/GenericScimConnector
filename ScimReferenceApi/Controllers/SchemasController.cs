@@ -36,5 +36,25 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             var items = JsonConvert.DeserializeObject<List<TypeScheme>>(schmea);
             return items;
         }
+
+        /// <summary>
+        /// Http get for particlar shema
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+#pragma warning disable CA1822 // Contoller methods must not be static
+        public ActionResult<TypeScheme> Get(string id)
+#pragma warning restore CA1822 // Mark members as static
+        {
+            var schmea = System.IO.File.ReadAllText("./JsonConstants/ReferenceCodeSchema.json");
+            var items = JsonConvert.DeserializeObject<List<TypeScheme>>(schmea);
+            var item = items.FirstOrDefault(sch => sch.Identifier.Equals(id, StringComparison.InvariantCultureIgnoreCase) || sch.Identifier.EndsWith(id,StringComparison.InvariantCultureIgnoreCase));
+            if(item == null)
+            {
+                return NotFound();
+            }
+            return item;
+        }
     }
 }

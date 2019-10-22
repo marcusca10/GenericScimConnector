@@ -1,4 +1,5 @@
 ﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,8 +18,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         private const string Template = "{0}: [{1}]";
 
         [DataMember(Name = AttributeNames.Value, Order = 2)]
-        private List<OperationValue> values;
-        private IReadOnlyCollection<OperationValue> valuesWrapper;
+        private List<JToken> values;
+        private IReadOnlyCollection<JToken> valuesWrapper;
 
         /// <summary>
         /// Constructor.
@@ -42,18 +43,22 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         /// <summary>
         /// Get the operation values.
         /// </summary>
-        public IReadOnlyCollection<OperationValue> Value
+        public IReadOnlyCollection<JToken> Value
         {
             get
             {
                 return this.valuesWrapper;
+            }
+            set
+            {
+                this.valuesWrapper = value;
             }
         }
 
         /// <summary>
         /// Add a value to values collection.
         /// </summary>
-        public void AddValue(OperationValue value)
+        public void AddValue(JToken value)
         {
             if (null == value)
             {
@@ -78,8 +83,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                 throw new ArgumentNullException(nameof(value));
             }
 
-            OperationValue operationValue = new OperationValue();
-            operationValue.Value = value;
+            JObject operationValue = new JObject();
+            operationValue.Add("value", value);
+            //operationValue.Value = value;
 
             PatchOperation result = new PatchOperation(operationName, pathExpression);
             result.AddValue(operationValue);
@@ -101,14 +107,14 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 
         private void OnInitialization()
         {
-            this.values = new List<OperationValue>();
+            this.values = new List<JToken>();
         }
 
         private void OnInitialized()
         {
             switch (this.values)
             {
-                case List<OperationValue> valueList:
+                case List<JToken> valueList:
                     this.valuesWrapper = valueList.AsReadOnly();
                     break;
                 default:
