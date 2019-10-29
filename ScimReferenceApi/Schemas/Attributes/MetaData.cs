@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
@@ -8,16 +9,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
     /// Metadata, of a Resource.
     /// </summary>
     [DataContract]
-    public class Metadata
+    public class Metadata : AttributeObject
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public object this[string propertyName]
-        {
-            get { return this.GetType().GetProperty(propertyName).GetValue(this, null); }
-            set { this.GetType().GetProperty(propertyName).SetValue(this, value, null); }
-        }
 
         /// <summary>
         /// Get or set Id Primary Key for persistant storage.

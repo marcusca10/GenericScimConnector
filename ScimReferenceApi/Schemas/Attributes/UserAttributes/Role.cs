@@ -9,14 +9,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
     [DataContract]
     public sealed class Role : TypedItem
     {
-        /// <summary>
-        /// Reflection.
-        /// </summary>
-        public object this[string propertyName]
-        {
-            get { return this.GetType().GetProperty(propertyName).GetValue(this, null); }
-            set { this.GetType().GetProperty(propertyName).SetValue(this, value, null); }
-        }
+
 
         /// <summary>
         /// Get or set Display.

@@ -4,7 +4,7 @@ languages:
 - csharp
 products:
 - dotnet
-description: "Add 150 character max description"
+description: SCIM reference code  
 urlFragment: "update-this-to-unique-url-stub"
 ---
 
@@ -19,6 +19,7 @@ Taxonomies for products and languages: https://review.docs.microsoft.com/new-hop
 -->
 
 Give a short description for your sample here. What does it do and why is it important?
+This code is intended to be a useful reference for those hoping to create their own SCIM endpoint. All the basic requirements for CRUD with two resources and an extension exist in the reference. Many of the useful optional features, such as filtering and pagination, are also provided.
 
 ## Contents
 
@@ -42,7 +43,7 @@ For using the tests Jmeter, blazemeter, or equivelent is required.
 ## Setup
 
 Explain how to prepare the sample once the user clones or downloads the repository. The section should outline every step necessary to install dependencies and set up any settings (for example, API keys and output folders).
-Placing all the files in a new folder is all that is needed.
+Cloning all the files into a new directory with Visual Studio is all that is needed.
 
 ## Runnning the sample
 

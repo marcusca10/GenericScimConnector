@@ -20,7 +20,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         public Group()
         {
             this.AddSchema(SchemaIdentifiers.Core2Group);
-            this.Metadata =
+            this.meta =
                 new Metadata()
                 {
                     ResourceType = Types.Group
@@ -31,7 +31,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         /// Get or set Metadata.
         /// </summary>
         [DataMember(Name = AttributeNames.Metadata)]
-        public Metadata Metadata { get; set; }
+        public Metadata meta { get; set; }
 
         /// <summary>
         /// Get or set DisplayName.
@@ -56,7 +56,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         /// </summary>
         public static IQueryable<Group> CompleteGroups(this ScimContext context)
         {
-            return context.Groups.Include("Metadata")
+            return context.Groups.Include("meta")
                     .Include("Members");
         }
 
@@ -80,7 +80,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             switch (operation.Path.AttributePath)
             {
                 case AttributeNames.DisplayName:
-                    value = operation.Value.SingleOrDefault();
+                    value = operation.Value.SingleOrDefault().ToObject<OperationValue>();
 
                     if (OperationName.Remove == operation.Name)
                     {
@@ -107,7 +107,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     group.PatchMembers(operation);
                     break;
                 case AttributeNames.ExternalIdentifier:
-                    value = operation.Value.SingleOrDefault();
+                    value = operation.Value.SingleOrDefault().ToObject<OperationValue>();
 
                     if (OperationName.Remove == operation.Name)
                     {
@@ -137,182 +137,18 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
 
 
-
-       /* private static void PatchMembers(this Group group, PatchOperation operation)
-        {
-            if (null == operation)
-            {
-                return;
-            }
-
-            if
-            (
-                !string.Equals(
-                    Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Members,
-                    operation.Path.AttributePath,
-                    StringComparison.OrdinalIgnoreCase)
-            )
-            {
-                return;
-            }
-
-            if (null == operation.Path.ValuePath )
-            {
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(operation.Path.ValuePath.AttributePath))
-            {
-                return;
-            }
-
-            IFilter subAttribute = operation.Path.SubAttributes.SingleOrDefault();
-            if (null == subAttribute)
-            {
-                return;
-            }
-
-            if
-            (
-                    (
-                            operation.Value != null
-                        && operation.Value.Count != 1
-                    )
-                || (
-                            null == operation.Value
-                        && operation.Name != OperationName.Remove
-                    )
-            )
-            {
-                return;
-            }
-
-            if
-            (
-                !string.Equals(
-                    Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Value,
-                    subAttribute.AttributePath,
-                    StringComparison.OrdinalIgnoreCase)
-            )
-            {
-                return;
-            }
-
-            Member address;
-            Member addressExisting;
-            if (group.Members != null)
-            {
-                addressExisting =
-                    address =
-                        group
-                        .Members
-                        .SingleOrDefault(
-                            (Member item) =>
-                                string.Equals(subAttribute.ComparisonValue, item.Value, StringComparison.Ordinal));
-            }
-            else
-            {
-                addressExisting = null;
-                address =
-                    new Member()
-                    {
-                        Value = subAttribute.ComparisonValue
-                    };
-            }
-
-            string value;
-            //if (string.Equals("value", subAttribute.ComparisonValue, StringComparison.Ordinal))
-            //{
-                if
-                (
-                    string.Equals(
-                        Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.Value,
-                        operation.Path.ValuePath.AttributePath,
-                        StringComparison.Ordinal)
-                )
-                {
-                    value = operation.Value != null ? operation.Value.Single().Value : null;
-                    if
-                    (
-                            value != null
-                        && OperationName.Remove == operation.Name
-                        && string.Equals(value, address.Value, StringComparison.OrdinalIgnoreCase)
-                    )
-                    {
-                        value = null;
-                    }
-                    address.Value = value;
-                }
-
-                if
-                (
-                    string.Equals(
-                        Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.AttributeNames.DisplayName,
-                        operation.Path.ValuePath.AttributePath,
-                        StringComparison.Ordinal)
-                )
-                {
-                    value = operation.Value != null ? operation.Value.Single().Value : null;
-                    if
-                    (
-                            value != null
-                        && OperationName.Remove == operation.Name
-                        && string.Equals(value, address.DisplayName, StringComparison.OrdinalIgnoreCase)
-                    )
-                    {
-                        value = null;
-                    }
-                    address.DisplayName = value;
-                }
-
-                
-            //}
-
-            if
-            (
-                    string.IsNullOrWhiteSpace(address.Value)
-                && string.IsNullOrWhiteSpace(address.DisplayName)
-            )
-            {
-                if (addressExisting != null)
-                {
-                    group.Members =
-                        group
-                        .Members
-                        .Where(
-                            (Member item) =>
-                                !string.Equals(subAttribute.ComparisonValue, item.Value, StringComparison.Ordinal))
-                        .ToArray();
-                }
-
-                return;
-            }
-
-            if (addressExisting != null)
-            {
-                return;
-            }
-
-            IEnumerable<Member> addresses =
-                new Member[]
-                    {
-                        address
-                    };
-            if (null == group.Members)
-            {
-                group.Members = addresses;
-            }
-            else
-            {
-                group.Members = group.Members.Union(addresses).ToArray();
-            }
-        }*/
-
-
-
         private static void PatchMembers(this Group group, PatchOperation operation)
         {
+            //path Members expects operation to only ontain one item
+            
             group.Members = PatchMembers(group.Members, operation);
+            if (operation.Value.Count > 1)
+            {
+                var list = operation.Value.ToList();
+                list.RemoveAt(0);
+                operation.Value = list;
+                group.PatchMembers(operation);
+            }
         }
 
 
@@ -343,7 +179,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             (
                     (
                             operation.Value != null
-                        && operation.Value.Count != 1
+                        && operation.Value.Count < 1
                     )
                 || (
                             null == operation.Value
@@ -356,8 +192,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
 
 
-            Member Member;
-            Member MemberExisting;
+            Member Member = null;
+            Member MemberExisting =null;
             if (members != null && operation.OperationName != "Add")
             {
                 MemberExisting =
@@ -365,25 +201,31 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                         members
                         .SingleOrDefault(
                             (Member item) =>
-                                string.Equals(operation.Value?.Single().Value, item.Value, StringComparison.Ordinal));
+                                string.Equals(operation.Value?.FirstOrDefault()?["value"]?.ToString(), item.Value, StringComparison.Ordinal));
             }
-            else
+            if(MemberExisting == null)
             {
                 MemberExisting = null;
-                Member =
-                    new Member()
-                    {
-                        //TypeName = "member"
-
+                if (operation.Value.FirstOrDefault().Type == Newtonsoft.Json.Linq.JTokenType.Object)
+                {
+                    Member = operation.Value.FirstOrDefault().ToObject<Member>();
+                }
+                else
+                {
+                    Member =
+                        new Member()
+                        {
+                            //TypeName = "member"
                     };
+                }
             }
 
-            string value = operation.Value?.Single().Value;
+            string value = operation.Value?.FirstOrDefault()?["value"]?.ToString();
             if
             (
                     value != null
                 && OperationName.Remove == operation.Name
-                && string.Equals(value, Member.Value, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(value, MemberExisting?.Value, StringComparison.OrdinalIgnoreCase)
             )
             {
                 value = null;

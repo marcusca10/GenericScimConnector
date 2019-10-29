@@ -13,17 +13,17 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Us
     [DataContract]
     public sealed class ExtensionAttributeEnterpriseUser : ExtensionAttributeEnterpriseUserBase
     {
-		/// <summary>
-		/// Invidiable indentifier for relatoinal object
-		/// </summary>
-		[Key]
-		[DataMember]
-		[ScaffoldColumn(false)]
-		public string Id { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		[DataMember(Name = AttributeNames.Manager, IsRequired = false, EmitDefaultValue = false)]
+        /// <summary>
+        /// Invidiable indentifier for relatoinal object
+        /// </summary>
+        [Key]
+        [DataMember]
+        [ScaffoldColumn(false)]
+        public string Id { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [DataMember(Name = AttributeNames.Manager, IsRequired = false, EmitDefaultValue = false)]
         public Manager Manager
         {
             get;

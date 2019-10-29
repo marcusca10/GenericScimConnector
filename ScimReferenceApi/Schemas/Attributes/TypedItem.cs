@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
@@ -7,7 +8,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
     /// TypedItem e.g. an email
     /// </summary>
     [DataContract]
-    public abstract class TypedItem
+    public abstract class TypedItem : AttributeObject
     {
         /// <summary>
         /// Get or set Id.
