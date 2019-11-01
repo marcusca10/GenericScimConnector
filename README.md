@@ -18,12 +18,10 @@ Guidance on onboarding samples to docs.microsoft.com/samples: https://review.doc
 Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
 -->
 
-Give a short description for your sample here. What does it do and why is it important?
 This code is intended to be a useful reference for those hoping to create their own SCIM endpoint. All the basic requirements for CRUD with two resources and an extension exist in the reference. Many of the useful optional features, such as filtering and pagination, are also provided.
 
 ## Contents
 
-Outline the file contents of the repository. It helps users navigate the codebase, build configuration and any related assets.
 
 | File/folder       | Description                                |
 |-------------------|--------------------------------------------|
@@ -36,7 +34,6 @@ Outline the file contents of the repository. It helps users navigate the codebas
 
 ## Prerequisites
 
-Outline the required components and tools that a user might need to have on their machine in order to run the sample. This can be anything from frameworks, SDKs, OS versions or IDE releases.
 Visual Studio with .NET core
 For using the tests Jmeter, blazemeter, or equivelent is required.
 
@@ -55,7 +52,6 @@ All the tests pass with the code in the repo and check CRUD for users and groups
 
 ## Key concepts
 
-Provide users with more context on the tools and services used in the sample. Explain some of the code that is being used and how services interact with each other.
 This reference code was developed as a .Net core MVC web API for SCIM provisioning. There are three main folders for the logic of implementing SCIM: Schemas, Controllers, and Protocol. 
 The Schemas folder includes the models for the resources User and Group along with some abstract classes like Schematized for shared functionality. Schemas also contains an Attributes folder which contains the class definitions for complex attributes of Users and Groups. eg address
 The Controllers folder contains the controllers for the various SCIM endpoints. Here again the Users and Groups are the most important aspect to consider as SCIM was designed for resource provisioning. Both resource controllers include 7 main functions for the HTTP verbs pertaining to CRUD for the resource. 
