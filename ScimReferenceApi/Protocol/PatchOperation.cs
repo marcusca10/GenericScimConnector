@@ -1,17 +1,16 @@
-﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 {
-    /// <summary>
-    /// Class for patch operation.
-    /// </summary>
     [DataContract]
     public sealed class PatchOperation : PatchOperationBase
     {
@@ -21,18 +20,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         private List<JToken> values;
         private IReadOnlyCollection<JToken> valuesWrapper;
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         public PatchOperation()
         {
             this.OnInitialization();
             this.OnInitialized();
         }
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         public PatchOperation(OperationName operationName, string pathExpression)
             : base(operationName, pathExpression)
         {
@@ -40,9 +33,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             this.OnInitialized();
         }
 
-        /// <summary>
-        /// Get the operation values.
-        /// </summary>
         public IReadOnlyCollection<JToken> Value
         {
             get
@@ -55,9 +45,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             }
         }
 
-        /// <summary>
-        /// Add a value to values collection.
-        /// </summary>
         public void AddValue(JToken value)
         {
             if (null == value)
@@ -68,9 +55,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             this.values.Add(value);
         }
 
-        /// <summary>
-        /// Method for making a Patchoperation.
-        /// </summary>
         public static PatchOperation Create(OperationName operationName, string pathExpression, string value)
         {
             if (string.IsNullOrWhiteSpace(pathExpression))
@@ -85,7 +69,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 
             JObject operationValue = new JObject();
             operationValue.Add("value", value);
-            //operationValue.Value = value;
 
             PatchOperation result = new PatchOperation(operationName, pathExpression);
             result.AddValue(operationValue);
@@ -122,9 +105,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             }
         }
 
-        /// <summary>
-        /// ToString override.
-        /// </summary>
         public override string ToString()
         {
             string allValues = string.Join(Environment.NewLine, this.Value);

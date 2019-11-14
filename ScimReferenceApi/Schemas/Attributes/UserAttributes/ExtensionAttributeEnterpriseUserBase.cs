@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
 using System.Runtime.Serialization;
-using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.UserAttributes
 {
-    /// <summary>
-    /// 
-    /// </summary>
     [DataContract]
     public abstract class ExtensionAttributeEnterpriseUserBase
     {
-        /// <summary>
-        /// 
-        /// </summary>
         [DataMember(Name = AttributeNames.CostCenter, IsRequired = false, EmitDefaultValue = false)]
         public string CostCenter
         {
@@ -22,9 +16,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Us
             set;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         [DataMember(Name = AttributeNames.Department, IsRequired = false, EmitDefaultValue = false)]
         public string Department
         {
@@ -32,9 +23,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Us
             set;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         [DataMember(Name = AttributeNames.Division, IsRequired = false, EmitDefaultValue = false)]
         public string Division
         {
@@ -42,9 +30,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Us
             set;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         [DataMember(Name = AttributeNames.EmployeeNumber, IsRequired = false, EmitDefaultValue = false)]
         public string EmployeeNumber
         {
@@ -52,9 +37,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Us
             set;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         [DataMember(Name = AttributeNames.Organization, IsRequired = false, EmitDefaultValue = false)]
         public string Organization
         {

@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------
-// Copyright (c) Microsoft Corporation.  All rights reserved.
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
@@ -7,9 +7,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
     using System;
     using System.Runtime.Serialization;
 
-    /// <summary>
-    /// Class for stroing info about a resource type endpoint.
-    /// </summary>
     [DataContract]
     public sealed class Core2ResourceType : Schematized
     {
@@ -18,9 +15,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         [DataMember(Name = AttributeNames.Endpoint)]
         private string endpointValue;
 
-        /// <summary>
-        /// Get or set the identifier.
-        /// </summary>
         [DataMember(Name = AttributeNames.Identifier)]
         public string Identifier
         {
@@ -32,9 +26,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         [DataMember(Name = AttributeNames.Name)]
         private string name;
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         public Core2ResourceType()
         {
             this.AddSchema(SchemaIdentifiers.Core2ResourceType);
@@ -45,9 +36,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                 };
         }
 
-        /// <summary>
-        /// Get or set the endpoint value.
-        /// </summary>
         public Uri Endpoint
         {
             get
@@ -77,9 +65,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             }
         }
 
-        /// <summary>
-        /// Get or set metadata.
-        /// </summary>
         [DataMember(Name = AttributeNames.Metadata)]
         public Metadata Metadata
         {
@@ -87,9 +72,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             set;
         }
 
-        /// <summary>
-        /// Get or set schema.
-        /// </summary>
         [DataMember(Name = AttributeNames.Schema)]
         public string Schema
         {

@@ -1,4 +1,8 @@
-﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.GroupAttributes;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,15 +12,9 @@ using System.Runtime.Serialization;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
-    /// <summary>
-    /// Model for Core 2 Group.
-    /// </summary>
     [DataContract]
     public class Group : Resource
     {
-        /// <summary>
-        /// Consructor.
-        /// </summary>
         public Group()
         {
             this.AddSchema(SchemaIdentifiers.Core2Group);
@@ -27,42 +25,24 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                 };
         }
 
-        /// <summary>
-        /// Get or set Metadata.
-        /// </summary>
         [DataMember(Name = AttributeNames.Metadata)]
         public Metadata meta { get; set; }
 
-        /// <summary>
-        /// Get or set DisplayName.
-        /// </summary>
         [DataMember(Name = AttributeNames.DisplayName)]
         public virtual string DisplayName { get; set; }
 
-        /// <summary>
-        /// Get or set Members.
-        /// </summary>
         [DataMember(Name = AttributeNames.Members, IsRequired = false, EmitDefaultValue = false)]
         public virtual IList<Member> Members { get; set; }
     }
 
-    /// <summary>
-    /// Group extension class.
-    /// </summary>
     public static class GroupExtensions
     {
-        /// <summary>
-        /// Returns fully populated Groups
-        /// </summary>
         public static IQueryable<Group> CompleteGroups(this ScimContext context)
         {
             return context.Groups.Include("meta")
                     .Include("Members");
         }
 
-        /// <summary>
-        /// Method for appling patch to a group.
-        /// </summary>
         public static void Apply(this Group group, PatchOperation operation)
         {
             if (null == operation)

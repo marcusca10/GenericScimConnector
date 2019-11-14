@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using System;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 {
-    /// <summary>
-    /// Class for holding the patch operation.
-    /// </summary>
     [DataContract]
     public abstract class PatchOperationBase : IPatchOperationBase
     {
@@ -22,16 +20,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         [DataMember(Name = ProtocolAttributeNames.Path, Order = 1)]
         private string pathExpression;
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         protected PatchOperationBase()
         {
         }
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         protected PatchOperationBase(OperationName operationName, string pathExpression)
         {
             if (string.IsNullOrWhiteSpace(pathExpression))
@@ -43,9 +35,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             this.Path = Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol.Path.Create(pathExpression);
         }
 
-        /// <summary>
-        /// Get or set the op name.
-        /// </summary>
         public OperationName Name
         {
             get
@@ -60,9 +49,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             }
         }
 
-        /// <summary>
-        /// It's the value of 'op' parameter within the json of request body.
-        /// </summary>
         [DataMember(Name = ProtocolAttributeNames.Patch2Operation, Order = 0)]
         public string OperationName
         {
@@ -82,9 +68,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             }
         }
 
-        /// <summary>
-        /// Get or set the path of the attribute to patched.
-        /// </summary>
         public IPath Path
         {
             get
@@ -104,9 +87,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             }
         }
 
-        /// <summary>
-        /// ToString overrride.
-        /// </summary>
         public override string ToString()
         {
             string result =

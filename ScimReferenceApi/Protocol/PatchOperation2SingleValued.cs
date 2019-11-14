@@ -1,17 +1,15 @@
-﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
 {
-    /// <summary>
-    /// Patch operation extension for ops with only one value.
-    /// </summary>
     [DataContract]
     public sealed class PatchOperation2SingleValued : PatchOperationBase
     {
@@ -20,17 +18,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
         [DataMember(Name = AttributeNames.Value, Order = 2)]
         private string valueValue;
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         public PatchOperation2SingleValued()
         {
             this.OnInitialization();
         }
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         public PatchOperation2SingleValued(OperationName operationName, string pathExpression, string value)
             : base(operationName, pathExpression)
         {
@@ -42,9 +34,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
             this.valueValue = value;
         }
 
-        /// <summary>
-        /// Get the value.
-        /// </summary>
         public string Value
         {
             get
@@ -64,9 +53,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
             this.valueValue = string.Empty;
         }
 
-        /// <summary>
-        /// ToString overrride.
-        /// </summary>
         public override string ToString()
         {
             string operation = base.ToString();

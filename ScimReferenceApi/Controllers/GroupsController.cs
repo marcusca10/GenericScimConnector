@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -15,9 +19,7 @@ using System.Web;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
-    /// <summary>
-    /// Api for Groups resource.
-    /// </summary>
+
     [Route("api/Groups")]
     [ApiController]
     //[Authorize]
@@ -25,22 +27,15 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
     {
         private readonly ScimContext _context;
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         public GroupsController(ScimContext context)
         {
-            _context = context;
+            this._context = context;
         }
 
-        /// <summary>
-        /// GET: api/Groups
-        /// Return list of all Groups from persistent storage.
-        /// </summary>
         [HttpGet]
         public async Task<ActionResult<ListResponse<Group>>> Get()
         {
-            IEnumerable<Group> groups; //= await _context.Groups.ToListAsync().ConfigureAwait(false);
+            IEnumerable<Group> groups;
 
             string query = Request.QueryString.ToUriComponent();
             if (!string.IsNullOrWhiteSpace(query))
@@ -49,7 +44,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             }
             else
             {
-                groups = await _context.CompleteGroups().ToListAsync().ConfigureAwait(false);
+                groups = await this._context.CompleteGroups().ToListAsync().ConfigureAwait(false);
             }
 
             NameValueCollection keyedValues = HttpUtility.ParseQueryString(query);
@@ -59,7 +54,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             if (startIndex == null)
             {
-                startIndex = "1";
+                startIndex = ControllerConfiguration.DefaultStartIndexString;
             }
 
             int start = int.Parse(startIndex, CultureInfo.InvariantCulture);
@@ -80,13 +75,13 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 groups = groups.Take(count.Value);
             }
 
-            var requested = Request.Query[QueryKeys.Attributes];
-            var exculted = Request.Query[QueryKeys.ExcludedAttributes];
-            var allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };
+            StringValues requested = Request.Query[QueryKeys.Attributes];
+            StringValues exculted = Request.Query[QueryKeys.ExcludedAttributes];
+            StringValues allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };
             groups = groups.Select(u =>
                 ColumnsUtility.SelectColumns(requested, exculted, u, allwaysRetuned)).ToList();
 
-            Response.ContentType = "application/scim+json";
+            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
 
             ListResponse<Group> list = new ListResponse<Group>()
             {
@@ -104,41 +99,33 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
         }
 
-        /// <summary>
-        /// GET: api/Groups/5
-        /// Return Group identified by id, if it exists.
-        /// </summary>
-        [HttpGet("{id}")]
+        [HttpGet(ControllerConfiguration.UriID)]
         public async Task<ActionResult<Group>> Get(string id)
         {
-            var Group = await _context.CompleteGroups().FirstOrDefaultAsync(i => i.Identifier.Equals(id, StringComparison.Ordinal)).ConfigureAwait(false);
+            Group Group = await this._context.CompleteGroups().FirstOrDefaultAsync(i => i.Identifier.Equals(id, StringComparison.Ordinal)).ConfigureAwait(false);
 
             if (Group == null)
             {
-                ErrorResponse notFoundError = new ErrorResponse("Resource " + id + " not found", "404");
-                notFoundError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
+                ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), "404");
                 return NotFound(notFoundError);
             }
-            var requested = Request.Query[QueryKeys.Attributes];
-            var exculted = Request.Query[QueryKeys.ExcludedAttributes];
-            var allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };
+            StringValues requested = Request.Query[QueryKeys.Attributes];
+            StringValues exculted = Request.Query[QueryKeys.ExcludedAttributes];
+            string[] allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };
             Group = ColumnsUtility.SelectColumns(requested, exculted, Group, allwaysRetuned);
-            Response.ContentType = "application/scim+json";
+            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
             return Group;
         }
 
-        /// <summary>
-        /// Search endpoint send 
-        /// </summary>
         [HttpPost]
         [Route("/api/Groups/.search")]
         public ActionResult<ListResponse<Group>> Post([FromBody] SearchRequest searchRequest)
         {
-            var filterGroups = new FilterGroups(_context);
+            FilterGroups filterGroups = new FilterGroups(_context);
             IEnumerable<Group> groups = filterGroups.GetGroups(searchRequest.filter);
-            var allwaysRetuned = new string[] { AttributeNames.Identifier, "identifier", AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };//TODO Read from schema 
-            var attributes = searchRequest.attributes?.ToArray() ?? Array.Empty<string>();
-            var exculdedattribes = searchRequest.excludedAttributes?.ToArray() ?? Array.Empty<string>();
+            string[] allwaysRetuned = new string[] { AttributeNames.Identifier, "identifier", AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };//TODO Read from schema 
+            string[] attributes = searchRequest.attributes?.ToArray() ?? Array.Empty<string>();
+            string[] exculdedattribes = searchRequest.excludedAttributes?.ToArray() ?? Array.Empty<string>();
             groups = groups.Select(g =>
                 ColumnsUtility.SelectColumns(attributes, exculdedattribes, g, allwaysRetuned)).ToList();
             if (searchRequest.startIndex.HasValue)
@@ -163,13 +150,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 StartIndex = groups.Any() ? 1 : (int?)null,
                 Resources = groups
             };
+            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
             return list;
         }
 
-        /// <summary>
-        /// POST: api/Groups
-        /// Creates a new Group if the item has non-null unique displayname.
-        /// </summary>
         [HttpPost]
         public async Task<ActionResult<Group>> Post(Group item)
         {
@@ -178,72 +162,58 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return BadRequest();
             }
 
-            var Exists = _context.Groups.Any(x => x.DisplayName == item.DisplayName);
+            bool Exists = this._context.Groups.Any(x => x.DisplayName == item.DisplayName);
             if (Exists == true)
             {
-                ErrorResponse conflictError = new ErrorResponse("DisplayName already exists", "409");
-                conflictError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
+                ErrorResponse conflictError = new ErrorResponse(ErrorDetail.DisplaynameConflict, "409");
                 return NotFound(conflictError);
             }
 
             item.meta.Created = DateTime.Now;
             item.meta.LastModified = DateTime.Now;
-            _context.Groups.Add(item);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
-            Response.ContentType = "application/scim+json";
+            this._context.Groups.Add(item);
+            await this._context.SaveChangesAsync().ConfigureAwait(false);
+            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
             return CreatedAtAction(nameof(Get), new { id = item.DisplayName }, item);
         }
 
-        /// <summary>
-        /// PUT: api/Groups/5
-        /// Replace all values for given Group, if it exists.
-        /// </summary>
-        [HttpPut("{id}")]
+        [HttpPut(ControllerConfiguration.UriID)]
         public async Task<ActionResult<Group>> Put(string id, Group item)
         {
             if (id != item.Identifier)
             {
-                ErrorResponse BadRequestError = new ErrorResponse("Attribute 'id' is read only", "400");
-                BadRequestError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
+                ErrorResponse BadRequestError = new ErrorResponse(ErrorDetail.Mutability, "400");
                 return NotFound(BadRequestError);
             }
-            Group group = _context.CompleteGroups().FirstOrDefault(g => g.Identifier.Equals(id, StringComparison.CurrentCulture));
+            Group group = this._context.CompleteGroups().FirstOrDefault(g => g.Identifier.Equals(id, StringComparison.CurrentCulture));
             group.DisplayName = item.DisplayName;
             group.Members = item.Members;
             group.meta.LastModified = DateTime.Now;
             group.ExternalIdentifier = item.ExternalIdentifier;
-            await _context.SaveChangesAsync().ConfigureAwait(false);
-            Response.ContentType = "application/scim+json";
+            await this._context.SaveChangesAsync().ConfigureAwait(false);
+            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
             return Ok(group);
         }
 
-        /// <summary>
-        /// DELETE: api/Groups/5
-        /// Remove the given Group from persistent storage, if it exists.
-        /// </summary>
-        [HttpDelete("{id}")]
+        [HttpDelete(ControllerConfiguration.UriID)]
         public async Task<IActionResult> Delete(string id)
         {
-            var Group = await _context.Groups.FindAsync(id).ConfigureAwait(false);
+            Group Group = await this._context.Groups.FindAsync(id).ConfigureAwait(false);
 
             if (Group == null)
             {
-                ErrorResponse notFoundError = new ErrorResponse("Resource " + id + " not found", "404");
-                notFoundError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
+                ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), "404");
                 return NotFound(notFoundError);
             }
 
-            _context.Groups.Remove(Group);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
-            Response.ContentType = "application/scim+json";
+            this._context.Groups.Remove(Group);
+            await this._context.SaveChangesAsync().ConfigureAwait(false);
+            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
             return NoContent();
         }
 
-        /// <summary>
-        /// Method For PATCH Group.
-        /// </summary>
-        [HttpPatch("{id}")]
-        public IActionResult Patch(string id, JObject body)//[FromBody]PatchRequest2Compliant patchRequest)
+        [HttpPatch(ControllerConfiguration.UriID)]
+        public IActionResult Patch(string id, JObject body)
         {
             PatchRequest2Compliant patchRequest = null;
             PatchRequest2Legacy patchLegacy = null;
@@ -263,7 +233,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 throw new NotSupportedException(unsupportedPatchTypeName);
             }
 
-            var groupToModify = _context.CompleteGroups().FirstOrDefault((group) => group.Identifier.Equals(id, StringComparison.Ordinal));
+            Group groupToModify = this._context.CompleteGroups().FirstOrDefault((group) => group.Identifier.Equals(id, StringComparison.Ordinal));
 
             if (groupToModify != null)
             {
@@ -272,7 +242,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                     foreach (var op in patchRequest.Operations)
                     {
 
-                        var patchOp = PatchOperation.Create(getOperationName(op.OperationName), op.Path.ToString(), op.Value);
+                        PatchOperation patchOp = PatchOperation.Create(getOperationName(op.OperationName), op.Path.ToString(), op.Value);
                         groupToModify.Apply(patchOp);
                         groupToModify.meta.LastModified = DateTime.Now;
 
@@ -287,7 +257,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                     }
                 }
             }
-            _context.SaveChanges();
+            this._context.SaveChanges();
 
             return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
         }

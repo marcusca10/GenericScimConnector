@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Threading.Tasks;
 using System.Reflection;
+using System;
+
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
 {
-    /// <summary>
-    /// Base Class for attribute objects for ease of items
-    /// </summary>
     public class AttributeObject
     {
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="propertyName"></param>
-        /// <returns></returns>
         public object this[string propertyName]
         {
             get
@@ -32,10 +26,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
         {
             return this.GetType().GetProperties().First(prop =>
             {
-                var dataMemberAttribue = prop.GetCustomAttribute(typeof(DataMemberAttribute), true);
+                Attribute dataMemberAttribue = prop.GetCustomAttribute(typeof(DataMemberAttribute), true);
                 if (dataMemberAttribue != null)
                 {
-                    var attribue = (DataMemberAttribute)dataMemberAttribue;
+                    DataMemberAttribute attribue = (DataMemberAttribute)dataMemberAttribue;
                     return attribue.Name.Equals(propertyName, System.StringComparison.InvariantCultureIgnoreCase);
                 }
                 return false;

@@ -1,4 +1,7 @@
-﻿
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +9,6 @@ using System.Runtime.Serialization;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
-    /// <summary>
-    /// Abstract class to use for objects that have a Schema.
-    /// </summary>
     [DataContract]
     public abstract class Schematized
     {
@@ -17,18 +17,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         private IReadOnlyCollection<string> schemasWrapper;
         private object schemasLock;
 
-        /// <summary>
-        /// Schematized constructor.
-        /// </summary>
         protected Schematized()
         {
             this.OnInitialization();
             this.OnInitialized();
         }
 
-        /// <summary>
-        /// Get schemas.
-        /// </summary>
         public virtual IReadOnlyCollection<string> Schemas
         {
             get
@@ -37,9 +31,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             }
         }
 
-        /// <summary>
-        /// If the new schemaIdentifier is not null or already included it is added to the list.
-        /// </summary>
         public void AddSchema(string schemaIdentifier)
         {
             if (string.IsNullOrWhiteSpace(schemaIdentifier))
@@ -72,9 +63,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             }
         }
 
-        /// <summary>
-        /// Checks the schemas to see if the passed scheme is included.
-        /// </summary>
         public bool Is(string scheme)
         {
             if (string.IsNullOrWhiteSpace(scheme))
@@ -109,9 +97,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             this.schemas = new List<string>();
         }
 
-        /// <summary>
-        /// Sets schemasWrapper on construction.
-        /// </summary>
         private void OnInitialized()
         {
             this.schemasWrapper = this.schemas.AsReadOnly();

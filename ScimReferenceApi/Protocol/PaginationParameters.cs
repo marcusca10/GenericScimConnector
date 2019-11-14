@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 {
-    /// <summary>
-    /// Class for hodling info about pagination.
-    /// </summary>
     public class PaginationParameters
     {
         int? count;
         int? startIndex;
 
-        /// <summary>
-        /// Number of resources per page.
-        /// </summary>
         public int? Count
         {
             get
@@ -34,9 +27,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             }
         }
 
-        /// <summary>
-        /// Start page.
-        /// </summary>
         public int? StartIndex
         {
             get

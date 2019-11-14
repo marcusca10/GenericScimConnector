@@ -1,30 +1,23 @@
-﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using System.Runtime.Serialization;
-using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 {
-    /// <summary>
-    /// Class for holding an error.
-    /// </summary>
     public class ErrorResponse : Schematized
     {
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         public ErrorResponse(string detail, string status)
         {
             this.detail = detail;
             this.status = status;
+            this.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
         }
 
-        /// <summary>
-        /// Detail portion of an error response, describing in human readable format the error.
-        /// </summary>
         [DataMember(Name = ProtocolAttributeNames.Detail)]
         public string detail
         {
@@ -32,9 +25,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             set;
         }
 
-        /// <summary>
-        /// The response code.
-        /// </summary>
         [DataMember(Name = ProtocolAttributeNames.Status)]
         public string status
         {

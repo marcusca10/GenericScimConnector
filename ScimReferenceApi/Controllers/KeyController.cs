@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -7,30 +10,24 @@ using System.Text;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
-    /// <summary>
-    /// Class for handeling Key endpoint. 
-    /// </summary>
+    //Controller for generating a bearer token for authorization during testing
     [Route("api/Key")]
     public class KeyController : ControllerBase
     {
-        /// <summary>
-        /// Response to HTTP POST. Generates a key and returns
-        /// TODO: make secure.
-        /// </summary>
-        /// <returns></returns>
+        //TODO: make secure.
         [HttpPost]
         public ActionResult POST()
         {
-            var tokenString = GenerateJSONWebToken();
+            string tokenString = GenerateJSONWebToken();
             return Ok(new { token = tokenString });
         }
 
         private static string GenerateJSONWebToken()
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Microsoft.Security.Bearer"));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Microsoft.Security.Bearer"));
+            SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken("Microsoft.Security.Bearer",
+            JwtSecurityToken token = new JwtSecurityToken("Microsoft.Security.Bearer",
               "Microsoft.Security.Bearer",
               null,
               expires: DateTime.Now.AddMinutes(120),
