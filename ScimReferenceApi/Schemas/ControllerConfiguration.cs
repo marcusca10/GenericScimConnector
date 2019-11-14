@@ -2,14 +2,12 @@
 // Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
-using System.Runtime.Serialization;
-
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
-    [DataContract]
-    public abstract class TypedValue : TypedItem
+    public static class ControllerConfiguration
     {
-        [DataMember(Name = AttributeNames.Value, Order = 0)]
-        public string Value { get; set; }
+        public const string DefaultStartIndexString = "1";
+        public const string DefaultContentType = "application/scim+json";
+        public const string UriID = "{id}";
     }
 }

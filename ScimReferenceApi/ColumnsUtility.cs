@@ -1,68 +1,22 @@
-﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 {
-	/// <summary>
-	/// Static tools class 
-	/// </summary>
-	public static class ColumnsUtility
+    public static class ColumnsUtility
 	{
-		/// <summary>
-		/// From retieved listed object select requested columns 
-		/// </summary>
-		/// <param name="requestedAttributes"></param>
-		/// <param name="excludedAttributes"></param>
-		/// <param name="projectedResouce"></param>
-		/// <param name="allwaysRetuned"></param>
-		/// <returns></returns>
 		public static T SelectColumns<T>(IEnumerable<string> requestedAttributes, IEnumerable<string> excludedAttributes, T projectedResouce, string[] allwaysRetuned) where T: Resource
 		{
 
 			return BuildResouce(requestedAttributes,excludedAttributes, allwaysRetuned, projectedResouce);
-
-			//if (!requestedAttributes.Any() && !excludedAttributes.Any())
-			//{
-			//	return projectedResouce;
-			//}
-			//var type = projectedResouce.GetType();
-			//var jsonObject = JObject.FromObject(projectedResouce);
-			////TODO: Replace with Build Object instead of clear object 
-			//if (requestedAttributes.Any() || excludedAttributes.Any())//If not requested attributes or excluded attributes then remove only what is nessecary.
-			//{
-
-			//	var children = jsonObject.Children().ToList();
-			//	foreach (var child in children)
-			//	{
-			//		string path = child.Path;
-			//		if (child.Children().First().Type == JTokenType.Array)
-			//		{
-			//			clearArray(child, requestedAttributes, excludedAttributes,allwaysRetuned);
-			//		}
-			//		else
-			//		{
-			//			if (
-			//			(
-			//				((!requestedAttributes.Any((requested) => requested.Equals(path, StringComparison.InvariantCultureIgnoreCase))) && requestedAttributes.Any()) //if there are requested attributes and it does not match remove
-			//					|| excludedAttributes.Any((excluded) => excluded.Equals(path, StringComparison.InvariantCultureIgnoreCase)))//Or if matches requested attributs
-			//			&& !allwaysRetuned.Contains(path))//And not marked as allways
-			//			{
-			//				child.Remove();
-			//			}
-			//		}
-			//	}
-			//}
-			
-			//var tobject = jsonObject.ToObject(type);
-
-			//return (Resource)tobject;
 		}
 
 		private static void ClearArray(JToken child, IReadOnlyCollection<string> requestedAttributes, IReadOnlyCollection<string> excludedAttributes, string[] allwaysRetuned)
@@ -70,7 +24,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 			//Get Requested and excluded attributes that include child
 
 			string path = child.Path;
-			var directRequested = requestedAttributes.Select(re =>
+			IEnumerable<IPath> directRequested = requestedAttributes.Select(re =>
 				 {
 					 return Path.TryParse(re, out IPath reqPath) ? reqPath : null;
 				 }).
@@ -78,7 +32,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 				 {
 					 return req?.AttributePath?.Equals(path, StringComparison.InvariantCultureIgnoreCase) ?? false;
 				 });
-			var directExclude = excludedAttributes.Select(re =>
+            IEnumerable<IPath> directExclude = excludedAttributes.Select(re =>
 				{
 					return Path.TryParse(re, out IPath reqPath) ? reqPath : null;
 				}).
@@ -107,11 +61,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 				child.Remove();//Entire array Excluded
 				return;
 			}
-			var children = jArray.Children().ToList();
-			foreach(var arrayItem in children)
+			List<JToken> children = jArray.Children().ToList();
+			foreach(JToken arrayItem in children)
 			{
 				bool shouldClearItem = true;
-				foreach(var internalyRequested in directRequested)
+				foreach(IPath internalyRequested in directRequested)
 				{
 					bool match = MatchArrayItem(arrayItem, internalyRequested);
 					if (match)
@@ -121,7 +75,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 					}
 				}
 				
-				foreach(var internalyExcluded in directExclude)
+				foreach(IPath internalyExcluded in directExclude)
 				{
 					bool match = MatchArrayItem(arrayItem, internalyExcluded);
 					if (match)
@@ -144,7 +98,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 		private static bool MatchArrayItem(JToken arrayItem, IPath internalyRequested)
 		{
 			IFilter filter = internalyRequested.SubAttributes.FirstOrDefault();//Cuts support for deeper attribute filters, very very rare use case
-			var atribute = filter.AttributePath;
+			string atribute = filter.AttributePath;
 			JToken selectedAttribue = null ;
             
 			if (atribute.Equals ("value",StringComparison.InvariantCultureIgnoreCase) && arrayItem.Type == JTokenType.String)
@@ -176,14 +130,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 			}
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="requestedAttributes"></param>
-		/// <param name="excludedAttributes"></param>
-		/// <param name="allwaysRetuned"></param>
-		/// <param name="resource"></param>
-		/// <returns></returns>
 		private static T BuildResouce<T>(IEnumerable<string> requestedAttributes, IEnumerable<string> excludedAttributes, string[] allwaysRetuned, T resource)
 		{
 			JObject FinalObject = new JObject();
@@ -197,7 +143,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 			{
 				if(Path.TryParse(requestedAtt,out IPath attributePath))
 				{
-					var itemValue = projectedResrouce[attributePath.AttributePath];
+					JToken itemValue = projectedResrouce[attributePath.AttributePath];
                     if (itemValue != null)
                     {
                         switch (itemValue.Type)
@@ -226,7 +172,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 			{
 				if (Path.TryParse(requestedAtt, out IPath attributePath))
 				{
-					var itemValue = projectedResrouce[attributePath.AttributePath];
+					JToken itemValue = projectedResrouce[attributePath.AttributePath];
                     if (itemValue != null)
                     {
                         switch (itemValue.Type)
@@ -260,7 +206,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 			{
 				if (Path.TryParse(excluded, out IPath attributePath))
 				{
-					var itemValue = projectedResrouce[attributePath.AttributePath];
+					JToken itemValue = projectedResrouce[attributePath.AttributePath];
                     if (itemValue != null)
                     {
                         switch (itemValue.Type)
@@ -301,7 +247,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
             //TODO: Support Notation ??.??[?? eq ??] but does not appear to exist in defined scim objects
 			//Assume that object allreay exists
 			JToken token = finalObject[attributePath.AttributePath];
-			var nextLevelAttribute = attributePath.ValuePath;
+			IPath nextLevelAttribute = attributePath.ValuePath;
 			JToken internalProperty = token[nextLevelAttribute.AttributePath];
 			if (nextLevelAttribute.ValuePath != null)
 			{
@@ -316,10 +262,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 		private static void ClearArray(JObject finalObject, IPath attributePath)
 		{
 			JToken array = (JArray) finalObject[attributePath.AttributePath];
-			var arrayItems = array.Children().ToList();
-			var filter = attributePath.SubAttributes.First();
+			List<JToken> arrayItems = array.Children().ToList();
 
-			foreach(var arItem in arrayItems)
+			foreach(JToken arItem in arrayItems)
 			{
 				if(MatchArrayItem(arItem, attributePath))
 				{
@@ -331,9 +276,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 		private static void AddArray(JObject finalObject, IPath attributePath, JToken itemValue)
 		{
 			finalObject.Add(attributePath.AttributePath, new JArray());
-			var jarray = (JArray) finalObject[attributePath.AttributePath];
-			var children = itemValue.Children().ToList();
-			foreach(var child in children)
+			JArray jarray = (JArray) finalObject[attributePath.AttributePath];
+			List<JToken> children = itemValue.Children().ToList();
+			foreach(JToken child in children)
 			{
 				if (MatchArrayItem(child, attributePath))
 				{
@@ -348,7 +293,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 			
 			JObject jobject = (JObject)finalObject[attributePath.AttributePath];
 			
-			var nextlevelAttribe = attributePath.ValuePath;
+			IPath nextlevelAttribe = attributePath.ValuePath;
 			
 			if(nextlevelAttribe == null)
 			{
@@ -356,7 +301,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 			}
 			else
 			{
-                var emptyObject = new JObject();
+                JObject emptyObject = new JObject();
                 finalObject.Add(attributePath.AttributePath, emptyObject);
                 JToken item = itemValue[nextlevelAttribe.AttributePath];
                 AddObject(emptyObject, nextlevelAttribe, item);

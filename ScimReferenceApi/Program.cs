@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
@@ -12,18 +16,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
     /// </summary>
     public static class Program
     {
-        /// <summary>
-        /// Entry point.
-        /// </summary>
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
         }
-        /// <summary>
-        /// Create web host builder.
-        /// </summary>
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>(); // use a startup class
+                .UseStartup<Startup>(); 
     }
 }

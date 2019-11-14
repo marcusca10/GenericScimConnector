@@ -1,15 +1,14 @@
-﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
 {
-    /// <summary>
-    /// Abstract class to extend patch request.
-    /// </summary>
     [DataContract]
     public abstract class PatchRequest2Base<TOperation> : PatchRequestBase
          where TOperation : PatchOperationBase
@@ -18,9 +17,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
         private List<TOperation> operationsValue;
         private IReadOnlyCollection<TOperation> operationsWrapper;
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         protected PatchRequest2Base()
         {
             this.OnInitialization();
@@ -28,18 +24,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
             this.AddSchema(ProtocolSchemaIdentifiers.Version2PatchOperation);
         }
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         protected PatchRequest2Base(IReadOnlyCollection<TOperation> operations)
             : this()
         {
             this.operationsValue.AddRange(operations);
         }
 
-        /// <summary>
-        /// Get the collection of operations.
-        /// </summary>
         public IReadOnlyCollection<TOperation> Operations
         {
             get
@@ -48,9 +38,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
             }
         }
 
-        /// <summary>
-        /// Method for adding an operation to the collection.
-        /// </summary>
         public void AddOperation(TOperation operation)
         {
             if (null == operation)

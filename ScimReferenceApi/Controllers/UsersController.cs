@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
@@ -8,20 +11,15 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
 
-    /// <summary>
-    /// Api for Users resource.
-    /// </summary>
     [Route("api/Users")]
     [ApiController]
     //[Authorize]
@@ -30,33 +28,26 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         private readonly ScimContext _context;
         private readonly ILogger<UsersController> _log;
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         public UsersController(ScimContext context, ILogger<UsersController> log)
         {
-            _context = context;
-            _log = log;
+            this._context = context;
+            this._log = log;
         }
 
-        /// <summary>
-        /// GET: api/Users
-        /// Return list of all Users from persistent storage.
-        /// </summary>
         [HttpGet]
         public async Task<ActionResult<ListResponse<User>>> Get()
         {
 
             IEnumerable<User> users;
 
-            string query = Request.QueryString.ToUriComponent();
+            string query = this.Request.QueryString.ToUriComponent();
             if (!string.IsNullOrWhiteSpace(query))
             {
                 users = new FilterUsers(_context).FilterGen(query);
             }
             else
             {
-                users = await _context.CompleteUsers().ToListAsync().ConfigureAwait(false);
+                users = await this._context.CompleteUsers().ToListAsync().ConfigureAwait(false);
             }
 
             NameValueCollection keyedValues = HttpUtility.ParseQueryString(query);
@@ -66,7 +57,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             if (startIndex == null)
             {
-                startIndex = "1";
+                startIndex = ControllerConfiguration.DefaultStartIndexString;
             }
 
             int start = int.Parse(startIndex, CultureInfo.InvariantCulture);
@@ -84,9 +75,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 				count = int.Parse(countString,CultureInfo.CurrentCulture);
 				users = users.Take(count.Value);
 			}
-			var requested = Request.Query[QueryKeys.Attributes].SelectMany((att) => att.Split(','));
-			var exculted = Request.Query[QueryKeys.ExcludedAttributes].SelectMany((att) => att.Split(','));
-			var allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };//TODO Read from schema 
+			IEnumerable<string> requested = Request.Query[QueryKeys.Attributes].SelectMany((att) => att.Split(','));
+            IEnumerable<string> exculted = Request.Query[QueryKeys.ExcludedAttributes].SelectMany((att) => att.Split(','));
+            string[] allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };//TODO Read from schema 
 			users = users.Select(u =>
 				ColumnsUtility.SelectColumns(requested, exculted, u, allwaysRetuned)).ToList();
 
@@ -102,43 +93,34 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 list.ItemsPerPage = count.Value;
             }
 
-            Response.ContentType = "application/scim+json";
+            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
 
             return list;
         }
 
-        /// <summary>
-        /// GET: api/Users/5
-        /// Return User identified by given id. If not found, return Not Found status.
-        /// </summary>
-        [HttpGet("{id}")]
+        [HttpGet(ControllerConfiguration.UriID)]
         public async Task<ActionResult<User>> Get(string id)
         {
-            User User = await _context.CompleteUsers().FirstOrDefaultAsync(i => i.Identifier.Equals(id, StringComparison.Ordinal)).ConfigureAwait(false);
+            User User = await this._context.CompleteUsers().FirstOrDefaultAsync(i => i.Identifier.Equals(id, StringComparison.Ordinal)).ConfigureAwait(false);
             if (User == null)
             {
-                ErrorResponse notFoundError = new ErrorResponse("Resource " + id + " not found", "404");
-                notFoundError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
+                ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), "404");
                 return NotFound(notFoundError);
             }
 
-            Response.ContentType = "application/scim+json";
+            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
             return Ok(User);
         }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
 		[HttpPost]
 		[Route("/api/Users/.search")]
 		public ActionResult<ListResponse<User>> Post([FromBody] SearchRequest searchRequest)
 		{
-			var filterUsers = new FilterUsers(_context);
+            FilterUsers filterUsers = new FilterUsers(_context);
 			IEnumerable<User> users = filterUsers.GetUsers(searchRequest.filter);
-			var allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active,AttributeNames.Metadata };//TODO Read from schema 
-			var attributes = searchRequest.attributes?.ToArray() ?? Array.Empty<string>();
-			var exculdedattribes = searchRequest.excludedAttributes?.ToArray() ?? Array.Empty<string>();
+            string[] allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active,AttributeNames.Metadata };//TODO Read from schema 
+            string[] attributes = searchRequest.attributes?.ToArray() ?? Array.Empty<string>();
+            string[] exculdedattribes = searchRequest.excludedAttributes?.ToArray() ?? Array.Empty<string>();
 			users = users.Select(u =>
 				ColumnsUtility.SelectColumns(attributes, exculdedattribes, u, allwaysRetuned));
 			int totalResults = users.Count();
@@ -165,44 +147,51 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 Resources = users,
                 ItemsPerPage = searchRequest.count ?? null,
             };
+            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
             return list;
         }
 
-        /// <summary>
-        /// POST: api/Users
-        /// Create a new user if given item has non-null unique username.
-        /// </summary>
         [HttpPost]
         public async Task<ActionResult<User>> Post(JObject body)
         {
-            User item = BuildUser(body);
-            if (item.UserName == null)
+            User item = null;
+            try { 
+                item = BuildUser(body);
+            }
+            catch(ArgumentException)
             {
-                ErrorResponse badRequestError = new ErrorResponse("No Username", "400");
-                badRequestError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
+                ErrorResponse invalidJSON = new ErrorResponse(ErrorDetail.Unparsable, "400");
+                return BadRequest(invalidJSON);
+            }
+            if (String.IsNullOrWhiteSpace(item.UserName))
+            {
+                ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.NoUsername, "400");
                 return BadRequest(badRequestError);
             }
 
-            var Exists = _context.Users.Any(x => x.UserName == item.UserName);
+            bool Exists = this._context.Users.Any(x => x.UserName == item.UserName);
             if (Exists == true)
             {
-                ErrorResponse conflictError = new ErrorResponse("Username already exists", "409");
-                conflictError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
+                ErrorResponse conflictError = new ErrorResponse(ErrorDetail.UsernameConflict, "409");
                 return Conflict(conflictError);
             }
 
 			item.meta.Created = DateTime.Now;
 			item.meta.LastModified = DateTime.Now;
-			_context.Users.Add(item);
-			await _context.SaveChangesAsync().ConfigureAwait(false);
-			_log.LogInformation(item.UserName);
-			Response.ContentType = "application/scim+json";
+			this._context.Users.Add(item);
+			await this._context.SaveChangesAsync().ConfigureAwait(false);
+			this._log.LogInformation(item.UserName);
+			this.Response.ContentType = ControllerConfiguration.DefaultContentType;
 			return CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
 		}
 
         private static User BuildUser(JObject body)
         {
-            var shemas = body["schemas"].Children();
+            if (body["schemas"]==null)
+            {
+                throw new ArgumentException("schemas");
+            }
+            JEnumerable<JToken> shemas = body["schemas"].Children();
             User item;
             if (shemas.Contains(SchemaIdentifiers.Core2EnterpriseUser))
             {
@@ -216,35 +205,28 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             return item;
         }
 
-        /// <summary>
-        /// PUT: api/Users/5
-        /// Replace all values for the given User, if it exists.
-        /// </summary>
-        [HttpPut("{id}")]
+        [HttpPut(ControllerConfiguration.UriID)]
         public async Task<ActionResult<User>> Put(string id, User item)
         {
 
             if (id != item.Identifier)
             {
-                ErrorResponse badRequestError = new ErrorResponse("Attribute 'id' is read only", "400");
-                badRequestError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
+                ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.Mutability, "400");
                 return BadRequest(badRequestError);
             }
             if (item.UserName == null)
             {
-                ErrorResponse badRequestError = new ErrorResponse("No Username", "400");
-                badRequestError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
+                ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.NoUsername, "400");
                 return BadRequest(badRequestError);
             }
 
-            var User = _context.CompleteUsers()
+            var User = this._context.CompleteUsers()
                 .Where(p => p.Identifier == id)
                 .SingleOrDefault();
 
             if (User == null)
             {
-                ErrorResponse notFoundError = new ErrorResponse("Resource " + id + " not found", "404");
-                notFoundError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
+                ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), "404");
                 return NotFound(notFoundError);
             }
 
@@ -255,40 +237,32 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             User.PhoneNumbers = item.PhoneNumbers;
             User.Roles = item.Roles;
             User.Addresses = item.Addresses;
-            _context.Entry(User).CurrentValues.SetValues(item);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
-            _log.LogInformation(item.UserName);
-            Response.ContentType = "application/scim+json";
+            this._context.Entry(User).CurrentValues.SetValues(item);
+            await this._context.SaveChangesAsync().ConfigureAwait(false);
+            this._log.LogInformation(item.UserName);
+            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
             return Ok(User);
         }
 
-        /// <summary>
-        /// DELETE: api/Users/5
-        /// Remove the given User from persistent storage, if it exists.
-        /// </summary>
-        [HttpDelete("{id}")]
+        [HttpDelete(ControllerConfiguration.UriID)]
         public async Task<IActionResult> Delete(string id)
         {
-            var User = await _context.Users.FindAsync(id).ConfigureAwait(false);
+            var User = await this._context.Users.FindAsync(id).ConfigureAwait(false);
             if (User == null)
             {
-                ErrorResponse notFoundError = new ErrorResponse("Resource " + id + " not found", "404");
-                notFoundError.AddSchema(ProtocolSchemaIdentifiers.Version2Error);
+                ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), "404");
                 return NotFound(notFoundError);
             }
 
-            _context.Users.Remove(User);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
-            _log.LogInformation(id);
-            Response.ContentType = "application/scim+json";
+            this._context.Users.Remove(User);
+            await this._context.SaveChangesAsync().ConfigureAwait(false);
+            this._log.LogInformation(id);
+            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
             return NoContent();
         }
 
-        /// <summary>
-        /// Method For PATCH User.
-        /// </summary>
-        [HttpPatch("{id}")]
-        public IActionResult Patch(string id, JObject body)// [FromBody]PatchRequest2Compliant patchRequest)
+        [HttpPatch(ControllerConfiguration.UriID)]
+        public IActionResult Patch(string id, JObject body)
         {
             PatchRequest2Compliant patchRequest = null;
             PatchRequest2Legacy patchLegacy = null;
@@ -307,7 +281,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 throw new NotSupportedException(unsupportedPatchTypeName);
             }
 
-            var usertoModify = _context.CompleteUsers().FirstOrDefault((user) => user.Identifier.Equals(id, StringComparison.Ordinal));
+            var usertoModify = this._context.CompleteUsers().FirstOrDefault((user) => user.Identifier.Equals(id, StringComparison.Ordinal));
             if (patchRequest != null)
             {
                 if (usertoModify != null)
@@ -317,7 +291,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                         if (op is PatchOperation2SingleValued singleValued)
                         {
 
-                            var patchOp = PatchOperation.Create(getOperationName(singleValued.OperationName), singleValued.Path.ToString(), singleValued.Value);
+                            PatchOperation patchOp = PatchOperation.Create(getOperationName(singleValued.OperationName), singleValued.Path.ToString(), singleValued.Value);
                             usertoModify.Apply(patchOp);
                             usertoModify.meta.LastModified = DateTime.Now;
                         }
@@ -335,7 +309,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                     }
                 }
             }
-            _context.SaveChanges();
+            this._context.SaveChanges();
 
             return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
         }

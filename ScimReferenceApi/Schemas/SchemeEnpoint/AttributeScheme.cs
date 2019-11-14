@@ -1,17 +1,15 @@
-﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemeEnpoint;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.SchemeEnpoint;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
 {
 
-    /// <summary>
-    /// Class for attributes of the schema endpoint.
-    /// </summary>
     [DataContract]
     public sealed class AttributeScheme
     {
@@ -24,16 +22,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
         private Uniqueness uniqueness;
         private string uniquenessValue;
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
         public AttributeScheme()
         {
         }
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         public AttributeScheme(string name, AttributeDataType type, bool plural)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -49,9 +41,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
             this.Uniqueness = Uniqueness.none;
         }
 
-        /// <summary>
-        /// Get or set if the attribute is case exact.
-        /// </summary>
         [DataMember(Name = AttributeNames.CaseExact)]
         public bool CaseExact
         {
@@ -59,9 +48,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
             set;
         }
 
-        /// <summary>
-        /// Get or set datatype.
-        /// </summary>
         public AttributeDataType DataType
         {
             get
@@ -87,15 +73,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
 
             set
             {
-                var stringValue = value.Substring(0, 1).ToUpper(CultureInfo.CurrentCulture) + value.Substring(1).ToLower(CultureInfo.CurrentCulture);
+                string stringValue = value.Substring(0, 1).ToUpper(CultureInfo.CurrentCulture) + value.Substring(1).ToLower(CultureInfo.CurrentCulture);
                 this.dataType = (AttributeDataType)Enum.Parse(typeof(AttributeDataType), stringValue);
                 this.dataTypeValue = value;
             }
         }
 
-        /// <summary>
-        /// Get or set the description of the attribute.
-        /// </summary>
         [DataMember(Name = AttributeNames.Description)]
         public string Description
         {
@@ -103,9 +86,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
             set;
         }
 
-        /// <summary>
-        /// Get or set the mutability of the attribute.
-        /// </summary>
         public Mutability Mutability
         {
             get
@@ -136,9 +116,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
             }
         }
 
-        /// <summary>
-        /// Get or set the attribute name.
-        /// </summary>
         [DataMember(Name = AttributeNames.Name)]
         public string Name
         {
@@ -146,9 +123,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
             set;
         }
 
-        /// <summary>
-        /// Get or set Plural.
-        /// </summary>
         [DataMember(Name = AttributeNames.Plural)]
         public bool Plural
         {
@@ -156,9 +130,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
             set;
         }
 
-        /// <summary>
-        /// Get or set if the attribute is required.
-        /// </summary>
         [DataMember(Name = AttributeNames.Required)]
         public bool Required
         {
@@ -166,9 +137,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
             set;
         }
 
-        /// <summary>
-        /// Get or set if the attribute is returned.
-        /// </summary>
         public Returned Returned
         {
             get
@@ -199,9 +167,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
             }
         }
 
-        /// <summary>
-        /// Get or set if the attribute must be unique.
-        /// </summary>
         public Uniqueness Uniqueness
         {
             get

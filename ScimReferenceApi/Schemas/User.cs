@@ -1,5 +1,10 @@
-﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,21 +12,10 @@ using System.Runtime.Serialization;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
-    /// <summary>
-    /// Model of Core 2 User.
-    /// </summary>
     [DataContract]
     public class User : Resource
     {
-        /// <summary>
-        /// Get or set user name.
-        /// </summary>
-        [DataMember(Name = AttributeNames.UserName, EmitDefaultValue =false)]
-        public virtual string UserName { get; set; }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
+        
         public User()
         {
             this.AddSchema(SchemaIdentifiers.Core2User);
@@ -34,75 +28,86 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             Active = true;
         }
 
-        /// <summary>
-        /// Get or set Active.
-        /// </summary>
+        [DataMember(Name = AttributeNames.UserName, EmitDefaultValue = false)]
+        public virtual string UserName
+        {
+            get;
+            set;
+        }
+
         [DataMember(Name = AttributeNames.Active)]
-        public virtual bool Active { get; set; }
+        public virtual bool Active 
+        { 
+            get; 
+            set; 
+        }
 
-        /// <summary>
-        /// Get or set Addresses.
-        /// </summary>
         [DataMember(Name = AttributeNames.Addresses, IsRequired = false, EmitDefaultValue = false)]
-        public virtual IEnumerable<Address> Addresses { get; set; }
+        public virtual IEnumerable<Address> Addresses 
+        { 
+            get; 
+            set; 
+        }
 
-        /// <summary>
-        /// Get or set DisplayName, should be human readable.
-        /// </summary>
         [DataMember(Name = AttributeNames.DisplayName, IsRequired = false, EmitDefaultValue = false)]
-        public virtual string DisplayName { get; set; }
+        public virtual string DisplayName 
+        { 
+            get; 
+            set;
+        }
 
-        /// <summary>
-        /// Get or set ElectronicMailAddresses, JSON name email.
-        /// </summary>
         [DataMember(Name = AttributeNames.ElectronicMailAddresses, IsRequired = false, EmitDefaultValue = false)]
-        public virtual IEnumerable<ElectronicMailAddress> ElectronicMailAddresses { get; set; }
+        public virtual IEnumerable<ElectronicMailAddress> ElectronicMailAddresses 
+        { 
+            get; 
+            set;
+        }
 
-        /// <summary>
-        /// Get or set Metadata.
-        /// </summary>
         [DataMember(Name = AttributeNames.Metadata)]
-        public virtual Metadata meta { get; set; }
+        public virtual Metadata meta 
+        { 
+            get;
+            set;
+        }
 
-        /// <summary>
-        /// Get or set Name.
-        /// </summary>
         [DataMember(Name = AttributeNames.Name, IsRequired = false, EmitDefaultValue = false)]
-        public virtual Name Name { get; set; }
+        public virtual Name Name 
+        { 
+            get;
+            set;
+        }
 
-        /// <summary>
-        /// Get or set PhoneNumbers.
-        /// </summary>
         [DataMember(Name = AttributeNames.PhoneNumbers, IsRequired = false, EmitDefaultValue = false)]
-        public virtual IEnumerable<PhoneNumber> PhoneNumbers { get; set; }
+        public virtual IEnumerable<PhoneNumber> PhoneNumbers 
+        { 
+            get; 
+            set; 
+        }
 
-        /// <summary>
-        /// Get or set PreferredLanguage.
-        /// </summary>
         [DataMember(Name = AttributeNames.PreferredLanguage, IsRequired = false, EmitDefaultValue = false)]
-        public virtual string PreferredLanguage { get; set; }
+        public virtual string PreferredLanguage 
+        { 
+            get;
+            set;
+        }
 
-        /// <summary>
-        /// Get or set Roles.
-        /// </summary>
         [DataMember(Name = AttributeNames.Roles, IsRequired = false, EmitDefaultValue = false)]
-        public virtual IEnumerable<Role> Roles { get; set; }
+        public virtual IEnumerable<Role> Roles 
+        { 
+            get; 
+            set; 
+        }
 
-        /// <summary>
-        /// Get or set Title
-        /// </summary>
         [DataMember(Name = AttributeNames.Title, IsRequired = false, EmitDefaultValue = false)]
-        public virtual string Title { get; set; }
+        public virtual string Title 
+        { 
+            get;
+            set;
+        }
     }
 
-    /// <summary>
-    /// User extentions for queyable items
-    /// </summary>
     public static class UserExtensions
     {
-        /// <summary>
-        /// Returns fully populated Users 
-        /// </summary>
         public static IQueryable<User> CompleteUsers(this ScimContext context)
         {
             return context.Users.Include("meta")
@@ -115,9 +120,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static void Apply(this User user, PatchOperation operation)
         {
             if (null == operation)
@@ -680,7 +682,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
         private static string GetSingleValue(PatchOperation operation)
         {
-            var item = operation.Value.First();
+            JToken item = operation.Value.First();
             switch (item.Type)
             {
                 case Newtonsoft.Json.Linq.JTokenType.String:

@@ -1,14 +1,14 @@
-﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
-    /// <summary>
-    /// Class for resourceIdentifier.
-    /// </summary>
     public sealed class UrlResourceIdentifier
     {
         private const string SeparatorSegments = "/";
@@ -20,10 +20,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                         {
                             UrlResourceIdentifier.SeparatorSegments
                         });
-        /// <summary>
-        /// Build uri identiier for item
-        /// </summary>
-        /// <param name="identifier"></param>
+
         public UrlResourceIdentifier(Uri identifier)
         {
             if (null == identifier)
@@ -84,10 +81,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             this.RelativePath = relativePath;
         }
 
-
-        /// <summary>
-        /// Get or set RelativePath.
-        /// </summary>
         public string RelativePath
         {
             get;

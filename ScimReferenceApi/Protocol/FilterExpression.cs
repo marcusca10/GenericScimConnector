@@ -1,11 +1,14 @@
-﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 {
@@ -668,9 +671,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             return result;
         }
 
-        /// <summary>
-        /// ToString() override.
-        /// </summary>
         public override string ToString()
         {
             string result =
@@ -818,9 +818,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                 }
             }
 
-            /// <summary>
-            /// Get DataType.
-            /// </summary>
             public AttributeDataType DataType
             {
                 get;

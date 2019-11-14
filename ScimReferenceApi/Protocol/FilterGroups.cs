@@ -1,35 +1,27 @@
-﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
-    /// <summary>
-    /// Class for generating alist of Groups based on the filter expression in a GET.
-    /// </summary>
     public class FilterGroups
     {
 
         private readonly ScimContext _context;
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         public FilterGroups(ScimContext context)
         {
             _context = context;
         }
 
-        /// <summary>
-        /// Method for filtering retruned results based on URI input.
-        /// </summary>
-        /// <param name="query">Query portion of URI</param>
-        /// <returns>AllGroups a list of the slected groups</returns>
         public IEnumerable<Group> FilterGen(string query)
         {
             IEnumerable<Group> AllGroups = new List<Group>();
@@ -47,9 +39,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             return AllGroups;
         }
 
-        /// <summary>
-        /// Method for apply the logic of the genearted collection of filter lists.
-        /// </summary>
         public IEnumerable<Group> GetGroups(string filterExpression)
         {
             List<Group> AllGroups = new List<Group>();
@@ -61,8 +50,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     Filter currentFilter = (Filter)results.ElementAt(i);
                     while (currentFilter != null)
                     {
-                        var attribute = currentFilter.AttributePath;
-                        var fullAttribute = attribute;
+                        string attribute = currentFilter.AttributePath;
+                        string fullAttribute = attribute;
                         int charLocation = attribute.IndexOf(".", StringComparison.Ordinal);
                         string propName = "";
                         if (charLocation > 0)
@@ -71,8 +60,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                             propName = fullAttribute.Substring(charLocation + 1, fullAttribute.Length - (charLocation + 1));
                         }
 
-                        var value = currentFilter.ComparisonValue;
-                        var filterOp = currentFilter.FilterOperator;
+                        string value = currentFilter.ComparisonValue;
+                        ComparisonOperator filterOp = currentFilter.FilterOperator;
                         currentFilter = (Filter)currentFilter.AdditionalFilter;
                         if (filterOp == ComparisonOperator.Equals)
                         {

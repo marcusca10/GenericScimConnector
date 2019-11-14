@@ -1,3 +1,7 @@
+//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
 [
   {
     "schemas": [ "urn:ietf:params:scim:schemas:core:2.0:ResourceType" ],

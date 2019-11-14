@@ -1,26 +1,22 @@
-﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 {
-    /// <summary>
-    /// Class for storing information on a filter and invoking the filterExpression .ToFilters().
-    /// </summary>
     public sealed class Filter : IFilter
     {
         private const string ComparisonValueTemplate = "\"{0}\"";
 
         private const string EncodingSpacePer2396 = "+";
 
-        /// <summary>
-        /// Name for null string.
-        /// </summary>
         public const string NullValue = "null";
 
         private const string ReservedPerRfc2396 = ";/?:@&=+$,";
@@ -54,9 +50,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         {
         }
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         public Filter(string attributePath, ComparisonOperator filterOperator, string comparisonValue)
         {
             if (string.IsNullOrWhiteSpace(attributePath))
@@ -75,9 +68,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             this.DataType = AttributeDataType.String;
         }
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         public Filter(IFilter other)
             : this(other?.AttributePath, other.FilterOperator, other?.ComparisonValue)
         {
@@ -119,27 +109,18 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             or
         }
 
-        /// <summary>
-        /// Refrence to the next filter in a list of ands.
-        /// </summary>
         public IFilter AdditionalFilter
         {
             get;
             set;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public string AttributePath
         {
             get;
             private set;
         }
 
-        /// <summary>
-        /// Value to be checked by expresion.
-        /// </summary>
         public string ComparisonValue
         {
             get
@@ -160,9 +141,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             }
         }
 
-        /// <summary>
-        /// Get comparisonValueEncoded.
-        /// </summary>
         public string ComparisonValueEncoded
         {
             get
@@ -171,9 +149,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             }
         }
 
-        /// <summary>
-        /// Get or Set the data type of the value being operated with.
-        /// </summary>
         public AttributeDataType? DataType
         {
             get
@@ -188,9 +163,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             }
         }
 
-        /// <summary>
-        /// Get or set the operator to apply to the vaule.
-        /// </summary>
         public ComparisonOperator FilterOperator
         {
             get;
@@ -221,9 +193,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             return result;
         }
 
-        /// <summary>
-        /// Method for serializing the filter and the list of ands.
-        /// </summary>
         public string Serialize()
         {
             ComparisonOperatorValue operatorValue;
@@ -311,18 +280,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             return result;
         }
 
-        /// <summary>
-        /// ToString() override.
-        /// </summary>
         public override string ToString()
         {
             string result = this.Serialize();
             return result;
         }
 
-        /// <summary>
-        /// Method for turing the colletion of filter lists into a string.
-        /// </summary>
         public static string ToString(IReadOnlyCollection<IFilter> filters)
         {
             if (null == filters)
@@ -369,12 +332,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             return result;
         }
 
-        /// <summary>
-        /// Method for trying to generate the collection of filter lists from the URI querry.
-        /// </summary>
         public static bool TryParse(string filterExpression, out IReadOnlyCollection<IFilter> filters)
         {
-            string expression = filterExpression;//.Trim('"');
+            string expression = filterExpression;
 
             try
             {

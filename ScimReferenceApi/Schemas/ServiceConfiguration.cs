@@ -1,17 +1,16 @@
-﻿
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
-    /// <summary>
-    /// Schematized object for providing configuration.
-    /// </summary>
     [DataContract]
     public class ServiceConfiguration : Schematized
     {
@@ -21,9 +20,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         private IReadOnlyCollection<SCIMAuthenticationScheme> authenticationSchemesWrapper;
         private object thisLock;
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         public ServiceConfiguration(bool bulkRequestsSupport,
             bool supportsEntityTags,
             bool supportsFiltering,
@@ -48,9 +44,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                 };
         }
 
-        /// <summary>
-        /// BulkRequests get set for supported.
-        /// </summary>
         [DataMember(Name = AttributeNames.Bulk)]
         public Feature BulkRequests
         {
@@ -58,9 +51,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             set;
         }
 
-        /// <summary>
-        /// DocumentationResource.
-        /// </summary>
         [DataMember(Name = AttributeNames.Documentation)]
         public string DocumentationResource
         {
@@ -68,9 +58,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             set;
         }
 
-        /// <summary>
-        /// EntityTags get set for supported.
-        /// </summary>
         [DataMember(Name = AttributeNames.EntityTag)]
         public Feature EntityTags
         {
@@ -78,9 +65,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             set;
         }
 
-        /// <summary>
-        /// Filtering get set for supported.
-        /// </summary>
         [DataMember(Name = AttributeNames.Filter)]
         public Feature Filtering
         {
@@ -88,9 +72,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             set;
         }
 
-        /// <summary>
-        /// PasswordChange get set for supported.
-        /// </summary>
         [DataMember(Name = AttributeNames.ChangePassword)]
         public Feature PasswordChange
         {
@@ -98,9 +79,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             set;
         }
 
-        /// <summary>
-        /// Patching get set for supported.
-        /// </summary>
         [DataMember(Name = AttributeNames.Patch)]
         public Feature Patching
         {
@@ -108,9 +86,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             set;
         }
 
-        /// <summary>
-        /// Sorting get set for supported.
-        /// </summary>
         [DataMember(Name = AttributeNames.Sort)]
         public Feature Sorting
         {
@@ -118,9 +93,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             set;
         }
 
-        /// <summary>
-        /// Method for addina an authentication sheme.
-        /// </summary>
         public void AddAuthenticationScheme(SCIMAuthenticationScheme authenticationScheme)
         {
             if (null == authenticationScheme)
@@ -181,9 +153,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             this.authenticationSchemesWrapper = this.authenticationSchemes.AsReadOnly();
         }
 
-        /// <summary>
-        /// MetaData get or set.
-        /// </summary>
         [DataMember(Name = AttributeNames.Metadata)]
         public Metadata Metadata
         {

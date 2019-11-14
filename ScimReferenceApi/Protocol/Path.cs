@@ -1,15 +1,14 @@
-﻿using System;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 {
-    /// <summary>
-    /// Instantiable class extension of Ipath
-    /// </summary>
     public sealed class Path : IPath
     {
         private const string ArgumentNamePathExpression = "pathExpression";
@@ -53,9 +52,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             this.Expression = pathExpression;
         }
 
-        /// <summary>
-        /// Get or set the path of the value.
-        /// </summary>
         public string AttributePath
         {
             get;
@@ -68,36 +64,24 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             set;
         }
 
-        /// <summary>
-        /// Get or set the SchemaIdentifier.
-        /// </summary>
         public string SchemaIdentifier
         {
             get;
             private set;
         }
 
-        /// <summary>
-        /// Get or set the subattributes.
-        /// </summary>
         public IReadOnlyCollection<IFilter> SubAttributes
         {
             get;
             private set;
         }
 
-        /// <summary>
-        /// Get or set the path of the value.
-        /// </summary>
         public IPath ValuePath
         {
             get;
             private set;
         }
 
-        /// <summary>
-        /// Method for creating a new path.
-        /// </summary>
         public static IPath Create(string pathExpression)
         {
             if (string.IsNullOrWhiteSpace(pathExpression))
@@ -152,9 +136,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             return true;
         }
 
-        /// <summary>
-        /// Method for converting a path string to a path class.
-        /// </summary>
         public static bool TryParse(string pathExpression, out IPath path)
         {
             path = null;
@@ -210,9 +191,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             return true;
         }
 
-        /// <summary>
-        /// ToString override.
-        /// </summary>
         public override string ToString()
         {
             return this.Expression;
