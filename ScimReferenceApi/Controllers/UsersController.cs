@@ -57,7 +57,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             if (startIndex == null)
             {
-                startIndex = ControllerConfiguration.DefaultStartIndexString;
+                startIndex = ControllerConstants.DefaultStartIndexString;
             }
 
             int start = int.Parse(startIndex, CultureInfo.InvariantCulture);
@@ -93,12 +93,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 list.ItemsPerPage = count.Value;
             }
 
-            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
 
             return list;
         }
 
-        [HttpGet(ControllerConfiguration.UriID)]
+        [HttpGet(ControllerConstants.UriID)]
         public async Task<ActionResult<User>> Get(string id)
         {
             User User = await this._context.CompleteUsers().FirstOrDefaultAsync(i => i.Identifier.Equals(id, StringComparison.Ordinal)).ConfigureAwait(false);
@@ -108,7 +108,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return NotFound(notFoundError);
             }
 
-            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
             return Ok(User);
         }
 
@@ -147,7 +147,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 Resources = users,
                 ItemsPerPage = searchRequest.count ?? null,
             };
-            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
             return list;
         }
 
@@ -181,7 +181,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 			this._context.Users.Add(item);
 			await this._context.SaveChangesAsync().ConfigureAwait(false);
 			this._log.LogInformation(item.UserName);
-			this.Response.ContentType = ControllerConfiguration.DefaultContentType;
+			this.Response.ContentType = ControllerConstants.DefaultContentType;
 			return CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
 		}
 
@@ -205,7 +205,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             return item;
         }
 
-        [HttpPut(ControllerConfiguration.UriID)]
+        [HttpPut(ControllerConstants.UriID)]
         public async Task<ActionResult<User>> Put(string id, User item)
         {
 
@@ -240,11 +240,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             this._context.Entry(User).CurrentValues.SetValues(item);
             await this._context.SaveChangesAsync().ConfigureAwait(false);
             this._log.LogInformation(item.UserName);
-            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
             return Ok(User);
         }
 
-        [HttpDelete(ControllerConfiguration.UriID)]
+        [HttpDelete(ControllerConstants.UriID)]
         public async Task<IActionResult> Delete(string id)
         {
             var User = await this._context.Users.FindAsync(id).ConfigureAwait(false);
@@ -257,11 +257,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             this._context.Users.Remove(User);
             await this._context.SaveChangesAsync().ConfigureAwait(false);
             this._log.LogInformation(id);
-            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
             return NoContent();
         }
 
-        [HttpPatch(ControllerConfiguration.UriID)]
+        [HttpPatch(ControllerConstants.UriID)]
         public IActionResult Patch(string id, JObject body)
         {
             PatchRequest2Compliant patchRequest = null;

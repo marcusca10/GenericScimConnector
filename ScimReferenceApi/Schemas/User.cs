@@ -25,7 +25,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     ResourceType = Types.User,
                 };
 
-            Active = true;
+            this.Active = true;
         }
 
         [DataMember(Name = AttributeNames.UserName, EmitDefaultValue = false)]

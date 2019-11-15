@@ -37,7 +37,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         {
             IEnumerable<Group> groups;
 
-            string query = Request.QueryString.ToUriComponent();
+            string query = this.Request.QueryString.ToUriComponent();
             if (!string.IsNullOrWhiteSpace(query))
             {
                 groups = new FilterGroups(_context).FilterGen(query);
@@ -54,7 +54,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             if (startIndex == null)
             {
-                startIndex = ControllerConfiguration.DefaultStartIndexString;
+                startIndex = ControllerConstants.DefaultStartIndexString;
             }
 
             int start = int.Parse(startIndex, CultureInfo.InvariantCulture);
@@ -75,13 +75,13 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 groups = groups.Take(count.Value);
             }
 
-            StringValues requested = Request.Query[QueryKeys.Attributes];
-            StringValues exculted = Request.Query[QueryKeys.ExcludedAttributes];
+            StringValues requested = this.Request.Query[QueryKeys.Attributes];
+            StringValues exculted = this.Request.Query[QueryKeys.ExcludedAttributes];
             StringValues allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };
             groups = groups.Select(u =>
                 ColumnsUtility.SelectColumns(requested, exculted, u, allwaysRetuned)).ToList();
 
-            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
 
             ListResponse<Group> list = new ListResponse<Group>()
             {
@@ -99,7 +99,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
         }
 
-        [HttpGet(ControllerConfiguration.UriID)]
+        [HttpGet(ControllerConstants.UriID)]
         public async Task<ActionResult<Group>> Get(string id)
         {
             Group Group = await this._context.CompleteGroups().FirstOrDefaultAsync(i => i.Identifier.Equals(id, StringComparison.Ordinal)).ConfigureAwait(false);
@@ -109,11 +109,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), "404");
                 return NotFound(notFoundError);
             }
-            StringValues requested = Request.Query[QueryKeys.Attributes];
-            StringValues exculted = Request.Query[QueryKeys.ExcludedAttributes];
+            StringValues requested = this.Request.Query[QueryKeys.Attributes];
+            StringValues exculted = this.Request.Query[QueryKeys.ExcludedAttributes];
             string[] allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };
             Group = ColumnsUtility.SelectColumns(requested, exculted, Group, allwaysRetuned);
-            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
             return Group;
         }
 
@@ -121,7 +121,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         [Route("/api/Groups/.search")]
         public ActionResult<ListResponse<Group>> Post([FromBody] SearchRequest searchRequest)
         {
-            FilterGroups filterGroups = new FilterGroups(_context);
+            FilterGroups filterGroups = new FilterGroups(this._context);
             IEnumerable<Group> groups = filterGroups.GetGroups(searchRequest.filter);
             string[] allwaysRetuned = new string[] { AttributeNames.Identifier, "identifier", AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };//TODO Read from schema 
             string[] attributes = searchRequest.attributes?.ToArray() ?? Array.Empty<string>();
@@ -150,7 +150,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 StartIndex = groups.Any() ? 1 : (int?)null,
                 Resources = groups
             };
-            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
             return list;
         }
 
@@ -173,11 +173,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             item.meta.LastModified = DateTime.Now;
             this._context.Groups.Add(item);
             await this._context.SaveChangesAsync().ConfigureAwait(false);
-            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
             return CreatedAtAction(nameof(Get), new { id = item.DisplayName }, item);
         }
 
-        [HttpPut(ControllerConfiguration.UriID)]
+        [HttpPut(ControllerConstants.UriID)]
         public async Task<ActionResult<Group>> Put(string id, Group item)
         {
             if (id != item.Identifier)
@@ -191,11 +191,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             group.meta.LastModified = DateTime.Now;
             group.ExternalIdentifier = item.ExternalIdentifier;
             await this._context.SaveChangesAsync().ConfigureAwait(false);
-            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
             return Ok(group);
         }
 
-        [HttpDelete(ControllerConfiguration.UriID)]
+        [HttpDelete(ControllerConstants.UriID)]
         public async Task<IActionResult> Delete(string id)
         {
             Group Group = await this._context.Groups.FindAsync(id).ConfigureAwait(false);
@@ -208,11 +208,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             this._context.Groups.Remove(Group);
             await this._context.SaveChangesAsync().ConfigureAwait(false);
-            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
             return NoContent();
         }
 
-        [HttpPatch(ControllerConfiguration.UriID)]
+        [HttpPatch(ControllerConstants.UriID)]
         public IActionResult Patch(string id, JObject body)
         {
             PatchRequest2Compliant patchRequest = null;

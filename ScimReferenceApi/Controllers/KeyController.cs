@@ -11,6 +11,8 @@ using System.Text;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
     //Controller for generating a bearer token for authorization during testing
+    //This is not meant to replace proper Oauth for authentication purposes. 
+    //Instead this is meant to validate the bearer token authorization set up
     [Route("api/Key")]
     public class KeyController : ControllerBase
     {
