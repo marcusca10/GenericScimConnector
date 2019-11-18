@@ -131,7 +131,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
         private static void PatchMembers(this Group group, PatchOperation operation)
         {
-            //path Members expects operation to only ontain one item
+            //path Members expects operation to only contain one item
             
             group.Members = PatchMembers(group.Members, operation);
             if (operation.Value.Count > 1)
@@ -182,7 +182,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                 return members;
             }
 
-
+            if(operation.Name == OperationName.Remove && string.IsNullOrEmpty(operation.Value?.FirstOrDefault()?["value"]?.ToString()))
+            {
+                return null;
+            }
 
             Member Member = null;
             Member MemberExisting =null;
