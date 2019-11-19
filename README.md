@@ -18,7 +18,7 @@ Guidance on onboarding samples to docs.microsoft.com/samples: https://review.doc
 Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
 -->
 
-This code is intended to be a useful reference for those building their own [SCIM](https://aka.ms/SCIMOverview) endpoint. All the basic requirements for CRUD with two resources and an extension exist in the reference. Many of the useful optional features, such as filtering and pagination, are also provided. This code is intended to help you get started building your SCIM endpoint and is provided "AS IS." It is intended as a reference to get started. There is no gaurantee of actively maintaining or supporting the reference code.  
+This code is intended to be a useful reference for those building their own [SCIM](https://docs.microsoft.com/azure/active-directory/manage-apps/use-scim-to-provision-users-and-groups) endpoint. All the basic requirements for CRUD with two resources and an extension exist in the reference. Many of the useful optional features, such as filtering and pagination, are also provided. This code is intended to help you get started building your SCIM endpoint and is provided "AS IS." It is intended as a reference to get started. There is no gaurantee of actively maintaining or supporting the reference code.  
 
 ## Contents
 
@@ -34,8 +34,8 @@ This code is intended to be a useful reference for those building their own [SCI
 
 ## Prerequisites
 
-Visual Studio with .NET core
-For using the tests Jmeter, blazemeter, or equivelent is required.
+* Visual Studio with .NET core
+* Jmeter, blazemeter, or equivelent for running tests.
 
 ## Setup
 
