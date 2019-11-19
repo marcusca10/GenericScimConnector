@@ -16,12 +16,16 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
     [Route("api/Key")]
     public class KeyController : ControllerBase
     {
-        //TODO: make secure.
+        //make more secure.
         [HttpPost]
-        public ActionResult POST()
+        public ActionResult POST([FromBody]string login)
         {
-            string tokenString = GenerateJSONWebToken();
-            return Ok(new { token = tokenString });
+            if (login == "VerySecure")
+            {
+                string tokenString = GenerateJSONWebToken();
+                return Ok(new { token = tokenString });
+            }
+            return BadRequest();
         }
 
         private static string GenerateJSONWebToken()
@@ -37,5 +41,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        
     }
 }
