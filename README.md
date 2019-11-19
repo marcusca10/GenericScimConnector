@@ -34,17 +34,17 @@ This code is intended to be a useful reference for those building their own [SCI
 
 ## Prerequisites
 
-* Visual Studio with .NET core
-* Jmeter, blazemeter, or equivelent for running tests.
+Visual Studio with .NET core, IIS is recomended for running the sample.
+To use the test files with extension .jmx Jmeter, blazemeter, or equivelent is required.
+
 
 ## Setup
 
-Explain how to prepare the sample once the user clones or downloads the repository. The section should outline every step necessary to install dependencies and set up any settings (for example, API keys and output folders).
-Cloning all the files into a new directory with Visual Studio is all that is needed.
+1. Open Visual Studio and choose checkout. 
+2. Use the clone link from Github to make a local copy of all files.
 
 ## Runnning the sample
 
-Outline step-by-step instructions to execute the sample and see its output. Include steps for executing the sample from the IDE, starting specific services in the Azure portal or anything related to the overall launch of the code.
 The solution is in the ScimReferenceApi folder and can be built and run from VisualStudio. Either locally for testing purposes with IIS Express or it can be published to Azure as a web app.
 All the enpoints are are at the host /api/ directory and can be interacted with the standard HTTP requests. eg {host}/api/Users can take a GET reequest that will return all users. The /api/ route can be changed at the top of each controller.
 Also included in the repository is a .jmx file that can be used with Jmeter or other simialr tools for validation purposes. Currently the http request defaults is set to send requests to https://scimreferenceapi19.azurewebsites.net/ but will need to be changed to your specific URI.

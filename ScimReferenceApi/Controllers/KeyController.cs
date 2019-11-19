@@ -11,15 +11,21 @@ using System.Text;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
     //Controller for generating a bearer token for authorization during testing
+    //This is not meant to replace proper Oauth for authentication purposes. 
+    //Instead this is meant to validate the bearer token authorization set up
     [Route("api/Key")]
     public class KeyController : ControllerBase
     {
-        //TODO: make secure.
+        //make more secure.
         [HttpPost]
-        public ActionResult POST()
+        public ActionResult POST([FromBody]string login)
         {
-            string tokenString = GenerateJSONWebToken();
-            return Ok(new { token = tokenString });
+            if (login == "VerySecure")
+            {
+                string tokenString = GenerateJSONWebToken();
+                return Ok(new { token = tokenString });
+            }
+            return BadRequest();
         }
 
         private static string GenerateJSONWebToken()
@@ -35,5 +41,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        
     }
 }

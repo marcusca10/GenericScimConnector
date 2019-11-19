@@ -33,19 +33,19 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut(ControllerConstants.UriID)]
         public IActionResult Put()
         {
             return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete(ControllerConstants.UriID)]
         public IActionResult Delete()
         {
             return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
         }
 
-        [HttpPatch("{id}")]
+        [HttpPatch(ControllerConstants.UriID)]
         public IActionResult Patch()
         {
             return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);

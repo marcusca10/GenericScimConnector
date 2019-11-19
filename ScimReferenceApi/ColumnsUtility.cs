@@ -118,7 +118,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 					case ComparisonOperator.Equals:
 						match = value.Equals(filter.ComparisonValue,StringComparison.InvariantCultureIgnoreCase);
 						break;
-					//TODO: Other comparison operators, very rare use case
 					default:
 						throw new NotImplementedException("Does not suppport comparision operator " + filter.FilterOperator.ToString());
 				}
@@ -244,7 +243,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 
 		private static void ClearObject(JToken finalObject, IPath attributePath)
 		{
-            //TODO: Support Notation ??.??[?? eq ??] but does not appear to exist in defined scim objects
 			//Assume that object allreay exists
 			JToken token = finalObject[attributePath.AttributePath];
 			IPath nextLevelAttribute = attributePath.ValuePath;

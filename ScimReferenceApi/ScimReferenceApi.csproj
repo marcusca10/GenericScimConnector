@@ -13,14 +13,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <DocumentationFile>C:\src\agit\scim\WebApplication1\ScimReferenceApi.xml</DocumentationFile>
+    <DocumentationFile></DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <DocumentationFile></DocumentationFile>
-    <NoWarn>1701;1702; 1591</NoWarn>
+    <NoWarn>1701;1702;1591</NoWarn>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
 

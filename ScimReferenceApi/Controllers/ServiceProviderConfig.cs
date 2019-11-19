@@ -2,15 +2,9 @@
 // Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {

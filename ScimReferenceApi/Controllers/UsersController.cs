@@ -28,87 +28,42 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         private readonly ScimContext _context;
         private readonly ILogger<UsersController> _log;
 
+        private Provider provider;
+
         public UsersController(ScimContext context, ILogger<UsersController> log)
         {
             this._context = context;
             this._log = log;
+            this.provider = new Provider(_context, _log);
         }
 
         [HttpGet]
         public async Task<ActionResult<ListResponse<User>>> Get()
         {
 
-            IEnumerable<User> users;
-
             string query = this.Request.QueryString.ToUriComponent();
-            if (!string.IsNullOrWhiteSpace(query))
-            {
-                users = new FilterUsers(_context).FilterGen(query);
-            }
-            else
-            {
-                users = await this._context.CompleteUsers().ToListAsync().ConfigureAwait(false);
-            }
+            IEnumerable<string> requested = this.Request.Query[QueryKeys.Attributes].SelectMany((att) => att.Split(','));
+            IEnumerable<string> exculted = this.Request.Query[QueryKeys.ExcludedAttributes].SelectMany((att) => att.Split(','));
 
-            NameValueCollection keyedValues = HttpUtility.ParseQueryString(query);
-            IEnumerable<string> keys = keyedValues.AllKeys;
-            string countString = keyedValues[QueryKeys.Count];
-            string startIndex = keyedValues[QueryKeys.StartIndex];
+            ListResponse<User> list = await provider.GetUsers(query, requested, exculted).ConfigureAwait(false);
 
-            if (startIndex == null)
-            {
-                startIndex = ControllerConfiguration.DefaultStartIndexString;
-            }
-
-            int start = int.Parse(startIndex, CultureInfo.InvariantCulture);
-
-            if (start < 1)
-            {
-                start = 1;
-            }
-
-            int total = users.Count();
-            int? count = null;
-
-			users = users.OrderBy(d => d.UserName).Skip(start - 1);
-			if (countString != null) {
-				count = int.Parse(countString,CultureInfo.CurrentCulture);
-				users = users.Take(count.Value);
-			}
-			IEnumerable<string> requested = Request.Query[QueryKeys.Attributes].SelectMany((att) => att.Split(','));
-            IEnumerable<string> exculted = Request.Query[QueryKeys.ExcludedAttributes].SelectMany((att) => att.Split(','));
-            string[] allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };//TODO Read from schema 
-			users = users.Select(u =>
-				ColumnsUtility.SelectColumns(requested, exculted, u, allwaysRetuned)).ToList();
-
-
-            ListResponse<User> list = new ListResponse<User>()
-            {
-                TotalResults = total,
-                StartIndex = users.Any() ? start : (int?)null,
-                Resources = users,
-            };
-            if (count.HasValue)
-            {
-                list.ItemsPerPage = count.Value;
-            }
-
-            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
-
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
             return list;
         }
 
-        [HttpGet(ControllerConfiguration.UriID)]
+        [HttpGet(ControllerConstants.UriID)]
         public async Task<ActionResult<User>> Get(string id)
         {
-            User User = await this._context.CompleteUsers().FirstOrDefaultAsync(i => i.Identifier.Equals(id, StringComparison.Ordinal)).ConfigureAwait(false);
+
+            User User = await provider.GetUserByID(id).ConfigureAwait(false);
+
             if (User == null)
             {
                 ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), "404");
                 return NotFound(notFoundError);
             }
 
-            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
             return Ok(User);
         }
 
@@ -147,16 +102,17 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 Resources = users,
                 ItemsPerPage = searchRequest.count ?? null,
             };
-            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
             return list;
         }
 
         [HttpPost]
         public async Task<ActionResult<User>> Post(JObject body)
         {
+
             User item = null;
             try { 
-                item = BuildUser(body);
+                item = Provider.BuildUser(body);
             }
             catch(ArgumentException)
             {
@@ -176,36 +132,14 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return Conflict(conflictError);
             }
 
-			item.meta.Created = DateTime.Now;
-			item.meta.LastModified = DateTime.Now;
-			this._context.Users.Add(item);
-			await this._context.SaveChangesAsync().ConfigureAwait(false);
-			this._log.LogInformation(item.UserName);
-			this.Response.ContentType = ControllerConfiguration.DefaultContentType;
-			return CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
+            await this.provider.AddUser(item).ConfigureAwait(false);
+
+			this.Response.ContentType = ControllerConstants.DefaultContentType;
+            return CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
+
 		}
 
-        private static User BuildUser(JObject body)
-        {
-            if (body["schemas"]==null)
-            {
-                throw new ArgumentException("schemas");
-            }
-            JEnumerable<JToken> shemas = body["schemas"].Children();
-            User item;
-            if (shemas.Contains(SchemaIdentifiers.Core2EnterpriseUser))
-            {
-                item = body.ToObject<EnterpriseUser>();
-            }
-            else
-            {
-                item = body.ToObject<User>();
-            }
-
-            return item;
-        }
-
-        [HttpPut(ControllerConfiguration.UriID)]
+        [HttpPut(ControllerConstants.UriID)]
         public async Task<ActionResult<User>> Put(string id, User item)
         {
 
@@ -230,21 +164,13 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return NotFound(notFoundError);
             }
 
-            item.meta.LastModified = DateTime.Now;
-            User.meta = item.meta;
-            User.Name = item.Name;
-            User.ElectronicMailAddresses = item.ElectronicMailAddresses;
-            User.PhoneNumbers = item.PhoneNumbers;
-            User.Roles = item.Roles;
-            User.Addresses = item.Addresses;
-            this._context.Entry(User).CurrentValues.SetValues(item);
-            await this._context.SaveChangesAsync().ConfigureAwait(false);
-            this._log.LogInformation(item.UserName);
-            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
+            await this.provider.ReplaceUser(item, User).ConfigureAwait(false);
+
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
             return Ok(User);
         }
 
-        [HttpDelete(ControllerConfiguration.UriID)]
+        [HttpDelete(ControllerConstants.UriID)]
         public async Task<IActionResult> Delete(string id)
         {
             var User = await this._context.Users.FindAsync(id).ConfigureAwait(false);
@@ -254,16 +180,19 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return NotFound(notFoundError);
             }
 
-            this._context.Users.Remove(User);
-            await this._context.SaveChangesAsync().ConfigureAwait(false);
-            this._log.LogInformation(id);
-            this.Response.ContentType = ControllerConfiguration.DefaultContentType;
+            await this.provider.DeleteUser(User).ConfigureAwait(false);
+
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
             return NoContent();
         }
 
-        [HttpPatch(ControllerConfiguration.UriID)]
+        [HttpPatch(ControllerConstants.UriID)]
         public IActionResult Patch(string id, JObject body)
         {
+
+            this.provider.PatchUser(id, body);
+
+            /*
             PatchRequest2Compliant patchRequest = null;
             PatchRequest2Legacy patchLegacy = null;
             try
@@ -309,7 +238,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                     }
                 }
             }
-            this._context.SaveChanges();
+            this._context.SaveChanges();*/
+
 
             return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
         }

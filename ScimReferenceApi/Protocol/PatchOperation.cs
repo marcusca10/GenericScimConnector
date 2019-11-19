@@ -62,7 +62,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                 throw new ArgumentNullException(nameof(pathExpression));
             }
 
-            if (string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(value) && operationName != Protocol.OperationName.Remove)
             {
                 throw new ArgumentNullException(nameof(value));
             }
