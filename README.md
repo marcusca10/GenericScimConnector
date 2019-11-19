@@ -4,15 +4,24 @@ languages:
 - csharp
 products:
 - dotnet
-description: SCIM reference code  
+description: SCIM provisioning reference code  
 urlFragment: "update-this-to-unique-url-stub"
 ---
 
 # Official Microsoft Sample
 
-This code is intended to be a useful reference for those hoping to create their own SCIM endpoint. All the basic requirements for CRUD with two resources and an extension exist in the reference. Many of the useful optional features, such as filtering and pagination, are also provided.
+<!-- 
+Guidelines on README format: https://review.docs.microsoft.com/help/onboard/admin/samples/concepts/readme-template?branch=master
+
+Guidance on onboarding samples to docs.microsoft.com/samples: https://review.docs.microsoft.com/help/onboard/admin/samples/process/onboarding?branch=master
+
+Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
+-->
+
+This code is intended to be a useful reference for those building their own [SCIM](https://docs.microsoft.com/azure/active-directory/manage-apps/use-scim-to-provision-users-and-groups) endpoint. All the basic requirements for CRUD with two resources and an extension exist in the reference. Many of the useful optional features, such as filtering and pagination, are also provided. This code is intended to help you get started building your SCIM endpoint and is provided "AS IS." It is intended as a reference to get started. There is no gaurantee of actively maintaining or supporting the reference code.  
 
 ## Contents
+
 
 | File/folder       | Description                                |
 |-------------------|--------------------------------------------|
@@ -27,6 +36,7 @@ This code is intended to be a useful reference for those hoping to create their 
 
 Visual Studio with .NET core, IIS is recomended for running the sample.
 To use the test files with extension .jmx Jmeter, blazemeter, or equivelent is required.
+
 
 ## Setup
 
