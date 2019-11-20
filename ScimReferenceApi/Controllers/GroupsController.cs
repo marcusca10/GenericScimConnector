@@ -7,6 +7,7 @@ using Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 using System;
@@ -26,75 +27,27 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
     public class GroupsController : ControllerBase
     {
         private readonly ScimContext _context;
+        private readonly ILogger<UsersController> _log;
+        private GroupProvider provider;
 
-        public GroupsController(ScimContext context)
+        public GroupsController(ScimContext context, ILogger<UsersController> log)
         {
             this._context = context;
+            this._log = log;
+            this.provider = new GroupProvider(_context, _log);
         }
 
         [HttpGet]
-        public async Task<ActionResult<ListResponse<Group>>> Get()
+        public async Task<ActionResult<ListResponse<Resource>>> Get()
         {
-            IEnumerable<Group> groups;
 
             string query = this.Request.QueryString.ToUriComponent();
-            if (!string.IsNullOrWhiteSpace(query))
-            {
-                groups = new FilterGroups(_context).FilterGen(query);
-            }
-            else
-            {
-                groups = await this._context.CompleteGroups().ToListAsync().ConfigureAwait(false);
-            }
-
-            NameValueCollection keyedValues = HttpUtility.ParseQueryString(query);
-            IEnumerable<string> keys = keyedValues.AllKeys;
-            string countString = keyedValues[QueryKeys.Count];
-            string startIndex = keyedValues[QueryKeys.StartIndex];
-
-            if (startIndex == null)
-            {
-                startIndex = ControllerConstants.DefaultStartIndexString;
-            }
-
-            int start = int.Parse(startIndex, CultureInfo.InvariantCulture);
-
-            if (start < 1)
-            {
-                start = 1;
-            }
-
-            int? count = null;
-            int total = groups.Count();
-
-            groups = groups.OrderBy(d => d.DisplayName).Skip(start - 1);
-
-            if (countString != null)
-            {
-                count = int.Parse(countString, CultureInfo.InvariantCulture);
-                groups = groups.Take(count.Value);
-            }
-
             StringValues requested = this.Request.Query[QueryKeys.Attributes];
             StringValues exculted = this.Request.Query[QueryKeys.ExcludedAttributes];
-            StringValues allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };
-            groups = groups.Select(u =>
-                ColumnsUtility.SelectColumns(requested, exculted, u, allwaysRetuned)).ToList();
+
+            ListResponse<Resource> list = await provider.Query(query, requested, exculted).ConfigureAwait(false);
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
-
-            ListResponse<Group> list = new ListResponse<Group>()
-            {
-                TotalResults = total,
-                StartIndex = groups.Any() ? start : (int?)null,
-                Resources = groups,
-            };
-            if (count.HasValue)
-            {
-                list.ItemsPerPage = count.Value;
-            }
-
-
             return list;
 
         }
@@ -102,7 +55,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         [HttpGet(ControllerConstants.UriID)]
         public async Task<ActionResult<Group>> Get(string id)
         {
-            Group Group = await this._context.CompleteGroups().FirstOrDefaultAsync(i => i.Identifier.Equals(id, StringComparison.Ordinal)).ConfigureAwait(false);
+            Group Group = (Group) await this.provider.GetById(id).ConfigureAwait(false);
 
             if (Group == null)
             {
@@ -150,6 +103,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 StartIndex = groups.Any() ? 1 : (int?)null,
                 Resources = groups
             };
+
+
             this.Response.ContentType = ControllerConstants.DefaultContentType;
             return list;
         }
@@ -169,10 +124,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return NotFound(conflictError);
             }
 
-            item.meta.Created = DateTime.Now;
-            item.meta.LastModified = DateTime.Now;
-            this._context.Groups.Add(item);
-            await this._context.SaveChangesAsync().ConfigureAwait(false);
+            await this.provider.Add(item).ConfigureAwait(false);
+
             this.Response.ContentType = ControllerConstants.DefaultContentType;
             return CreatedAtAction(nameof(Get), new { id = item.DisplayName }, item);
         }
@@ -185,12 +138,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 ErrorResponse BadRequestError = new ErrorResponse(ErrorDetail.Mutability, "400");
                 return NotFound(BadRequestError);
             }
+            
             Group group = this._context.CompleteGroups().FirstOrDefault(g => g.Identifier.Equals(id, StringComparison.CurrentCulture));
-            group.DisplayName = item.DisplayName;
-            group.Members = item.Members;
-            group.meta.LastModified = DateTime.Now;
-            group.ExternalIdentifier = item.ExternalIdentifier;
-            await this._context.SaveChangesAsync().ConfigureAwait(false);
+            await this.provider.Replace(item, group).ConfigureAwait(false);
+
             this.Response.ContentType = ControllerConstants.DefaultContentType;
             return Ok(group);
         }
@@ -206,8 +157,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return NotFound(notFoundError);
             }
 
-            this._context.Groups.Remove(Group);
-            await this._context.SaveChangesAsync().ConfigureAwait(false);
+            await this.provider.Delete(Group).ConfigureAwait(false);
+
             this.Response.ContentType = ControllerConstants.DefaultContentType;
             return NoContent();
         }
@@ -215,66 +166,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         [HttpPatch(ControllerConstants.UriID)]
         public IActionResult Patch(string id, JObject body)
         {
-            PatchRequest2Compliant patchRequest = null;
-            PatchRequest2Legacy patchLegacy = null;
-            try
-            {
-                patchRequest = body.ToObject<PatchRequest2Compliant>();
-            }
-            catch (Newtonsoft.Json.JsonException) { }
-            if (patchRequest == null)
-            {
-                patchLegacy = body.ToObject<PatchRequest2Legacy>();
-            }
 
-            if (null == patchRequest && null == patchLegacy)
-            {
-                string unsupportedPatchTypeName = patchRequest.GetType().FullName;
-                throw new NotSupportedException(unsupportedPatchTypeName);
-            }
-
-            Group groupToModify = this._context.CompleteGroups().FirstOrDefault((group) => group.Identifier.Equals(id, StringComparison.Ordinal));
-
-            if (groupToModify != null)
-            {
-                if (patchRequest != null)
-                {
-                    foreach (var op in patchRequest.Operations)
-                    {
-
-                        PatchOperation patchOp = PatchOperation.Create(getOperationName(op.OperationName), op.Path.ToString(), op.Value);
-                        groupToModify.Apply(patchOp);
-                        groupToModify.meta.LastModified = DateTime.Now;
-
-                    }
-                }
-                if (patchLegacy != null)
-                {
-                    foreach (var op in patchLegacy.Operations)
-                    {
-                        groupToModify.Apply(op);
-                        groupToModify.meta.LastModified = DateTime.Now;
-                    }
-                }
-            }
-            this._context.SaveChanges();
+            this.provider.Update(id, body);
 
             return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
-        }
-
-        private static OperationName getOperationName(string operationName)
-        {
-            switch (operationName.ToLower(CultureInfo.CurrentCulture))
-            {
-                case "add":
-                    return OperationName.Add;
-                case "remove":
-                    return OperationName.Remove;
-                case "replace":
-                    return OperationName.Replace;
-                default:
-                    throw new NotImplementedException("Invalid operatoin Name" + operationName);
-            }
         }
     }
 }
