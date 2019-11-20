@@ -27,25 +27,24 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
     {
         private readonly ScimContext _context;
         private readonly ILogger<UsersController> _log;
-
-        private Provider provider;
+        private UserProvider provider;
 
         public UsersController(ScimContext context, ILogger<UsersController> log)
         {
             this._context = context;
             this._log = log;
-            this.provider = new Provider(_context, _log);
+            this.provider = new UserProvider(_context, _log);
         }
 
         [HttpGet]
-        public async Task<ActionResult<ListResponse<User>>> Get()
+        public async Task<ActionResult<ListResponse<Resource>>> Get()
         {
 
             string query = this.Request.QueryString.ToUriComponent();
             IEnumerable<string> requested = this.Request.Query[QueryKeys.Attributes].SelectMany((att) => att.Split(','));
             IEnumerable<string> exculted = this.Request.Query[QueryKeys.ExcludedAttributes].SelectMany((att) => att.Split(','));
 
-            ListResponse<User> list = await provider.GetUsers(query, requested, exculted).ConfigureAwait(false);
+            ListResponse<Resource> list = await provider.Query(query, requested, exculted).ConfigureAwait(false);
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
             return list;
@@ -55,7 +54,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         public async Task<ActionResult<User>> Get(string id)
         {
 
-            User User = await provider.GetUserByID(id).ConfigureAwait(false);
+            User User = (User) await provider.GetById(id).ConfigureAwait(false);
 
             if (User == null)
             {
@@ -112,7 +111,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             User item = null;
             try { 
-                item = Provider.BuildUser(body);
+                item = BuildUser(body);
             }
             catch(ArgumentException)
             {
@@ -132,7 +131,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return Conflict(conflictError);
             }
 
-            await this.provider.AddUser(item).ConfigureAwait(false);
+            await this.provider.Add(item).ConfigureAwait(false);
 
 			this.Response.ContentType = ControllerConstants.DefaultContentType;
             return CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
@@ -164,7 +163,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return NotFound(notFoundError);
             }
 
-            await this.provider.ReplaceUser(item, User).ConfigureAwait(false);
+            await this.provider.Replace(item, User).ConfigureAwait(false);
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
             return Ok(User);
@@ -180,7 +179,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return NotFound(notFoundError);
             }
 
-            await this.provider.DeleteUser(User).ConfigureAwait(false);
+            await this.provider.Delete(User).ConfigureAwait(false);
+           
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
             return NoContent();
@@ -190,73 +190,29 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         public IActionResult Patch(string id, JObject body)
         {
 
-            this.provider.PatchUser(id, body);
-
-            /*
-            PatchRequest2Compliant patchRequest = null;
-            PatchRequest2Legacy patchLegacy = null;
-            try
-            {
-                patchRequest = body.ToObject<PatchRequest2Compliant>();
-            }
-            catch (Newtonsoft.Json.JsonException) { }
-            if (patchRequest == null)
-            {
-                patchLegacy = body.ToObject<PatchRequest2Legacy>();
-            }
-            if (null == patchRequest && null == patchLegacy)
-            {
-                string unsupportedPatchTypeName = patchRequest.GetType().FullName;
-                throw new NotSupportedException(unsupportedPatchTypeName);
-            }
-
-            var usertoModify = this._context.CompleteUsers().FirstOrDefault((user) => user.Identifier.Equals(id, StringComparison.Ordinal));
-            if (patchRequest != null)
-            {
-                if (usertoModify != null)
-                {
-                    foreach (var op in patchRequest.Operations)
-                    {
-                        if (op is PatchOperation2SingleValued singleValued)
-                        {
-
-                            PatchOperation patchOp = PatchOperation.Create(getOperationName(singleValued.OperationName), singleValued.Path.ToString(), singleValued.Value);
-                            usertoModify.Apply(patchOp);
-                            usertoModify.meta.LastModified = DateTime.Now;
-                        }
-                    }
-                }
-            }
-            else if(patchLegacy != null)
-            {
-                if (usertoModify != null)
-                {
-                    foreach (var op in patchLegacy.Operations)
-                    {
-                        usertoModify.Apply(op);
-                        usertoModify.meta.LastModified = DateTime.Now;
-                    }
-                }
-            }
-            this._context.SaveChanges();*/
-
+            this.provider.Update(id, body);
 
             return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
         }
 
-        private static OperationName getOperationName(string operationName)
-        {
-            switch (operationName.ToLower(CultureInfo.CurrentCulture))
-            {
-                case "add":
-                    return OperationName.Add;
-                case "remove":
-                    return OperationName.Remove;
-                case "replace":
-                    return OperationName.Replace;
-                default:
-                    throw new NotImplementedException("Invalid operatoin Name" + operationName);
-            }
-        }
-    }
+		private static User BuildUser(JObject body)
+		{
+			if (body["schemas"] == null)
+			{
+				throw new ArgumentException("schemas");
+			}
+			JEnumerable<JToken> shemas = body["schemas"].Children();
+			User item;
+			if (shemas.Contains(SchemaIdentifiers.Core2EnterpriseUser))
+			{
+				item = body.ToObject<EnterpriseUser>();
+			}
+			else
+			{
+				item = body.ToObject<User>();
+			}
+
+			return item;
+		}
+	}
 }

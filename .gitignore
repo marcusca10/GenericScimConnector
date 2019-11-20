@@ -331,3 +331,4 @@ ASALocalRun/
 
 # log files
 Log/
+*.txt
