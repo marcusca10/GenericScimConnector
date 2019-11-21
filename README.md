@@ -40,8 +40,9 @@ To use the test files with extension .jmx Jmeter, blazemeter, or equivelent is r
 
 ## Setup
 
-1. Open Visual Studio and choose checkout. 
-2. Use the clone link from Github to make a local copy of all files.
+1. Click the clone or download link near the top of the page and copy the link. OR. Click fork near the top of the page to make a copy of the repo for personal use.
+2. Open Visual Studio and choose clone or checkout. 
+3. Use the clone link from Github int the repository link feild and click clone to make a local copy of all files. The solution should open.
 
 ## Runnning the sample
 

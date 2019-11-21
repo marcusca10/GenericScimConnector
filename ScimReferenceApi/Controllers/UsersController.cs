@@ -2,8 +2,8 @@
 // Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using Microsoft.EntityFrameworkCore;
@@ -11,18 +11,16 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
 
     [Route("api/Users")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly ScimContext _context;

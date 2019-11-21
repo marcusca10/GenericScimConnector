@@ -20,7 +20,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         [HttpPost]
         public ActionResult POST([FromBody]string login)
         {
-            if (login == "VerySecure")
+            if (login == "SecureLogin")
             {
                 string tokenString = GenerateJSONWebToken();
                 return Ok(new { token = tokenString });
