@@ -13,7 +13,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 {
     public static class ColumnsUtility
 	{
-		public static T SelectColumns<T>(IEnumerable<string> requestedAttributes, IEnumerable<string> excludedAttributes, T projectedResouce, string[] allwaysRetuned) where T: Resource
+		public static T FilterAttributes<T>(IEnumerable<string> requestedAttributes, IEnumerable<string> excludedAttributes, T projectedResouce, string[] allwaysRetuned) where T: Resource
 		{
 
 			return BuildResouce(requestedAttributes,excludedAttributes, allwaysRetuned, projectedResouce);

@@ -104,6 +104,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             get;
             set;
         }
+
+
     }
 
     public static class UserExtensions
@@ -115,7 +117,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     .Include("ElectronicMailAddresses")
                     .Include("PhoneNumbers")
                     .Include("Roles")
-                    .Include("Manager")
+                    .Include("ExtentsionValues")
                     .Include("Addresses");
         }
 

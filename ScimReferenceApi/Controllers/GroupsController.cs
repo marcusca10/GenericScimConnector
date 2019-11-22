@@ -62,7 +62,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             StringValues requested = this.Request.Query[QueryKeys.Attributes];
             StringValues exculted = this.Request.Query[QueryKeys.ExcludedAttributes];
             string[] allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };
-            Group = ColumnsUtility.SelectColumns(requested, exculted, Group, allwaysRetuned);
+            Group = ColumnsUtility.FilterAttributes(requested, exculted, Group, allwaysRetuned);
             this.Response.ContentType = ControllerConstants.DefaultContentType;
             return Group;
         }
@@ -77,7 +77,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             string[] attributes = searchRequest.attributes?.ToArray() ?? Array.Empty<string>();
             string[] exculdedattribes = searchRequest.excludedAttributes?.ToArray() ?? Array.Empty<string>();
             groups = groups.Select(g =>
-                ColumnsUtility.SelectColumns(attributes, exculdedattribes, g, allwaysRetuned)).ToList();
+                ColumnsUtility.FilterAttributes(attributes, exculdedattribes, g, allwaysRetuned)).ToList();
             if (searchRequest.startIndex.HasValue)
             {
                 if (searchRequest.startIndex > 1)

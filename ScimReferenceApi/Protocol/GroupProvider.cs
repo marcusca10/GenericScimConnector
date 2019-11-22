@@ -70,7 +70,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 
             StringValues allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };
             groups = groups.Select(u =>
-                ColumnsUtility.SelectColumns(requested, exculted, u, allwaysRetuned)).ToList();
+                ColumnsUtility.FilterAttributes(requested, exculted, u, allwaysRetuned)).ToList();
 
 
 
@@ -125,7 +125,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         public void Update(string id, JObject body)
         {
             PatchRequest2Compliant patchRequest = null;
-            PatchRequest2Legacy patchLegacy = null;
+            PatchRequestSimple patchSimple = null;
             try
             {
                 patchRequest = body.ToObject<PatchRequest2Compliant>();
@@ -133,10 +133,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             catch (Newtonsoft.Json.JsonException) { }
             if (patchRequest == null)
             {
-                patchLegacy = body.ToObject<PatchRequest2Legacy>();
+                patchSimple = body.ToObject<PatchRequestSimple>();
             }
 
-            if (null == patchRequest && null == patchLegacy)
+            if (null == patchRequest && null == patchSimple)
             {
                 string unsupportedPatchTypeName = patchRequest.GetType().FullName;
                 throw new NotSupportedException(unsupportedPatchTypeName);
@@ -157,9 +157,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 
                     }
                 }
-                if (patchLegacy != null)
+                if (patchSimple != null)
                 {
-                    foreach (var op in patchLegacy.Operations)
+                    foreach (var op in patchSimple.Operations)
                     {
                         groupToModify.Apply(op);
                         groupToModify.meta.LastModified = DateTime.Now;
