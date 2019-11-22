@@ -22,12 +22,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
     }
 
     [DataContract]
-    public sealed class PatchRequest2Legacy : PatchRequest2Base<PatchOperation>
+    public sealed class PatchRequestSimple : PatchRequest2Base<PatchOperation>
     {
-        public PatchRequest2Legacy()
+        public PatchRequestSimple()
         {
         }
-        public PatchRequest2Legacy(IReadOnlyCollection<PatchOperation> operations)
+        public PatchRequestSimple(IReadOnlyCollection<PatchOperation> operations)
             : base(operations)
         {
         }

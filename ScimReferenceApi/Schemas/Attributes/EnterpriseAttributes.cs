@@ -1,29 +1,22 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
-
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes;
+﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.UserAttributes;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 
-namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
+namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
 {
-    [DataContract]
-    public class EnterpriseUser : User
+    public class EnterpriseAttributes
     {
-        protected EnterpriseUser()
-            : base()
+        public EnterpriseAttributes()
         {
-            this.AddSchema(SchemaIdentifiers.Core2EnterpriseUser);
         }
 
-        [DataMember(Name = AttributeNames.ExtensionEnterpriseUser2, IsRequired = false, EmitDefaultValue = false)]
-        public EnterpriseAttributes ExtentsionValues
-        {
-            get;
-            set;
-        }
+        [Key]
+        public string Id { get; set; }
 
-        /*
         [DataMember(Name = AttributeNames.Department, IsRequired = false, EmitDefaultValue = false)]
         public string Department
         {
@@ -64,6 +57,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         {
             get;
             set;
-        }*/
+        }
     }
 }

@@ -20,12 +20,13 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
     [Route("api/Users")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UsersController : ControllerBase
     {
         private readonly ScimContext _context;
         private readonly ILogger<UsersController> _log;
         private UserProvider provider;
+        private string[] allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };//TODO Read from schema 
 
         public UsersController(ScimContext context, ILogger<UsersController> log)
         {
@@ -70,11 +71,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 		{
             FilterUsers filterUsers = new FilterUsers(_context);
 			IEnumerable<User> users = filterUsers.GetUsers(searchRequest.filter);
-            string[] allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active,AttributeNames.Metadata };//TODO Read from schema 
             string[] attributes = searchRequest.attributes?.ToArray() ?? Array.Empty<string>();
             string[] exculdedattribes = searchRequest.excludedAttributes?.ToArray() ?? Array.Empty<string>();
 			users = users.Select(u =>
-				ColumnsUtility.SelectColumns(attributes, exculdedattribes, u, allwaysRetuned));
+				ColumnsUtility.FilterAttributes(attributes, exculdedattribes, u, allwaysRetuned));
 			int totalResults = users.Count();
 			if (searchRequest.startIndex.HasValue)
 			{
@@ -192,7 +192,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
         }
-
+    
 		private static User BuildUser(JObject body)
 		{
 			if (body["schemas"] == null)
