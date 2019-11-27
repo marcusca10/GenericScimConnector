@@ -1,9 +1,12 @@
-﻿using Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers;
+﻿//------------------------------------------------------------
+// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------
+
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -19,6 +22,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
     {
         private readonly ScimContext _context;
         private readonly ILogger<UsersController> _log;
+        private string[] allwaysRetuned = ControllerConstants.AllwaysRetunedAttributes;
 
         public GroupProvider(ScimContext context, ILogger<UsersController> log)
         {
@@ -67,10 +71,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                 groups = groups.Take(count.Value);
             }
 
-
-            StringValues allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };
             groups = groups.Select(u =>
-                ColumnsUtility.FilterAttributes(requested, exculted, u, allwaysRetuned)).ToList();
+                ColumnsUtility.FilterAttributes(requested, exculted, u, this.allwaysRetuned)).ToList();
 
 
 
@@ -113,15 +115,15 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             group.ExternalIdentifier = item.ExternalIdentifier;
             await this._context.SaveChangesAsync().ConfigureAwait(false);
         }
-        
+
         public async Task Delete(Resource resource)
         {
-            Group Group = (Group) resource;
+            Group Group = (Group)resource;
             this._context.Groups.Remove(Group);
             await this._context.SaveChangesAsync().ConfigureAwait(false);
             this._log.LogInformation(Group.Identifier);
         }
-        
+
         public void Update(string id, JObject body)
         {
             PatchRequest2Compliant patchRequest = null;
@@ -151,7 +153,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                     foreach (var op in patchRequest.Operations)
                     {
 
-                        PatchOperation patchOp = PatchOperation.Create(getOperationName(op.OperationName), op.Path.ToString(), op.Value);
+                        PatchOperation patchOp = PatchOperation.Create(OperationValue.getOperationName(op.OperationName), op.Path.ToString(), op.Value);
                         groupToModify.Apply(patchOp);
                         groupToModify.meta.LastModified = DateTime.Now;
 
@@ -167,21 +169,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                 }
             }
             this._context.SaveChanges();
-        }
-
-        private static OperationName getOperationName(string operationName)
-        {
-            switch (operationName.ToLower(CultureInfo.CurrentCulture))
-            {
-                case "add":
-                    return OperationName.Add;
-                case "remove":
-                    return OperationName.Remove;
-                case "replace":
-                    return OperationName.Replace;
-                default:
-                    throw new NotImplementedException("Invalid operatoin Name" + operationName);
-            }
         }
     }
 }

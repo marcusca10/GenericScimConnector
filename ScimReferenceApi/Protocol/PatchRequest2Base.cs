@@ -5,6 +5,7 @@
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.Serialization;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch

@@ -26,6 +26,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         private readonly ScimContext _context;
         private readonly ILogger<UsersController> _log;
         private GroupProvider provider;
+        private string[] allwaysRetuned = ControllerConstants.AllwaysRetunedAttributes;
 
         public GroupsController(ScimContext context, ILogger<UsersController> log)
         {
@@ -52,58 +53,22 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         [HttpGet(ControllerConstants.UriID)]
         public async Task<ActionResult<Group>> Get(string id)
         {
-            Group Group = (Group) await this.provider.GetById(id).ConfigureAwait(false);
+            StringValues requested = this.Request.Query[QueryKeys.Attributes];
+            StringValues exculted = this.Request.Query[QueryKeys.ExcludedAttributes];
+
+            Group Group = (Group)await this.provider.GetById(id).ConfigureAwait(false);
+
 
             if (Group == null)
             {
                 ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), "404");
                 return NotFound(notFoundError);
             }
-            StringValues requested = this.Request.Query[QueryKeys.Attributes];
-            StringValues exculted = this.Request.Query[QueryKeys.ExcludedAttributes];
-            string[] allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };
-            Group = ColumnsUtility.FilterAttributes(requested, exculted, Group, allwaysRetuned);
+
+            Group = ColumnsUtility.FilterAttributes(requested, exculted, Group, this.allwaysRetuned);
+
             this.Response.ContentType = ControllerConstants.DefaultContentType;
             return Group;
-        }
-
-        [HttpPost]
-        [Route("/api/Groups/.search")]
-        public ActionResult<ListResponse<Group>> Post([FromBody] SearchRequest searchRequest)
-        {
-            FilterGroups filterGroups = new FilterGroups(this._context);
-            IEnumerable<Group> groups = filterGroups.GetGroups(searchRequest.filter);
-            string[] allwaysRetuned = new string[] { AttributeNames.Identifier, "identifier", AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };//TODO Read from schema 
-            string[] attributes = searchRequest.attributes?.ToArray() ?? Array.Empty<string>();
-            string[] exculdedattribes = searchRequest.excludedAttributes?.ToArray() ?? Array.Empty<string>();
-            groups = groups.Select(g =>
-                ColumnsUtility.FilterAttributes(attributes, exculdedattribes, g, allwaysRetuned)).ToList();
-            if (searchRequest.startIndex.HasValue)
-            {
-                if (searchRequest.startIndex > 1)
-                {
-                    groups = groups.Skip(searchRequest.startIndex.Value - 1);
-                }
-            }
-
-            if (searchRequest.count.HasValue)
-            {
-                if (searchRequest.count >= 1)
-                {
-                    groups = groups.Take(searchRequest.count.Value);
-                }
-            }
-
-            ListResponse<Group> list = new ListResponse<Group>()
-            {
-                TotalResults = groups.Count(),
-                StartIndex = groups.Any() ? 1 : (int?)null,
-                Resources = groups
-            };
-
-
-            this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return list;
         }
 
         [HttpPost]
@@ -117,7 +82,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             bool Exists = this._context.Groups.Any(x => x.DisplayName == item.DisplayName);
             if (Exists == true)
             {
-                ErrorResponse conflictError = new ErrorResponse(ErrorDetail.DisplaynameConflict, "409");
+                ErrorResponse conflictError = new ErrorResponse(ErrorDetail.DisplaynameConflict, ErrorDetail.Status409);
                 return NotFound(conflictError);
             }
 
@@ -132,10 +97,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         {
             if (id != item.Identifier)
             {
-                ErrorResponse BadRequestError = new ErrorResponse(ErrorDetail.Mutability, "400");
+                ErrorResponse BadRequestError = new ErrorResponse(ErrorDetail.Mutability, ErrorDetail.Status400);
                 return NotFound(BadRequestError);
             }
-            
+
             Group group = this._context.CompleteGroups().FirstOrDefault(g => g.Identifier.Equals(id, StringComparison.CurrentCulture));
             await this.provider.Replace(item, group).ConfigureAwait(false);
 
@@ -150,7 +115,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             if (Group == null)
             {
-                ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), "404");
+                ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
                 return NotFound(notFoundError);
             }
 

@@ -20,13 +20,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
     [Route("api/Users")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly ScimContext _context;
         private readonly ILogger<UsersController> _log;
         private UserProvider provider;
-        private string[] allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };//TODO Read from schema 
 
         public UsersController(ScimContext context, ILogger<UsersController> log)
         {
@@ -53,7 +52,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         public async Task<ActionResult<User>> Get(string id)
         {
 
-            User User = (User) await provider.GetById(id).ConfigureAwait(false);
+            User User = (User)await provider.GetById(id).ConfigureAwait(false);
 
             if (User == null)
             {
@@ -65,76 +64,39 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             return Ok(User);
         }
 
-		[HttpPost]
-		[Route("/api/Users/.search")]
-		public ActionResult<ListResponse<User>> Post([FromBody] SearchRequest searchRequest)
-		{
-            FilterUsers filterUsers = new FilterUsers(_context);
-			IEnumerable<User> users = filterUsers.GetUsers(searchRequest.filter);
-            string[] attributes = searchRequest.attributes?.ToArray() ?? Array.Empty<string>();
-            string[] exculdedattribes = searchRequest.excludedAttributes?.ToArray() ?? Array.Empty<string>();
-			users = users.Select(u =>
-				ColumnsUtility.FilterAttributes(attributes, exculdedattribes, u, allwaysRetuned));
-			int totalResults = users.Count();
-			if (searchRequest.startIndex.HasValue)
-			{
-				if (searchRequest.startIndex > 1)
-				{
-					users = users.Skip(searchRequest.startIndex.Value - 1);
-				}
-			}
-
-            if (searchRequest.count.HasValue)
-            {
-                if (searchRequest.count >= 1)
-                {
-                    users = users.Take(searchRequest.count.Value);
-                }
-            }
-
-            ListResponse<User> list = new ListResponse<User>()
-            {
-                TotalResults = totalResults,
-                StartIndex = searchRequest.startIndex ?? null,
-                Resources = users,
-                ItemsPerPage = searchRequest.count ?? null,
-            };
-            this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return list;
-        }
-
         [HttpPost]
         public async Task<ActionResult<User>> Post(JObject body)
         {
 
             User item = null;
-            try { 
+            try
+            {
                 item = BuildUser(body);
             }
-            catch(ArgumentException)
+            catch (ArgumentException)
             {
-                ErrorResponse invalidJSON = new ErrorResponse(ErrorDetail.Unparsable, "400");
+                ErrorResponse invalidJSON = new ErrorResponse(ErrorDetail.Unparsable, ErrorDetail.Status400);
                 return BadRequest(invalidJSON);
             }
             if (String.IsNullOrWhiteSpace(item.UserName))
             {
-                ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.NoUsername, "400");
+                ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.NoUsername, ErrorDetail.Status400);
                 return BadRequest(badRequestError);
             }
 
             bool Exists = this._context.Users.Any(x => x.UserName == item.UserName);
             if (Exists == true)
             {
-                ErrorResponse conflictError = new ErrorResponse(ErrorDetail.UsernameConflict, "409");
+                ErrorResponse conflictError = new ErrorResponse(ErrorDetail.UsernameConflict, ErrorDetail.Status409);
                 return Conflict(conflictError);
             }
 
             await this.provider.Add(item).ConfigureAwait(false);
 
-			this.Response.ContentType = ControllerConstants.DefaultContentType;
+            this.Response.ContentType = ControllerConstants.DefaultContentType;
             return CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
 
-		}
+        }
 
         [HttpPut(ControllerConstants.UriID)]
         public async Task<ActionResult<User>> Put(string id, User item)
@@ -142,12 +104,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             if (id != item.Identifier)
             {
-                ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.Mutability, "400");
+                ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.Mutability, ErrorDetail.Status400);
                 return BadRequest(badRequestError);
             }
             if (item.UserName == null)
             {
-                ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.NoUsername, "400");
+                ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.NoUsername, ErrorDetail.Status400);
                 return BadRequest(badRequestError);
             }
 
@@ -157,7 +119,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             if (User == null)
             {
-                ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), "404");
+                ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
                 return NotFound(notFoundError);
             }
 
@@ -173,12 +135,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             var User = await this._context.Users.FindAsync(id).ConfigureAwait(false);
             if (User == null)
             {
-                ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), "404");
+                ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
                 return NotFound(notFoundError);
             }
 
             await this.provider.Delete(User).ConfigureAwait(false);
-           
+
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
             return NoContent();
@@ -192,25 +154,25 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
         }
-    
-		private static User BuildUser(JObject body)
-		{
-			if (body["schemas"] == null)
-			{
-				throw new ArgumentException("schemas");
-			}
-			JEnumerable<JToken> shemas = body["schemas"].Children();
-			User item;
-			if (shemas.Contains(SchemaIdentifiers.Core2EnterpriseUser))
-			{
-				item = body.ToObject<EnterpriseUser>();
-			}
-			else
-			{
-				item = body.ToObject<User>();
-			}
 
-			return item;
-		}
-	}
+        private static User BuildUser(JObject body)
+        {
+            if (body[AttributeNames.Schemas] == null)
+            {
+                throw new ArgumentException(AttributeNames.Schemas);
+            }
+            JEnumerable<JToken> shemas = body[AttributeNames.Schemas].Children();
+            User item;
+            if (shemas.Contains(SchemaIdentifiers.Core2EnterpriseUser))
+            {
+                item = body.ToObject<EnterpriseUser>();
+            }
+            else
+            {
+                item = body.ToObject<User>();
+            }
+
+            return item;
+        }
+    }
 }

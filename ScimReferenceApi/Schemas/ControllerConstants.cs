@@ -9,5 +9,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         public const string DefaultStartIndexString = "1";
         public const string DefaultContentType = "application/scim+json";
         public const string UriID = "{id}";
+        public static readonly string[] AllwaysRetunedAttributes = { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };//TODO Read from schema
     }
 }

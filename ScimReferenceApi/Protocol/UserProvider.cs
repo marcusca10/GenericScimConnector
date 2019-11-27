@@ -2,7 +2,6 @@
 // Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
@@ -23,7 +22,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
     {
         private readonly ScimContext _context;
         private readonly ILogger<UsersController> _log;
-        private string[] allwaysRetuned = new string[] { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };//TODO Read from schema 
+        private string[] allwaysRetuned = ControllerConstants.AllwaysRetunedAttributes;
 
         public UserProvider(ScimContext context, ILogger<UsersController> log)
         {
@@ -73,9 +72,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             }
 
 
-            
+
             users = users.Select(u =>
-                ColumnsUtility.FilterAttributes(requested, exculted, u, allwaysRetuned)).ToList();
+                ColumnsUtility.FilterAttributes(requested, exculted, u, this.allwaysRetuned)).ToList();
 
 
             ListResponse<Resource> list = new ListResponse<Resource>()
@@ -100,9 +99,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
         public async Task Add(Resource item)
         {
-			User user = (User)item;
-			user.meta.Created = DateTime.Now;
-			user.meta.LastModified = DateTime.Now;
+            User user = (User)item;
+            user.meta.Created = DateTime.Now;
+            user.meta.LastModified = DateTime.Now;
             this._context.Users.Add(user);
             await this._context.SaveChangesAsync().ConfigureAwait(false);
             this._log.LogInformation(user.UserName);
@@ -110,15 +109,15 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
         public async Task Replace(Resource old, Resource next)
         {
-			User item = (User)old;
-			User user = (User)next;
+            User item = (User)old;
+            User user = (User)next;
             item.meta.LastModified = DateTime.Now;
             user.meta = item.meta;
-			user.Name = item.Name;
-			user.ElectronicMailAddresses = item.ElectronicMailAddresses;
-			user.PhoneNumbers = item.PhoneNumbers;
-			user.Roles = item.Roles;
-			user.Addresses = item.Addresses;
+            user.Name = item.Name;
+            user.ElectronicMailAddresses = item.ElectronicMailAddresses;
+            user.PhoneNumbers = item.PhoneNumbers;
+            user.Roles = item.Roles;
+            user.Addresses = item.Addresses;
             this._context.Entry(user).CurrentValues.SetValues(item);
             await this._context.SaveChangesAsync().ConfigureAwait(false);
             this._log.LogInformation(item.UserName);
@@ -160,7 +159,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                         if (op is PatchOperation2SingleValued singleValued)
                         {
 
-                            PatchOperation patchOp = PatchOperation.Create(getOperationName(singleValued.OperationName), singleValued.Path.ToString(), singleValued.Value);
+                            PatchOperation patchOp = PatchOperation.Create(OperationValue.getOperationName(singleValued.OperationName), singleValued.Path.ToString(), singleValued.Value);
                             usertoModify.Apply(patchOp);
                             usertoModify.meta.LastModified = DateTime.Now;
                         }
@@ -179,23 +178,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 }
             }
             this._context.SaveChanges();
-        }
-
-       
-
-        private static OperationName getOperationName(string operationName)
-        {
-            switch (operationName.ToLower(CultureInfo.CurrentCulture))
-            {
-                case "add":
-                    return OperationName.Add;
-                case "remove":
-                    return OperationName.Remove;
-                case "replace":
-                    return OperationName.Replace;
-                default:
-                    throw new NotImplementedException("Invalid operatoin Name" + operationName);
-            }
         }
     }
 }
