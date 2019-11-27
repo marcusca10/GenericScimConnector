@@ -13,5 +13,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         public const string Mutability = "Attribute 'id' is read only";
         public const string NotFound = "Resource {0} not found";
 
+        public const string Status400 = "400";
+        public const string Status401 = "401";
+        public const string Status404 = "404";
+        public const string Status409 = "409";
     }
 }

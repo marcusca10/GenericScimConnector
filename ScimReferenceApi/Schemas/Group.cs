@@ -26,24 +26,24 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         }
 
         [DataMember(Name = AttributeNames.Metadata)]
-        public Metadata meta 
-        { 
+        public Metadata meta
+        {
             get;
-            set; 
+            set;
         }
 
         [DataMember(Name = AttributeNames.DisplayName)]
-        public virtual string DisplayName 
-        { 
-            get; 
-            set; 
+        public virtual string DisplayName
+        {
+            get;
+            set;
         }
 
         [DataMember(Name = AttributeNames.Members, IsRequired = false, EmitDefaultValue = false)]
-        public virtual IList<Member> Members 
-        { 
-            get; 
-            set; 
+        public virtual IList<Member> Members
+        {
+            get;
+            set;
         }
     }
 
@@ -132,7 +132,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         private static void PatchMembers(this Group group, PatchOperation operation)
         {
             //path Members expects operation to only contain one item
-            
+
             group.Members = PatchMembers(group.Members, operation);
             if (operation.Value.Count > 1)
             {
@@ -182,13 +182,13 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                 return members;
             }
 
-            if(operation.Name == OperationName.Remove && string.IsNullOrEmpty(operation.Value?.FirstOrDefault()?["value"]?.ToString()))
+            if (operation.Name == OperationName.Remove && string.IsNullOrEmpty(operation.Value?.FirstOrDefault()?["value"]?.ToString()))
             {
                 return null;
             }
 
             Member Member = null;
-            Member MemberExisting =null;
+            Member MemberExisting = null;
             if (members != null && operation.OperationName != "Add")
             {
                 MemberExisting =
@@ -198,7 +198,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                             (Member item) =>
                                 string.Equals(operation.Value?.FirstOrDefault()?["value"]?.ToString(), item.Value, StringComparison.Ordinal));
             }
-            if(MemberExisting == null)
+            if (MemberExisting == null)
             {
                 MemberExisting = null;
                 if (operation.Value.FirstOrDefault().Type == Newtonsoft.Json.Linq.JTokenType.Object)
@@ -211,7 +211,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                         new Member()
                         {
                             //TypeName = "member"
-                    };
+                        };
                 }
             }
 

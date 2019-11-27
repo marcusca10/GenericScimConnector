@@ -15,7 +15,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
     [DataContract]
     public class User : Resource
     {
-        
+
         public User()
         {
             this.AddSchema(SchemaIdentifiers.Core2User);
@@ -36,75 +36,74 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         }
 
         [DataMember(Name = AttributeNames.Active)]
-        public virtual bool Active 
-        { 
-            get; 
-            set; 
+        public virtual bool Active
+        {
+            get;
+            set;
         }
 
         [DataMember(Name = AttributeNames.Addresses, IsRequired = false, EmitDefaultValue = false)]
-        public virtual IEnumerable<Address> Addresses 
-        { 
-            get; 
-            set; 
+        public virtual IEnumerable<Address> Addresses
+        {
+            get;
+            set;
         }
 
         [DataMember(Name = AttributeNames.DisplayName, IsRequired = false, EmitDefaultValue = false)]
-        public virtual string DisplayName 
-        { 
-            get; 
+        public virtual string DisplayName
+        {
+            get;
             set;
         }
 
         [DataMember(Name = AttributeNames.ElectronicMailAddresses, IsRequired = false, EmitDefaultValue = false)]
-        public virtual IEnumerable<ElectronicMailAddress> ElectronicMailAddresses 
-        { 
-            get; 
+        public virtual IEnumerable<ElectronicMailAddress> ElectronicMailAddresses
+        {
+            get;
             set;
         }
 
         [DataMember(Name = AttributeNames.Metadata)]
-        public virtual Metadata meta 
-        { 
+        public virtual Metadata meta
+        {
             get;
             set;
         }
 
         [DataMember(Name = AttributeNames.Name, IsRequired = false, EmitDefaultValue = false)]
-        public virtual Name Name 
-        { 
+        public virtual Name Name
+        {
             get;
             set;
         }
 
         [DataMember(Name = AttributeNames.PhoneNumbers, IsRequired = false, EmitDefaultValue = false)]
-        public virtual IEnumerable<PhoneNumber> PhoneNumbers 
-        { 
-            get; 
-            set; 
+        public virtual IEnumerable<PhoneNumber> PhoneNumbers
+        {
+            get;
+            set;
         }
 
         [DataMember(Name = AttributeNames.PreferredLanguage, IsRequired = false, EmitDefaultValue = false)]
-        public virtual string PreferredLanguage 
-        { 
+        public virtual string PreferredLanguage
+        {
             get;
             set;
         }
 
         [DataMember(Name = AttributeNames.Roles, IsRequired = false, EmitDefaultValue = false)]
-        public virtual IEnumerable<Role> Roles 
-        { 
-            get; 
-            set; 
-        }
-
-        [DataMember(Name = AttributeNames.Title, IsRequired = false, EmitDefaultValue = false)]
-        public virtual string Title 
-        { 
+        public virtual IEnumerable<Role> Roles
+        {
             get;
             set;
         }
 
+        [DataMember(Name = AttributeNames.Title, IsRequired = false, EmitDefaultValue = false)]
+        public virtual string Title
+        {
+            get;
+            set;
+        }
 
     }
 

@@ -8,14 +8,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
-	public interface IProvider
-	{
-		Task<ListResponse<Resource>> Query(string query, IEnumerable<string> requested, IEnumerable<string> exculted);
+    public interface IProvider
+    {
+        Task<ListResponse<Resource>> Query(string query, IEnumerable<string> requested, IEnumerable<string> exculted);
 
-		Task<Resource> GetById(string id);
-		Task Add(Resource resource);
-		Task Replace(Resource old, Resource newresorce);
-		Task Delete(Resource resource);
+        Task<Resource> GetById(string id);
+        Task Add(Resource resource);
+        Task Replace(Resource old, Resource newresorce);
+        Task Delete(Resource resource);
         void Update(string id, JObject body);
 
     }

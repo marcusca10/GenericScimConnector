@@ -37,8 +37,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         {
             string schmea = System.IO.File.ReadAllText("./JsonConstants/ReferenceCodeSchema.json");
             List<TypeScheme> items = JsonConvert.DeserializeObject<List<TypeScheme>>(schmea);
-            TypeScheme item = items.FirstOrDefault(sch => sch.Identifier.Equals(id, StringComparison.InvariantCultureIgnoreCase) || sch.Identifier.EndsWith(id,StringComparison.InvariantCultureIgnoreCase));
-            if(item == null)
+            TypeScheme item = items.FirstOrDefault(sch => sch.Identifier.Equals(id, StringComparison.InvariantCultureIgnoreCase) || sch.Identifier.EndsWith(id, StringComparison.InvariantCultureIgnoreCase));
+            if (item == null)
             {
                 return NotFound();
             }

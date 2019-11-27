@@ -3,6 +3,7 @@
 //------------------------------------------------------------
 
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+using System;
 using System.Globalization;
 using System.Runtime.Serialization;
 
@@ -37,6 +38,21 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     this.Reference)
                 .Trim();
             return result;
+        }
+
+        public static OperationName getOperationName(string operationName)
+        {
+            switch (operationName.ToLower(CultureInfo.CurrentCulture))
+            {
+                case "add":
+                    return OperationName.Add;
+                case "remove":
+                    return OperationName.Remove;
+                case "replace":
+                    return OperationName.Replace;
+                default:
+                    throw new NotImplementedException("Invalid operatoin Name" + operationName);
+            }
         }
     }
 }

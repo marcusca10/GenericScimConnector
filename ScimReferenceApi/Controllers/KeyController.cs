@@ -42,6 +42,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        
+
     }
 }
