@@ -23,6 +23,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
         private readonly ScimContext _context;
         private readonly ILogger<UsersController> _log;
         private string[] allwaysRetuned = ControllerConstants.AllwaysRetunedAttributes;
+        private int DefaultStartIndex = 1;
 
         public GroupProvider(ScimContext context, ILogger<UsersController> log)
         {
@@ -55,9 +56,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 
             int start = int.Parse(startIndex, CultureInfo.InvariantCulture);
 
-            if (start < 1)
+            if (start < DefaultStartIndex)
             {
-                start = 1;
+                start = DefaultStartIndex;
             }
 
             int? count = null;

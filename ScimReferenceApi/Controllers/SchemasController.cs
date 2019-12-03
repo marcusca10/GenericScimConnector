@@ -20,22 +20,18 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         }
 
         [HttpGet]
-#pragma warning disable CA1822 // Contoller methods must not be static
         public ActionResult<IEnumerable<TypeScheme>> Get()
-#pragma warning restore CA1822 // Mark members as static
         {
 
-            string schmea = System.IO.File.ReadAllText("./JsonConstants/ReferenceCodeSchema.json");
+            string schmea = System.IO.File.ReadAllText(ControllerConstants.ReferenceCodeSchemaFilePath);
             List<TypeScheme> items = JsonConvert.DeserializeObject<List<TypeScheme>>(schmea);
             return items;
         }
 
-        [HttpGet("{id}")]
-#pragma warning disable CA1822 // Contoller methods must not be static
+        [HttpGet(ControllerConstants.UriID)]
         public ActionResult<TypeScheme> Get(string id)
-#pragma warning restore CA1822 // Mark members as static
         {
-            string schmea = System.IO.File.ReadAllText("./JsonConstants/ReferenceCodeSchema.json");
+            string schmea = System.IO.File.ReadAllText(ControllerConstants.ReferenceCodeSchemaFilePath);
             List<TypeScheme> items = JsonConvert.DeserializeObject<List<TypeScheme>>(schmea);
             TypeScheme item = items.FirstOrDefault(sch => sch.Identifier.Equals(id, StringComparison.InvariantCultureIgnoreCase) || sch.Identifier.EndsWith(id, StringComparison.InvariantCultureIgnoreCase));
             if (item == null)

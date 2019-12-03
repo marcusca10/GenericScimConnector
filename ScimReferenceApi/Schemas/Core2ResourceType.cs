@@ -2,11 +2,11 @@
 // Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
+using System;
+using System.Runtime.Serialization;
+
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
-    using System;
-    using System.Runtime.Serialization;
-
     [DataContract]
     public sealed class Core2ResourceType : Schematized
     {
@@ -22,7 +22,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             set;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "Serialized")]
         [DataMember(Name = AttributeNames.Name)]
         private string name;
 
@@ -50,7 +49,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Setter can be called on de-serialization.")]
         private string EndpointValue
         {
             get
