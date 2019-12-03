@@ -23,6 +23,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         private readonly ScimContext _context;
         private readonly ILogger<UsersController> _log;
         private string[] allwaysRetuned = ControllerConstants.AllwaysRetunedAttributes;
+        private int DefaultStartIndex = 1;
 
         public UserProvider(ScimContext context, ILogger<UsersController> log)
         {
@@ -56,9 +57,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             int start = int.Parse(startIndex, CultureInfo.InvariantCulture);
 
-            if (start < 1)
+            if (start < DefaultStartIndex)
             {
-                start = 1;
+                start = DefaultStartIndex;
             }
 
             int total = users.Count();

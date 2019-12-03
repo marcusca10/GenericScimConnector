@@ -6,6 +6,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
     public static class AttributeNames
     {
+        public const string AttributeName = "Name";
+        public const string AttributeEmails = "ElectronicMailAddresses";
+        public const string AttributePhones = "PhoneNumbers";
+        public const string AttributeRoles = "Roles";
+        public const string AttributeAddresses = "Addresses";
         public const string AccountEnabled = "accountEnabled";
         public const string Active = "active";
         public const string Addresses = "addresses";
@@ -32,6 +37,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         public const string EntityTag = "eTag";
         public const string Expiry = "exp";
         public const string ExtensionEnterpriseUser2 = SchemaIdentifiers.Core2EnterpriseUser;
+        public const string ExtentsionValues = "ExtentsionValues";
         public const string ExternalIdentifier = "externalId";
         public const string FamilyName = "familyName";
         public const string Filter = "filter";

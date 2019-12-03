@@ -21,11 +21,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         }
 
         [HttpGet]
-#pragma warning disable CA1822 // Mark members as static do not mark static controler methods
         public ActionResult<IEnumerable<Core2ResourceType>> Get()
-#pragma warning restore CA1822 // Mark members as static
         {
-            string schmea = System.IO.File.ReadAllText("./JsonConstants/resourceTypes.json");
+            string schmea = System.IO.File.ReadAllText(ControllerConstants.ResourceTypeFilePath);
             List<Core2ResourceType> items = JsonConvert.DeserializeObject<List<Core2ResourceType>>(schmea);
             return items;
         }

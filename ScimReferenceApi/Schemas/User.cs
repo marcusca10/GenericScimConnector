@@ -111,13 +111,13 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
     {
         public static IQueryable<User> CompleteUsers(this ScimContext context)
         {
-            return context.Users.Include("meta")
-                    .Include("Name")
-                    .Include("ElectronicMailAddresses")
-                    .Include("PhoneNumbers")
-                    .Include("Roles")
-                    .Include("ExtentsionValues")
-                    .Include("Addresses");
+            return context.Users.Include(AttributeNames.Metadata)
+                    .Include(AttributeNames.AttributeName)
+                    .Include(AttributeNames.AttributeEmails)
+                    .Include(AttributeNames.AttributePhones)
+                    .Include(AttributeNames.AttributeRoles)
+                    .Include(AttributeNames.ExtentsionValues)
+                    .Include(AttributeNames.AttributeAddresses);
         }
 
 

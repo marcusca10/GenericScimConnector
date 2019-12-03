@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
 
-    [Route("api/Users")]
+    [Route(ControllerConstants.DefualtUserRoute)]
     [ApiController]
     [Authorize]
     public class UsersController : ControllerBase
@@ -39,8 +39,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         {
 
             string query = this.Request.QueryString.ToUriComponent();
-            IEnumerable<string> requested = this.Request.Query[QueryKeys.Attributes].SelectMany((att) => att.Split(','));
-            IEnumerable<string> exculted = this.Request.Query[QueryKeys.ExcludedAttributes].SelectMany((att) => att.Split(','));
+            IEnumerable<string> requested = this.Request.Query[QueryKeys.Attributes].SelectMany((att) => att.Split(ControllerConstants.DelimiterComma));
+            IEnumerable<string> exculted = this.Request.Query[QueryKeys.ExcludedAttributes].SelectMany((att) => att.Split(ControllerConstants.DelimiterComma));
 
             ListResponse<Resource> list = await provider.Query(query, requested, exculted).ConfigureAwait(false);
 
@@ -56,7 +56,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             if (User == null)
             {
-                ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), "404");
+                ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
                 return NotFound(notFoundError);
             }
 

@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
 
-    [Route("api/Groups")]
+    [Route(ControllerConstants.DefaultGroupRoute)]
     [ApiController]
     [Authorize]
     public class GroupsController : ControllerBase
@@ -61,7 +61,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             if (Group == null)
             {
-                ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), "404");
+                ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
                 return NotFound(notFoundError);
             }
 
