@@ -66,6 +66,22 @@ This will advance the dialog to have several options.
 The name feild is for the name of the app but is also the first part of the default URL so removeing the date time numbers from the end is a good idea.
 Select the resource group and plan you would like to use then hit publish.
 
+
+## Testing
+This project provides test cases that you can use to ensure your application is SCIM compliant. The test cases have been authored for both Jmeter and Postman.
+
+#### Postman testing instructions
+1. [Download Postman collection](https:aka.ms/ProvisioningPostman)
+2. [Download the Postman client]()
+3. Import the postman collection as raw text. **Import** > **Paste Raw Text**
+4. Point the URL to your endpoint (for example: https://localhost:<input>/api/users or https://scimreferenceapi19.azurewebsites.net/api/users)
+5. Turn off SSL Cert verification. **File** > **Settings** > **SSL certificate verification**
+6. Ensure that you are authorized to make requests to the endpoint
+  1. Option 1: Turn off authorization for your endpoint (this is fine for testing purposes, but there must be some form of authorization for apps being used by customers in production.
+  2. Option 2: POST to key endpoint to retrieve a token
+7. Run your tests
+
+
 ## Key concepts
 
 This reference code was developed as a .Net core MVC web API for SCIM provisioning. There are three main folders for the logic of implementing SCIM: Schemas, Controllers, and Protocol. 
