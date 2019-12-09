@@ -34,9 +34,10 @@ This code is intended to be a useful reference for those building their own [SCI
 
 ## Prerequisites
 
-Visual Studio with .NET core, IIS is recomended for running the sample.
-To use the test files with extension .jmx Jmeter, blazemeter, or equivelent is required.
-
+* [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) (required)
+* [.NET core 2.2 or above](https://dotnet.microsoft.com/download/dotnet-core/2.2) (required)
+* IIS (recommended)
+* Testing platform such as [Postman](https://www.getpostman.com/downloads/) or [Jmeter](https://jmeter.apache.org/download_jmeter.cgi) (recommended)
 
 ## Setup
 
