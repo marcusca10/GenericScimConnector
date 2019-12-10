@@ -18,7 +18,7 @@ Guidance on onboarding samples to docs.microsoft.com/samples: https://review.doc
 Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
 -->
 
-This code is intended to be a useful reference for those building their own [SCIM](https://docs.microsoft.com/azure/active-directory/manage-apps/use-scim-to-provision-users-and-groups) endpoint. All the basic requirements for CRUD with two resources and an extension exist in the reference. Many of the useful optional features, such as filtering and pagination, are also provided. This code is intended to help you get started building your SCIM endpoint and is provided "AS IS." It is intended as a reference to get started. There is no gaurantee of actively maintaining or supporting the reference code.  
+This code is intended to be a useful reference for a [SCIM](https://docs.microsoft.com/azure/active-directory/manage-apps/use-scim-to-provision-users-and-groups) endpoint. The reference contains all the basic requirements for CRUD operatons on a user and group object. In addition, it contains many useful optional features such as filtering and pagination. This code is intended to help you get started building your SCIM endpoint and is provided "AS IS." It is intended as a reference to get started and there is no gaurantee of actively maintaining or supporting it. 
 
 ## Prerequisites
 
@@ -29,19 +29,16 @@ This code is intended to be a useful reference for those building their own [SCI
 
 ## Clone the repo and build your SCIM endpoint
 
+The solution is in the ScimReferenceApi folder and can be built and run from VisualStudio.
+
+#### Run the solution locally
 1. Click the clone or download link near the top of the page and copy the link. OR. Click fork near the top of the page to make a copy of the repo for personal use.
 2. Open Visual Studio and choose clone or checkout. 
 3. Use the clone link from Github int the repository link feild and click clone to make a local copy of all files. The solution should open.
 4. Switch views to the SCIMReference.sln
 5. Click IIS Express to execute (the project will build and you will be redirected to a web page with the local host URL)
 
-## Runnning the sample
-
-The solution is in the ScimReferenceApi folder and can be built and run from VisualStudio. Either locally for testing purposes with IIS Express or it can be published to Azure as a web app.
-All the enpoints are are at the host /api/ directory and can be interacted with the standard HTTP requests. eg {host}/api/Users can take a GET reequest that will return all users. The /api/ route can be changed at the top of each controller.
-Also included in the repository is a .jmx file that can be used with Jmeter or other simialr tools for validation purposes. Currently the http request defaults is set to send requests to https://scimreferenceapi19.azurewebsites.net/ but will need to be changed to your specific URI.
-All the tests pass with the code in the repo and check CRUD for users and groups along with pagination, filtering, and attribute filtering. Any changes to the source code should at least pass all the sample tests.
-
+#### Host the solution in the cloud
 To publish the solution to Azure first make sure you are signed into visual studio with the account that has acces to your hosting resources. Then click the solution file in the solution explorer and select publish from the list on the left of the window. Alternatively use the Search (ctrl + q) at the top of the page to search for "publish"
 If the solution has not yet been published this will open a dialog in a new window.
 Make sure app service is selected and the radio button for create new is pressed and click create profile.
@@ -49,6 +46,7 @@ This will advance the dialog to have several options.
 The name feild is for the name of the app but is also the first part of the default URL so removeing the date time numbers from the end is a good idea.
 Select the resource group and plan you would like to use then hit publish.
 
+All the endpoints are are at the host /api/ directory and can be interacted with the standard HTTP requests. eg {host}/api/Users can take a GET reequest that will return all users. The /api/ route can be changed at the top of each controller.
 
 ## Testing your SCIM endpoint
 This project provides test cases that you can use to ensure your application is SCIM compliant. The test cases have been authored for both Jmeter and Postman.
@@ -67,6 +65,9 @@ This project provides test cases that you can use to ensure your application is 
 7. Run your tests
 
 #### Jmeter instructions
+Also included in the repository is a .jmx file that can be used with Jmeter or other simialr tools for validation purposes. Currently the http request defaults is set to send requests to https://scimreferenceapi19.azurewebsites.net/ but will need to be changed to your specific URI.
+All the tests pass with the code in the repo and check CRUD for users and groups along with pagination, filtering, and attribute filtering. Any changes to the source code should at least pass all the sample tests.
+
 Jmeter is an apache open source testing framework built with java available for download at https://jmeter.apache.org/download_jmeter.cgi
 Java is required to run Jmeter and should be add to PATH
 After expanding the download there is a .jar file ApacheJMeter file that can be executed.
@@ -91,8 +92,6 @@ Currently the user extension enterpriseUser is handled at the user endpoint as w
 |Enable / disable authorization|Navigate to the UsersController.cs file and comment out the authorize command|
 |Add additional filterable attributes|Navigate to the FilterUsers.cs or FilterGroups.cs file and update the method to take a filter expression|
 |Extend the user schema to support additional attributes||
-|||
-|||
 
 ## Contents
 
