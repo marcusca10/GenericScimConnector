@@ -39,19 +39,13 @@ This code is intended to be a useful reference for those building their own [SCI
 * IIS (recommended)
 * Testing platform such as [Postman](https://www.getpostman.com/downloads/) or [Jmeter](https://jmeter.apache.org/download_jmeter.cgi) (recommended)
 
-## Setup
+## Clone the repo and build your SCIM endpoint
 
 1. Click the clone or download link near the top of the page and copy the link. OR. Click fork near the top of the page to make a copy of the repo for personal use.
 2. Open Visual Studio and choose clone or checkout. 
 3. Use the clone link from Github int the repository link feild and click clone to make a local copy of all files. The solution should open.
-
-Jmeter is an apache open source testing framework built with java available for download at https://jmeter.apache.org/download_jmeter.cgi
-Java is required to run Jmeter and should be add to PATH
-After expanding the download there is a .jar file ApacheJMeter file that can be executed.
-Once it runs file -> open ~.jmx will load the tests
-Under thread group the target URI can be enabled/disabled or changed with the user defined varible options 
-Making sure the sample is running the test can be run (ctrl + r), or clicking the start button
-The results of the tests apear in the results tree.
+4. Switch views to the SCIMReference.sln
+5. Click IIS Express to execute (the project will build and you will be redirected to a web page with the local host URL)
 
 ## Runnning the sample
 
@@ -75,20 +69,30 @@ This project provides test cases that you can use to ensure your application is 
 1. [Download Postman collection](https:aka.ms/ProvisioningPostman)
 2. [Download the Postman client]()
 3. Import the postman collection as raw text. **Import** > **Paste Raw Text**
-4. Point the URL to your endpoint (for example: https://localhost:<input>/api/users or https://scimreferenceapi19.azurewebsites.net/api/users)
+4. Specify the URL for your SCIM endpoint
+    1. When running the project locally, the format is typically (replace 44355 with the port found in the URL that opens up when you execute the project): https://localhost:44355/api/users 
+    2. When hosting the endpoint in Azure, the URL is typically similar to: https://scimreferenceapi19.azurewebsites.net/api/users)
 5. Turn off SSL Cert verification. **File** > **Settings** > **SSL certificate verification**
 6. Ensure that you are authorized to make requests to the endpoint
     1. Option 1: Turn off authorization for your endpoint (this is fine for testing purposes, but there must be some form of authorization for apps being used by customers in production.
     2. Option 2: POST to key endpoint to retrieve a token
 7. Run your tests
 
+#### Jmeter instructions
+Jmeter is an apache open source testing framework built with java available for download at https://jmeter.apache.org/download_jmeter.cgi
+Java is required to run Jmeter and should be add to PATH
+After expanding the download there is a .jar file ApacheJMeter file that can be executed.
+Once it runs file -> open ~.jmx will load the tests
+Under thread group the target URI can be enabled/disabled or changed with the user defined varible options 
+Making sure the sample is running the test can be run (ctrl + r), or clicking the start button
+The results of the tests apear in the results tree.
 
-## Key concepts
+## Navigating the reference code
 
 This reference code was developed as a .Net core MVC web API for SCIM provisioning. There are three main folders for the logic of implementing SCIM: Schemas, Controllers, and Protocol. 
-The Schemas folder includes the models for the resources User and Group along with some abstract classes like Schematized for shared functionality. Schemas also contains an Attributes folder which contains the class definitions for complex attributes of Users and Groups. eg address
-The Controllers folder contains the controllers for the various SCIM endpoints. Here again the Users and Groups are the most important aspect to consider as SCIM was designed for resource provisioning. Both resource controllers include 7 main functions for the HTTP verbs pertaining to CRUD for the resource. 
-The Protocol folder contains the code for actions relating to the way resources are returned according to the SCIM RFC. Such as returning multiple resources as a list or returning only specific resources based on a filter.
+* The **Schemas** folder includes the models for the resources User and Group along with some abstract classes like Schematized for shared functionality. Schemas also contains an Attributes folder which contains the class definitions for complex attributes of Users and Groups. eg address
+* The **Controllers** folder contains the controllers for the various SCIM endpoints. Here again the Users and Groups are the most important aspect to consider as SCIM was designed for resource provisioning. Both resource controllers include 7 main functions for the HTTP verbs pertaining to CRUD for the resource. 
+* The **Protocol** folder contains the code for actions relating to the way resources are returned according to the SCIM RFC. Such as returning multiple resources as a list or returning only specific resources based on a filter.
 Here there is also the most of the logic. For example FilterExpression contians the logic for turning a querry into a list of linked lists of single filters. There is also the logic for turning a patch request into an operation with attributes 
 pertating to the value path and the type of operation that can then be used to apply changes to resource objects.
 Currently the user extension enterpriseUser is handled at the user endpoint as well by checking the schemas included with a post to determine the type of user. Therefore to add another extension one would have to include another schema with it and check for its existance in the post as well.
