@@ -8,7 +8,7 @@ description: SCIM provisioning reference code
 urlFragment: "update-this-to-unique-url-stub"
 ---
 
-# Official Microsoft Sample
+# SCIM Reference Code
 
 <!-- 
 Guidelines on README format: https://review.docs.microsoft.com/help/onboard/admin/samples/concepts/readme-template?branch=master
@@ -19,18 +19,6 @@ Taxonomies for products and languages: https://review.docs.microsoft.com/new-hop
 -->
 
 This code is intended to be a useful reference for those building their own [SCIM](https://docs.microsoft.com/azure/active-directory/manage-apps/use-scim-to-provision-users-and-groups) endpoint. All the basic requirements for CRUD with two resources and an extension exist in the reference. Many of the useful optional features, such as filtering and pagination, are also provided. This code is intended to help you get started building your SCIM endpoint and is provided "AS IS." It is intended as a reference to get started. There is no gaurantee of actively maintaining or supporting the reference code.  
-
-## Contents
-
-
-| File/folder       | Description                                |
-|-------------------|--------------------------------------------|
-| `ScimRefrenceAPI` | Sample source code.                        |
-| `.gitignore`      | Define what to ignore at commit time.      |
-| `CHANGELOG.md`    | List of changes to the sample.             |
-| `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
-| `README.md`       | This README file.                          |
-| `LICENSE`         | The license for the sample.                |
 
 ## Prerequisites
 
@@ -97,6 +85,26 @@ Here there is also the most of the logic. For example FilterExpression contians 
 pertating to the value path and the type of operation that can then be used to apply changes to resource objects.
 Currently the user extension enterpriseUser is handled at the user endpoint as well by checking the schemas included with a post to determine the type of user. Therefore to add another extension one would have to include another schema with it and check for its existance in the post as well.
 
+## Common scenarios
+|Scenario|How-to|
+|---|---|
+|Enable / disable authorization|Navigate to the UsersController.cs file and comment out the authorize command|
+|Add additional filterable attributes|Navigate to the FilterUsers.cs or FilterGroups.cs file and update the method to take a filter expression|
+|Extend the user schema to support additional attributes||
+|||
+|||
+
+## Contents
+
+
+| File/folder       | Description                                |
+|-------------------|--------------------------------------------|
+| `ScimRefrenceAPI` | Sample source code.                        |
+| `.gitignore`      | Define what to ignore at commit time.      |
+| `CHANGELOG.md`    | List of changes to the sample.             |
+| `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
+| `README.md`       | This README file.                          |
+| `LICENSE`         | The license for the sample.                |
 
 ## Contributing
 
