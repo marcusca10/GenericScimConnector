@@ -22,16 +22,14 @@ Use this reference code to get started building a [SCIM](https://docs.microsoft.
 
 ## Capabilities 
 
-#### Currently supported
-|Endpoint|Description|Capabilities|
-|---|---|---|
-|/User|Perform CRUD operations on a user object.|Create <br/> Update (PUT and PATCH) <br/> Delete <br/> Get <br/> List <br/> Filter <br/> Sort <br/> Patch <br/> Paginate|
-|/Group|Perform CRUD operations on a group object.|Create <br/> Update <br/> Delete <br/> Get <br/> List <br/> Filter <br/> Sort <br/> Patch <br/> Paginate|
-|/Bulk|Bulk operations allow you to perform operations on a large collection of resource objects in a single operation (e.g. update memberships for a large group).|Currently unavailabel in reference code|
-|/Schemas|The set of attributes supported by each client and service provider can vary. While one service provider may include “name”, “title”, and “emails” another service provider may use “name”, “title”, and “phoneNumbers”. The schemas endpoint allows for discovery of the attributes supported.|Currently unavailabel in reference code|
-|/ResourceTypes|Specifies metadata about each resource|Currently unavailabel in reference code|
-|/ServiceProviderConfig|Provides details about the features of the SCIM standard that are supported. For example it would indicate what resources are supported and the authentication method.|Currently unavailabel in reference code|
-
+|Endpoint|Description|
+|---|---|
+|/User|Perform CRUD operations on a user object. <br/> Create <br/> Update (PUT and PATCH) <br/> Delete <br/> Get <br/> List <br/> Filter <br/> Sort <br/> Patch <br/> Paginate|
+|/Group|Perform CRUD operations on a group object. <br/> Create <br/> Update <br/> Delete <br/> Get <br/> List <br/> Filter <br/> Sort <br/> Patch <br/> Paginate|
+|/Bulk|Bulk operations allow you to perform operations on a large collection of resource objects in a single operation (e.g. update memberships for a large group). Currently unavailable in reference code.|
+|/Schemas|The set of attributes supported by each client and service provider can vary. While one service provider may include “name”, “title”, and “emails” another service provider may use “name”, “title”, and “phoneNumbers”. The schemas endpoint allows for discovery of the attributes supported. Currently unavailable in reference code.|
+|/ResourceTypes|Specifies metadata about each resource. Currently unavailable in reference code.|
+|/ServiceProviderConfig|Provides details about the features of the SCIM standard that are supported. For example it would indicate what resources are supported and the authentication method. Currently unavailable in reference code.|
 ## Prerequisites
 
 * [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) (required)
