@@ -65,7 +65,7 @@ All the endpoints are are at the host /api/ directory and can be interacted with
 This project provides test cases that you can use to ensure your application is SCIM compliant. The test cases have been authored for both Jmeter and Postman.
 
 #### Postman testing instructions
-1. Download the [Postman collection](https:aka.ms/ProvisioningPostman)
+1. Download the [Postman collection](https://aka.ms/ProvisioningPostman)
 2. Download the [Postman client](https://www.getpostman.com/downloads/)
 3. Import the postman collection as raw text. **Import** > **Paste Raw Text**
 4. Specify the URL for your SCIM endpoint
