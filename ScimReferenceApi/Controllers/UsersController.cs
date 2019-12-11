@@ -20,18 +20,18 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
     [Route(ControllerConstants.DefualtUserRoute)]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UsersController : ControllerBase
     {
-        private readonly ScimContext _context;
-        private readonly ILogger<UsersController> _log;
+        private readonly ScimContext context;
+        private readonly ILogger<UsersController> logger;
         private UserProvider provider;
 
-        public UsersController(ScimContext context, ILogger<UsersController> log)
+        public UsersController(ScimContext context, ILogger<UsersController> logger)
         {
-            this._context = context;
-            this._log = log;
-            this.provider = new UserProvider(_context, _log);
+            this.context = context;
+            this.logger = logger;
+            this.provider = new UserProvider(this.context, this.logger);
         }
 
         [HttpGet]
@@ -42,26 +42,26 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             IEnumerable<string> requested = this.Request.Query[QueryKeys.Attributes].SelectMany((att) => att.Split(ControllerConstants.DelimiterComma));
             IEnumerable<string> exculted = this.Request.Query[QueryKeys.ExcludedAttributes].SelectMany((att) => att.Split(ControllerConstants.DelimiterComma));
 
-            ListResponse<Resource> list = await provider.Query(query, requested, exculted).ConfigureAwait(false);
+            ListResponse<Resource> list = await this.provider.Query(query, requested, exculted).ConfigureAwait(false);
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
             return list;
         }
 
-        [HttpGet(ControllerConstants.UriID)]
+        [HttpGet(ControllerConstants.Identifier)]
         public async Task<ActionResult<User>> Get(string id)
         {
 
-            User User = (User)await provider.GetById(id).ConfigureAwait(false);
+            User User = (User)await this.provider.GetById(id).ConfigureAwait(false);
 
             if (User == null)
             {
                 ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
-                return NotFound(notFoundError);
+                return this.NotFound(notFoundError);
             }
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return Ok(User);
+            return this.Ok(User);
         }
 
         [HttpPost]
@@ -76,83 +76,83 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             catch (ArgumentException)
             {
                 ErrorResponse invalidJSON = new ErrorResponse(ErrorDetail.Unparsable, ErrorDetail.Status400);
-                return BadRequest(invalidJSON);
+                return this.BadRequest(invalidJSON);
             }
             if (String.IsNullOrWhiteSpace(item.UserName))
             {
                 ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.NoUsername, ErrorDetail.Status400);
-                return BadRequest(badRequestError);
+                return this.BadRequest(badRequestError);
             }
 
-            bool Exists = this._context.Users.Any(x => x.UserName == item.UserName);
+            bool Exists = this.context.Users.Any(x => x.UserName == item.UserName);
             if (Exists == true)
             {
                 ErrorResponse conflictError = new ErrorResponse(ErrorDetail.UsernameConflict, ErrorDetail.Status409);
-                return Conflict(conflictError);
+                return this.Conflict(conflictError);
             }
 
             await this.provider.Add(item).ConfigureAwait(false);
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
+            return this.CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
 
         }
 
-        [HttpPut(ControllerConstants.UriID)]
+        [HttpPut(ControllerConstants.Identifier)]
         public async Task<ActionResult<User>> Put(string id, User item)
         {
 
             if (id != item.Identifier)
             {
                 ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.Mutability, ErrorDetail.Status400);
-                return BadRequest(badRequestError);
+                return this.BadRequest(badRequestError);
             }
             if (item.UserName == null)
             {
                 ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.NoUsername, ErrorDetail.Status400);
-                return BadRequest(badRequestError);
+                return this.BadRequest(badRequestError);
             }
 
-            var User = this._context.CompleteUsers()
+            var User = this.context.CompleteUsers()
                 .Where(p => p.Identifier == id)
                 .SingleOrDefault();
 
             if (User == null)
             {
                 ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
-                return NotFound(notFoundError);
+                return this.NotFound(notFoundError);
             }
 
             await this.provider.Replace(item, User).ConfigureAwait(false);
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return Ok(User);
+            return this.Ok(User);
         }
 
-        [HttpDelete(ControllerConstants.UriID)]
+        [HttpDelete(ControllerConstants.Identifier)]
         public async Task<IActionResult> Delete(string id)
         {
-            var User = await this._context.Users.FindAsync(id).ConfigureAwait(false);
+            var User = await this.context.Users.FindAsync(id).ConfigureAwait(false);
             if (User == null)
             {
                 ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
-                return NotFound(notFoundError);
+                return this.NotFound(notFoundError);
             }
 
             await this.provider.Delete(User).ConfigureAwait(false);
 
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return NoContent();
+            return this.NoContent();
         }
 
-        [HttpPatch(ControllerConstants.UriID)]
+        [HttpPatch(ControllerConstants.Identifier)]
         public IActionResult Patch(string id, JObject body)
         {
 
             this.provider.Update(id, body);
 
-            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
+            return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
         }
 
         private static User BuildUser(JObject body)

@@ -25,7 +25,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 DocumentationResource = "http://example.com/help/scim.html"
             };
             config.AddAuthenticationScheme(SCIMAuthenticationScheme.CreateOpenStandardForAuthorizationBearerTokenScheme());
-            return Ok(config);
+            return this.Ok(config);
         }
     }
 }

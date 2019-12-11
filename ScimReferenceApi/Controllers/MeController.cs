@@ -12,43 +12,43 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
     [ApiController]
     public class MeController : ControllerBase
     {
-        private readonly ScimContext _context;
-        private readonly ILogger<UsersController> _log;
+        private readonly ScimContext context;
+        private readonly ILogger<UsersController> logger;
 
         public MeController(ScimContext context, ILogger<UsersController> log)
         {
-            this._context = context;
-            this._log = log;
+            this.context = context;
+            this.logger = log;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
+            return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
         }
 
         [HttpPost]
         public IActionResult Post()
         {
-            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
+            return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
         }
 
-        [HttpPut(ControllerConstants.UriID)]
+        [HttpPut(ControllerConstants.Identifier)]
         public IActionResult Put()
         {
-            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
+            return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
         }
 
-        [HttpDelete(ControllerConstants.UriID)]
+        [HttpDelete(ControllerConstants.Identifier)]
         public IActionResult Delete()
         {
-            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
+            return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
         }
 
-        [HttpPatch(ControllerConstants.UriID)]
+        [HttpPatch(ControllerConstants.Identifier)]
         public IActionResult Patch()
         {
-            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
+            return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
         }
     }
 }

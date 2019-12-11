@@ -28,7 +28,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             return items;
         }
 
-        [HttpGet(ControllerConstants.UriID)]
+        [HttpGet(ControllerConstants.Identifier)]
         public ActionResult<TypeScheme> Get(string id)
         {
             string schmea = System.IO.File.ReadAllText(ControllerConstants.ReferenceCodeSchemaFilePath);
@@ -36,7 +36,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             TypeScheme item = items.FirstOrDefault(sch => sch.Identifier.Equals(id, StringComparison.InvariantCultureIgnoreCase) || sch.Identifier.EndsWith(id, StringComparison.InvariantCultureIgnoreCase));
             if (item == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
             return item;
         }
