@@ -25,7 +25,7 @@ Use this reference code to get started building a [SCIM](https://docs.microsoft.
 #### Currently supported
 |Endpoint|Description|Capabilities|
 |---|---|---|
-|/User|Perform CRUD operations on a user object.|Create <br/> Update <br/> Delete <br/> Get <br/> List <br/> Filter <br/> Sort <br/> Patch <br/> Paginate|
+|/User|Perform CRUD operations on a user object.|Create <br/> Update (PUT and PATCH) <br/> Delete <br/> Get <br/> List <br/> Filter <br/> Sort <br/> Patch <br/> Paginate|
 |/Group|Perform CRUD operations on a group object.|Create <br/> Update <br/> Delete <br/> Get <br/> List <br/> Filter <br/> Sort <br/> Patch <br/> Paginate|
 |/Bulk|Bulk operations allow you to perform operations on a large collection of resource objects in a single operation (e.g. update memberships for a large group).|Currently unavailabel in reference code|
 |/Schemas|The set of attributes supported by each client and service provider can vary. While one service provider may include “name”, “title”, and “emails” another service provider may use “name”, “title”, and “phoneNumbers”. The schemas endpoint allows for discovery of the attributes supported.|Currently unavailabel in reference code|
@@ -38,6 +38,7 @@ Use this reference code to get started building a [SCIM](https://docs.microsoft.
 * [.NET core 2.2 or above](https://dotnet.microsoft.com/download/dotnet-core/2.2) (required)
 * IIS (recommended)
 * Testing platform such as [Postman](https://www.getpostman.com/downloads/) or [Jmeter](https://jmeter.apache.org/download_jmeter.cgi) (recommended)
+    * [Java](https://www.java.com/en/download/) is required if using Jmeter
 
 ## Clone or fork the repo and build your SCIM endpoint
 
@@ -66,8 +67,8 @@ All the endpoints are are at the host /api/ directory and can be interacted with
 This project provides test cases that you can use to ensure your application is SCIM compliant. The test cases have been authored for both Jmeter and Postman.
 
 #### Postman testing instructions
-1. [Download Postman collection](https:aka.ms/ProvisioningPostman)
-2. [Download the Postman client](https://www.getpostman.com/downloads/)
+1. Download the [Postman collection](https:aka.ms/ProvisioningPostman)
+2. Download the [Postman client](https://www.getpostman.com/downloads/)
 3. Import the postman collection as raw text. **Import** > **Paste Raw Text**
 4. Specify the URL for your SCIM endpoint
     1. When running the project locally, the format is typically (replace 44355 with the port found in the URL that opens up when you execute the project): https://localhost:44355/api/users 
@@ -82,8 +83,8 @@ This project provides test cases that you can use to ensure your application is 
 The repository contains a .jmx file that can be used with Jmeter or other simialr tools for testing purposes. The http request default is set to send requests to https://scimreferenceapi19.azurewebsites.net/ but will need to be changed to your specific URI.
 
 
-1. Download Java 
-2. [Download Jmeter](https://jmeter.apache.org/download_jmeter.cgi) (Apache open source testing framework built with java available) 
+1. Download [Java](https://www.java.com/en/download/) 
+2. Download [Jmeter](https://jmeter.apache.org/download_jmeter.cgi) (Apache open source testing framework built with java available) 
 3. Add Java to PATH
 3. Unzip the download there and execute the ApacheJMeter.jar file
 4. Once it runs file -> open ~.jmx will load the tests
