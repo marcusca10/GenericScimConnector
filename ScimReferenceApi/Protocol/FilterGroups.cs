@@ -19,7 +19,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
         public FilterGroups(ScimContext context)
         {
-            _context = context;
+            this._context = context;
         }
 
         public IEnumerable<Group> FilterGen(string query)
@@ -32,7 +32,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                 if (string.Equals(key, QueryKeys.Filter, StringComparison.OrdinalIgnoreCase))
                 {
                     string filterExpression = keyedValues[key];
-                    AllGroups = GetGroups(filterExpression);
+                    AllGroups = this.GetGroups(filterExpression);
 
                 }
             }
@@ -46,7 +46,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             {
                 for (int i = 0; i < results.Count; i++)
                 {
-                    IEnumerable<Group> groups = _context.CompleteGroups();
+                    IEnumerable<Group> groups = this._context.CompleteGroups();
                     Filter currentFilter = (Filter)results.ElementAt(i);
                     while (currentFilter != null)
                     {

@@ -24,9 +24,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             if (login == "SecureLogin")
             {
                 string tokenString = GenerateJSONWebToken();
-                return Ok(new { token = tokenString });
+                return this.Ok(new { token = tokenString });
             }
-            return BadRequest();
+            return this.BadRequest();
         }
 
         private static string GenerateJSONWebToken()

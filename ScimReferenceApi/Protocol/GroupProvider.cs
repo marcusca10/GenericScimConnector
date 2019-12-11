@@ -22,7 +22,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
     {
         private readonly ScimContext _context;
         private readonly ILogger<UsersController> _log;
-        private string[] allwaysRetuned = ControllerConstants.AllwaysRetunedAttributes;
+        private string[] allwaysRetuned = ControllerConstants.AlwaysRetunedAttributes;
         private int DefaultStartIndex = 1;
 
         public GroupProvider(ScimContext context, ILogger<UsersController> log)
@@ -37,7 +37,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             IEnumerable<Group> groups;
             if (!string.IsNullOrWhiteSpace(query))
             {
-                groups = new FilterGroups(_context).FilterGen(query);
+                groups = new FilterGroups(this._context).FilterGen(query);
             }
             else
             {
@@ -56,9 +56,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 
             int start = int.Parse(startIndex, CultureInfo.InvariantCulture);
 
-            if (start < DefaultStartIndex)
+            if (start < this.DefaultStartIndex)
             {
-                start = DefaultStartIndex;
+                start = this.DefaultStartIndex;
             }
 
             int? count = null;

@@ -19,7 +19,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
         public FilterUsers(ScimContext context)
         {
-            _context = context;
+            this._context = context;
         }
 
         public IEnumerable<User> FilterGen(string query)
@@ -32,12 +32,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
             if (filterExpression != null)
             {
-                AllUsers = GetUsers(filterExpression);
+                AllUsers = this.GetUsers(filterExpression);
 
             }
             else
             {
-                AllUsers = _context.CompleteUsers().AsEnumerable();
+                AllUsers = this._context.CompleteUsers().AsEnumerable();
             }
 
             return AllUsers;
@@ -50,7 +50,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             {
                 for (int i = 0; i < results.Count; i++)
                 {
-                    IEnumerable<User> users = _context.CompleteUsers();
+                    IEnumerable<User> users = this._context.CompleteUsers();
                     Filter currentFilter = (Filter)results.ElementAt(i);
                     while (currentFilter != null)
                     {
@@ -129,13 +129,13 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                                     users = users.Where(p => !p.DisplayName.Equals(value ?? String.Empty, StringComparison.InvariantCultureIgnoreCase)).ToList();
                                     break;
                                 case AttributeNames.ElectronicMailAddresses:
-                                    users = _context.Users.Where(p => p.ElectronicMailAddresses.Any(e => e[propName].ToString().Equals(value ?? String.Empty, StringComparison.InvariantCultureIgnoreCase))).ToList();
+                                    users = this._context.Users.Where(p => p.ElectronicMailAddresses.Any(e => e[propName].ToString().Equals(value ?? String.Empty, StringComparison.InvariantCultureIgnoreCase))).ToList();
                                     break;
                                 case AttributeNames.Name:
                                     users = users.Where(p => !p.Name[propName].Equals(value ?? String.Empty)).ToList();
                                     break;
                                 case AttributeNames.PhoneNumbers:
-                                    users = _context.Users.Where(p => !p.PhoneNumbers.Any(n => n[propName].ToString().Equals(value ?? String.Empty, StringComparison.InvariantCultureIgnoreCase))).ToList();
+                                    users = this._context.Users.Where(p => !p.PhoneNumbers.Any(n => n[propName].ToString().Equals(value ?? String.Empty, StringComparison.InvariantCultureIgnoreCase))).ToList();
                                     break;
                                 case AttributeNames.PreferredLanguage:
                                     users = users.Where(p => !p.PreferredLanguage.Equals(value ?? String.Empty, StringComparison.InvariantCultureIgnoreCase)).ToList();
@@ -309,7 +309,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                                     users = users.Where(p => !string.IsNullOrWhiteSpace(p.PreferredLanguage)).ToList();
                                     break;
                                 case AttributeNames.Roles:
-                                    users = _context.Users.Where(p => p.Roles.Any(r => !string.IsNullOrWhiteSpace(r[propName].ToString()))).ToList();
+                                    users = this._context.Users.Where(p => p.Roles.Any(r => !string.IsNullOrWhiteSpace(r[propName].ToString()))).ToList();
                                     break;
                                 case AttributeNames.Title:
                                     users = users.Where(p => !string.IsNullOrWhiteSpace(p.Title)).ToList();
