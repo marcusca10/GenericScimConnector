@@ -3,6 +3,7 @@
 //------------------------------------------------------------
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -13,7 +14,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
     //Controller for generating a bearer token for authorization during testing
     //This is not meant to replace proper Oauth for authentication purposes. 
     //Instead this is meant to validate the bearer token authorization set up
-    [Route("api/Key")]
+    [Route(ControllerConstants.DefaultKeyRoute)]
     public class KeyController : ControllerBase
     {
         //make more secure.

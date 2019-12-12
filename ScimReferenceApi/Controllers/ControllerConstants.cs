@@ -12,9 +12,13 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         public const string UriID = "{id}";
         public const string ReferenceCodeSchemaFilePath = "./JsonConstants/ReferenceCodeSchema.json";
         public const string ResourceTypeFilePath = "./JsonConstants/resourceTypes.json";
-        public const string DefaultApiRoute = "api/";
+        public const string DefaultApiRoute = "Scim/";
         public static readonly string[] AllwaysRetunedAttributes = { AttributeNames.Identifier, AttributeNames.Schemas, AttributeNames.Active, AttributeNames.Metadata };//TODO Read from schema
-        public const string DefaultGroupRoute = DefaultApiRoute + "Groups";
-        public const string DefualtUserRoute = DefaultApiRoute + "Users";
+        public const string DefaultGroupsRoute = DefaultApiRoute + "Groups";
+        public const string DefaultUsersRoute = DefaultApiRoute + "Users";
+        public const string DefaultKeyRoute = DefaultApiRoute + "Key";
+        public const string DefaultResourceTypesRoute = DefaultApiRoute + "ResourceTypes";
+        public const string DefaultSchemasRoute = DefaultApiRoute + "Schemas";
+        public const string DefaultServiceProviderConfigRoute = DefaultApiRoute + "ServiceProviderConfig";
     }
 }
