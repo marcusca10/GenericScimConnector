@@ -28,7 +28,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             return items;
         }
 
-        [HttpGet(ControllerConstants.Identifier)]
+        [HttpGet(ControllerConstants.AttributeValueIdentifier)]
         public ActionResult<TypeScheme> Get(string id)
         {
             string schmea = System.IO.File.ReadAllText(ControllerConstants.ReferenceCodeSchemaFilePath);
