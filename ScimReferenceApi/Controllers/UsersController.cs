@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
 
-    [Route(ControllerConstants.DefualtUserRoute)]
+    [Route(ControllerConstants.DefaultUsersRoute)]
     [ApiController]
     [Authorize]
     public class UsersController : ControllerBase
@@ -48,7 +48,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             return list;
         }
 
-        [HttpGet(ControllerConstants.UriID)]
+        [HttpGet(ControllerConstants.UriID)]//todo switch to v2
         public async Task<ActionResult<User>> Get(string id)
         {
 

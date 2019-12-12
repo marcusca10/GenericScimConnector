@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
 
-    [Route(ControllerConstants.DefaultGroupRoute)]
+    [Route(ControllerConstants.DefaultGroupsRoute)]
     [ApiController]
     [Authorize]
     public class GroupsController : ControllerBase
