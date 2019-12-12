@@ -12,7 +12,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
     [ApiController]
     public class ServiceProviderConfig : ControllerBase
     {
-
         public ServiceProviderConfig()
         {
         }
@@ -24,6 +23,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             {
                 DocumentationResource = "http://example.com/help/scim.html"
             };
+
             config.AddAuthenticationScheme(SCIMAuthenticationScheme.CreateOpenStandardForAuthorizationBearerTokenScheme());
             return this.Ok(config);
         }

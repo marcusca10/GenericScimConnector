@@ -21,8 +21,20 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             this.logger = log;
         }
 
+        [HttpDelete(ControllerConstants.AttributeValueIdentifier)]
+        public IActionResult Delete()
+        {
+            return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
+        }
+
         [HttpGet]
         public IActionResult Get()
+        {
+            return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
+        }
+
+        [HttpPatch(ControllerConstants.AttributeValueIdentifier)]
+        public IActionResult Patch()
         {
             return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
         }
@@ -33,22 +45,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
         }
 
-        [HttpPut(ControllerConstants.Identifier)]
+        [HttpPut(ControllerConstants.AttributeValueIdentifier)]
         public IActionResult Put()
         {
             return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
-        }
-
-        [HttpDelete(ControllerConstants.Identifier)]
-        public IActionResult Delete()
-        {
-            return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
-        }
-
-        [HttpPatch(ControllerConstants.Identifier)]
-        public IActionResult Patch()
-        {
-            return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
-        }
+        }        
     }
 }

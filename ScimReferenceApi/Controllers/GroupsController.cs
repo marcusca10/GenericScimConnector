@@ -49,7 +49,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
         }
 
-        [HttpGet(ControllerConstants.Identifier)]
+        [HttpGet(ControllerConstants.AttributeValueIdentifier)]
         public async Task<ActionResult<Group>> Get(string id)
         {
             StringValues requested = this.Request.Query[QueryKeys.Attributes];
@@ -91,7 +91,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             return this.CreatedAtAction(nameof(Get), new { id = item.DisplayName }, item);
         }
 
-        [HttpPut(ControllerConstants.Identifier)]
+        [HttpPut(ControllerConstants.AttributeValueIdentifier)]
         public async Task<ActionResult<Group>> Put(string id, Group item)
         {
             if (id != item.Identifier)
@@ -107,7 +107,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             return this.Ok(group);
         }
 
-        [HttpDelete(ControllerConstants.Identifier)]
+        [HttpDelete(ControllerConstants.AttributeValueIdentifier)]
         public async Task<IActionResult> Delete(string id)
         {
             Group Group = await this.context.Groups.FindAsync(id).ConfigureAwait(false);
@@ -124,7 +124,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             return this.NoContent();
         }
 
-        [HttpPatch(ControllerConstants.Identifier)]
+        [HttpPatch(ControllerConstants.AttributeValueIdentifier)]
         public IActionResult Patch(string id, JObject body)
         {
 

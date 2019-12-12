@@ -48,7 +48,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             return list;
         }
 
-        [HttpGet(ControllerConstants.Identifier)]
+        [HttpGet(ControllerConstants.AttributeValueIdentifier)]
         public async Task<ActionResult<User>> Get(string id)
         {
 
@@ -98,7 +98,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
         }
 
-        [HttpPut(ControllerConstants.Identifier)]
+        [HttpPut(ControllerConstants.AttributeValueIdentifier)]
         public async Task<ActionResult<User>> Put(string id, User item)
         {
 
@@ -129,7 +129,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             return this.Ok(User);
         }
 
-        [HttpDelete(ControllerConstants.Identifier)]
+        [HttpDelete(ControllerConstants.AttributeValueIdentifier)]
         public async Task<IActionResult> Delete(string id)
         {
             var User = await this.context.Users.FindAsync(id).ConfigureAwait(false);
@@ -146,7 +146,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             return this.NoContent();
         }
 
-        [HttpPatch(ControllerConstants.Identifier)]
+        [HttpPatch(ControllerConstants.AttributeValueIdentifier)]
         public IActionResult Patch(string id, JObject body)
         {
 
