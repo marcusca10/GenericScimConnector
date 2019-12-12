@@ -34,7 +34,7 @@ Use this reference code to get started building a [SCIM](https://docs.microsoft.
 
 * [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) (required)
 * [.NET core 2.2 or above](https://dotnet.microsoft.com/download/dotnet-core/2.2) (required)
-* IIS (recommended)
+* [IIS](https://www.microsoft.com/download/details.aspx?id=48264) (recommended)
 * Testing platform such as [Postman](https://www.getpostman.com/downloads/) or [Jmeter](https://jmeter.apache.org/download_jmeter.cgi) (recommended)
     * [Java](https://www.java.com/en/download/) is required if using Jmeter
 
@@ -47,7 +47,7 @@ The solution is in the ScimReferenceApi folder and can be built and run from Vis
 2. Open Visual Studio and choose clone or checkout. 
 3. Use the clone link from Github int the repository link feild and click clone to make a local copy of all files. The solution should open.
 4. Switch views to the SCIMReference.sln
-5. Click IIS Express to execute (the project will build and you will be redirected to a web page with the local host URL)
+5. Click IIS Express to execute (the project will launch as a web page with the local host URL)
 
 #### Steps to host the solution in the Azure
 1. Open Visual Studio and sign into the account that has access to your hosting resources. 
@@ -100,18 +100,18 @@ The repository contains a .jmx file that can be used with Jmeter or other simial
 
 This reference code was developed as a .Net core MVC web API for SCIM provisioning. The three main folders are Schemas, Controllers, and Protocol. 
 * The **Schemas** folder includes the models for the User and Group resources along with some abstract classes like Schematized for shared functionality. Schemas also contains an Attributes folder which contains the class definitions for complex attributes of Users and Groups such as address
-* The **Controllers** folder contains the controllers for the various SCIM endpoints. Here again the Users and Groups are the most important aspect to consider as SCIM was designed for resource provisioning. Both resource controllers include 7 main functions for the HTTP verbs pertaining to CRUD for the resource. 
+* The **Controllers** folder contains the controllers for the various SCIM endpoints. Here again the Users and Groups are the most important aspect to consider as SCIM was designed for resource provisioning. Both resource controllers include HTTP verbs to perform CRUD operations on the resource (GETP, POST, PUT, PATCH, DELETE). 
 * The **Protocol** folder contains the code for actions relating to the way resources are returned according to the SCIM RFC. Such as returning multiple resources as a list or returning only specific resources based on a filter.
-Here there is also the most of the logic. For example FilterExpression contians the logic for turning a querry into a list of linked lists of single filters. There is also the logic for turning a patch request into an operation with attributes 
+Here there is also the most of the logic. For example FilterExpression contians the logic for turning a query into a list of linked lists of single filters. There is also the logic for turning a patch request into an operation with attributes 
 pertating to the value path and the type of operation that can then be used to apply changes to resource objects.
 Currently the user extension enterpriseUser is handled at the user endpoint as well by checking the schemas included with a post to determine the type of user. Therefore to add another extension one would have to include another schema with it and check for its existance in the post as well.
 
 ## Common scenarios
 |Scenario|How-to|
 |---|---|
-|Enable / disable authorization|Navigate to the UsersController.cs file and comment out the authorize command|
-|Add additional filterable attributes|Navigate to the FilterUsers.cs or FilterGroups.cs file and update the method to take a filter expression|
-|Extend the user schema to support additional attributes||
+|Enable / disable authorization|Navigate to the UsersController.cs and GroupController.cs files and comment / uncomment out the authorize command.|
+|Add additional filterable attributes|Navigate to the FilterUsers.cs or FilterGroups.cs file and update the method to include the attrbutes that you would like to support filtering for. |
+|Support extensions beyond enterpriseUser| 1. Copy the enterpriseUser class 2. Change the class to your custom extension name 3. Update the schema to match the desired naming convention 4. Mirror what was done with the enterpriseAttributes and replace with the attributes that you need.|
 
 ## Contents
 
