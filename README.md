@@ -59,7 +59,7 @@ The solution is in the ScimReferenceApi folder and can be built and run from Vis
 6. Remove the date time numbers from the app name. The name field is used for both the app name and the SCIM URL.
 7. Select the resource group and plan you would like to use and hit publish.
 
-All the endpoints are are at the host /api/ directory and can be interacted with the standard HTTP requests. eg {host}/api/Users can take a GET reequest that will return all users. The /api/ route can be changed at the top of each controller.
+All the endpoints are are at the host /scim/ directory and can be interacted with the standard HTTP requests. eg {host}/scim/Users can take a GET reequest that will return all users. The /scim/ route can be changed at the top of each controller.
 
 ## Test your SCIM endpoint
 This project provides test cases that you can use to ensure your application is SCIM compliant. The test cases have been authored for both Jmeter and Postman.
@@ -67,10 +67,10 @@ This project provides test cases that you can use to ensure your application is 
 #### Postman testing instructions
 1. Download the [Postman collection](https://aka.ms/ProvisioningPostman)
 2. Download the [Postman client](https://www.getpostman.com/downloads/)
-3. Import the postman collection as raw text. **Import** > **Paste Raw Text**
-4. Specify the URL for your SCIM endpoint
-    1. When running the project locally, the format is typically (replace 44355 with the port found in the URL that opens up when you execute the project): https://localhost:44355/api/users 
-    2. When hosting the endpoint in Azure, the URL is typically similar to: https://scimreferenceapi19.azurewebsites.net/api/users)
+3. Import the postman collection from the link by pasting the link. **Import** > **Import From Link**
+4. Specify the URL for your SCIM endpoint by creating enviroment variables
+    1. When running the project locally, the format is typically (replace 44355 with the port found in the URL that opens up when you execute the project): https://localhost:44355/scim/users. Create the {{Server}}{{Port}}/{{Api}} variables to match.
+    2. When hosting the endpoint in Azure, the URL is typically similar to: https://scimreferenceapi19.azurewebsites.net/scim/users)
 5. Turn off SSL Cert verification. **File** > **Settings** > **SSL certificate verification**
 6. Ensure that you are authorized to make requests to the endpoint
     1. Option 1: Turn off authorization for your endpoint (this is fine for testing purposes, but there must be some form of authorization for apps being used by customers in production.
