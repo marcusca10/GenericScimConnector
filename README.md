@@ -33,10 +33,10 @@ Use this reference code to get started building a [SCIM](https://docs.microsoft.
 ## Prerequisites
 
 * [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) (required)
-* [.NET core 2.2 or above](https://dotnet.microsoft.com/download/dotnet-core/2.2) (required)
+* [.NET core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) (required)
 * [IIS](https://www.microsoft.com/download/details.aspx?id=48264) (recommended)
 * Testing platform such as [Postman](https://www.getpostman.com/downloads/) or [Jmeter](https://jmeter.apache.org/download_jmeter.cgi) (recommended)
-    * [Java](https://www.java.com/en/download/) is required if using Jmeter
+* [Java](https://www.java.com/en/download/) is required if using Jmeter
 
 ## Clone or fork the repo and build your SCIM endpoint
 
