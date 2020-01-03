@@ -19,7 +19,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
     [Route(ControllerConstants.DefaultRouteGroups)]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class GroupsController : ControllerBase
     {
         private readonly ScimContext context;

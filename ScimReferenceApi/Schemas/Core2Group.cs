@@ -123,8 +123,13 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
         public static IQueryable<Core2Group> CompleteGroups(this ScimContext context)
         {
-            return context.Groups.Include("meta")
-                    .Include("Members");
+            if (!context.Groups.Any())
+            {
+                return context.Groups;
+            }
+
+            return context.Groups.Include(AttributeNames.Metadata)
+                    .Include(AttributeNames.DisplayName);
         }
 
         private static void PatchMembers(this Core2Group group, PatchOperation operation)
