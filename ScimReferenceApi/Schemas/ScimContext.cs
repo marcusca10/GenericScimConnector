@@ -10,6 +10,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
     {
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //modelBuilder.Entity<Resource>().Property(e => e.Identifier).ValueGeneratedOnAdd();
             modelBuilder.Entity<Core2EnterpriseUser>().HasBaseType<Core2User>();
         }
         public ScimContext(DbContextOptions<ScimContext> options) : base(options) { }

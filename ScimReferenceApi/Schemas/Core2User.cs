@@ -114,7 +114,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                 return context.Users;
             }
 
-            return context.Users.Include(AttributeNames.Metadata)
+            return context.Users.Include(u => u.Metadata)
                     .Include(AttributeNames.AttributeName)
                     .Include(AttributeNames.AttributeEmails)
                     .Include(AttributeNames.AttributePhones)

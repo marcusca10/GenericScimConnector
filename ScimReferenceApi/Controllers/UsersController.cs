@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
 
-    [Route(ControllerConstants.DefualtUserRoute)]
+    [Route(ControllerConstants.DefaultRouteUsers)]
     [ApiController]
     //[Authorize]
     public class UsersController : ControllerBase
@@ -99,6 +99,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return this.Conflict(conflictError);
             }
 
+            //this.context.Users.Add(item);
+            //await context.SaveChangesAsync().ConfigureAwait(false);
             await this.provider.Add(item).ConfigureAwait(false);
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;

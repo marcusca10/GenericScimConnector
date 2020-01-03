@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
-    [Route(ControllerConstants.DefaultSchemasRoute)]
+    [Route(ControllerConstants.DefaultRouteSchemas)]
     [ApiController]
     public class SchemasController : ControllerBase
     {

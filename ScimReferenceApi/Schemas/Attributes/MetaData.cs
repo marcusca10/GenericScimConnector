@@ -5,6 +5,7 @@
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
@@ -14,6 +15,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
     {
         [Key]
         [ScaffoldColumn(false)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
 
         [DataMember(Name = AttributeNames.ResourceType, Order = 0)]
