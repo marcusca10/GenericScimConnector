@@ -3,6 +3,8 @@
 //------------------------------------------------------------
 
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas

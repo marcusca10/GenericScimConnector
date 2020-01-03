@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
 
-    [Route(ControllerConstants.DefualtUserRoute)]
+    [Route(ControllerConstants.DefaultRouteUsers)]
     [ApiController]
     //[Authorize]
     public class UsersController : ControllerBase

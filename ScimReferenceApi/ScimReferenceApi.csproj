@@ -8,6 +8,7 @@
     <Company>Microsoft Corporation</Company>
     <Authors>Microsoft Corporation</Authors>
     <Copyright>Microsoft Corporation</Copyright>
+    <StartupObject>Microsoft.AzureAD.Provisioning.ScimReference.Api.Program</StartupObject>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

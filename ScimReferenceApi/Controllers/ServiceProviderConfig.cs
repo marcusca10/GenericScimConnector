@@ -8,7 +8,7 @@ using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Config
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
-    [Route("api/ServiceProviderConfig")]
+    [Route(ControllerConstants.DefaultRouteServiceConfiguration)]
     [ApiController]
     public class ServiceProviderConfig : ControllerBase
     {
