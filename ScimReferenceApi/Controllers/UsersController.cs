@@ -49,10 +49,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         }
 
         [HttpGet(ControllerConstants.AttributeValueIdentifier)]
-        public async Task<ActionResult<User>> Get(string id)
+        public async Task<ActionResult<Core2User>> Get(string id)
         {
 
-            User User = (User)await this.provider.GetById(id).ConfigureAwait(false);
+            Core2User User = (Core2User)await this.provider.GetById(id).ConfigureAwait(false);
 
             if (User == null)
             {
@@ -65,10 +65,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> Post(JObject body)
+        public async Task<ActionResult<Core2User>> Post(JObject body)
         {
 
-            User item = null;
+            Core2User item = null;
             try
             {
                 item = BuildUser(body);
@@ -99,7 +99,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         }
 
         [HttpPut(ControllerConstants.AttributeValueIdentifier)]
-        public async Task<ActionResult<User>> Put(string id, User item)
+        public async Task<ActionResult<Core2User>> Put(string id, Core2User item)
         {
 
             if (id != item.Identifier)
@@ -155,21 +155,21 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
         }
 
-        private static User BuildUser(JObject body)
+        private static Core2User BuildUser(JObject body)
         {
             if (body[AttributeNames.Schemas] == null)
             {
                 throw new ArgumentException(AttributeNames.Schemas);
             }
             JEnumerable<JToken> shemas = body[AttributeNames.Schemas].Children();
-            User item;
+            Core2User item;
             if (shemas.Contains(SchemaIdentifiers.Core2EnterpriseUser))
             {
-                item = body.ToObject<EnterpriseUser>();
+                item = body.ToObject<Core2EnterpriseUser>();
             }
             else
             {
-                item = body.ToObject<User>();
+                item = body.ToObject<Core2User>();
             }
 
             return item;

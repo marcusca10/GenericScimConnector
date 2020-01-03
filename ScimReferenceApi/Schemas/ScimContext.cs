@@ -10,12 +10,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
     {
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<EnterpriseUser>().HasBaseType<User>();
+            modelBuilder.Entity<Core2EnterpriseUser>().HasBaseType<Core2User>();
         }
         public ScimContext(DbContextOptions<ScimContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<Core2User> Users { get; set; }
 
-        public DbSet<Group> Groups { get; set; }
+        public DbSet<Core2Group> Groups { get; set; }
     }
 }

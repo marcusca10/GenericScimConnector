@@ -31,7 +31,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             this.Metadata =
                 new Metadata()
                 {
-                    ResourceType = Types.ResourceType
+                    ResourceType = ResourceTypes.ResourceType
                 };
         }
 

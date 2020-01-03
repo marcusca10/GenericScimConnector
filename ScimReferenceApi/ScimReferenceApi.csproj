@@ -27,9 +27,15 @@
 
   <ItemGroup>
     
+    <Compile Remove="Util\**" />
+    
     <Compile Remove="wwwroot\**" />
+    
+    <Content Remove="Util\**" />
     <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="Util\**" />
     <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="Util\**" />
     <None Remove="wwwroot\**" />
   </ItemGroup>
 
@@ -56,7 +62,6 @@
 
   <ItemGroup>
     <Folder Include="Logs\" />
-    <Folder Include="Util\" />
   </ItemGroup>
 
 </Project>

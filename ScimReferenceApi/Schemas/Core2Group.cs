@@ -2,34 +2,27 @@
 // Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.GroupAttributes;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.GroupAttributes;
+using Microsoft.EntityFrameworkCore;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
     [DataContract]
-    public class Group : Resource
+    public class Core2Group : Resource
     {
-        public Group()
+        public Core2Group()
         {
             this.AddSchema(SchemaIdentifiers.Core2Group);
-            this.meta =
+            this.Metadata =
                 new Metadata()
                 {
-                    ResourceType = Types.Group
+                    ResourceType = ResourceTypes.Group
                 };
-        }
-
-        [DataMember(Name = AttributeNames.Metadata)]
-        public Metadata meta
-        {
-            get;
-            set;
         }
 
         [DataMember(Name = AttributeNames.DisplayName)]
@@ -45,17 +38,18 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             get;
             set;
         }
+
+        [DataMember(Name = AttributeNames.Metadata)]
+        public Metadata Metadata
+        {
+            get;
+            set;
+        }
     }
 
     public static class GroupExtensions
     {
-        public static IQueryable<Group> CompleteGroups(this ScimContext context)
-        {
-            return context.Groups.Include("meta")
-                    .Include("Members");
-        }
-
-        public static void Apply(this Group group, PatchOperation operation)
+        public static void Apply(this Core2Group group, PatchOperation operation)
         {
             if (null == operation)
             {
@@ -127,9 +121,13 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             }
         }
 
+        public static IQueryable<Core2Group> CompleteGroups(this ScimContext context)
+        {
+            return context.Groups.Include("meta")
+                    .Include("Members");
+        }
 
-
-        private static void PatchMembers(this Group group, PatchOperation operation)
+        private static void PatchMembers(this Core2Group group, PatchOperation operation)
         {
             //path Members expects operation to only contain one item
 
@@ -142,7 +140,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                 group.PatchMembers(operation);
             }
         }
-
 
         internal static IList<Member> PatchMembers(IList<Member> members, PatchOperation operation)
         {

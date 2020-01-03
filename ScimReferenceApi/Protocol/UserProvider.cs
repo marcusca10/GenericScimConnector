@@ -20,10 +20,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
     public class UserProvider : IProvider
     {
+        private string[] alwaysRetuned = ControllerConstants.AlwaysRetunedAttributes;
         private readonly ScimContext context;
+        private int defaultStartIndex = 1;
         private readonly ILogger<UsersController> logger;
-        private string[] allwaysRetuned = ControllerConstants.AlwaysRetunedAttributes;
-        private int DefaultStartIndex = 1;
 
         public UserProvider(ScimContext context, ILogger<UsersController> log)
         {
@@ -34,7 +34,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         public async Task<ListResponse<Resource>> Query(string query, IEnumerable<string> requested, IEnumerable<string> exculted)
         {
 
-            IEnumerable<User> users;
+            IEnumerable<Core2User> users;
 
             if (!string.IsNullOrWhiteSpace(query))
             {
@@ -57,9 +57,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             int start = int.Parse(startIndex, CultureInfo.InvariantCulture);
 
-            if (start < this.DefaultStartIndex)
+            if (start < this.defaultStartIndex)
             {
-                start = this.DefaultStartIndex;
+                start = this.defaultStartIndex;
             }
 
             int total = users.Count();
@@ -72,12 +72,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 users = users.Take(count.Value);
             }
 
-
-
             users = users.Select(u =>
-                ColumnsUtility.FilterAttributes(requested, exculted, u, this.allwaysRetuned)).ToList();
-
-
+                ColumnsUtility.FilterAttributes(requested, exculted, u, this.alwaysRetuned)).ToList();
+            
             ListResponse<Resource> list = new ListResponse<Resource>()
             {
                 TotalResults = total,
@@ -94,15 +91,15 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
         public async Task<Resource> GetById(string id)
         {
-            User User = await this.context.CompleteUsers().FirstOrDefaultAsync(i => i.Identifier.Equals(id, StringComparison.Ordinal)).ConfigureAwait(false);
+            Core2User User = await this.context.CompleteUsers().FirstOrDefaultAsync(i => i.Identifier.Equals(id, StringComparison.Ordinal)).ConfigureAwait(false);
             return User;
         }
 
         public async Task Add(Resource item)
         {
-            User user = (User)item;
-            user.meta.Created = DateTime.Now;
-            user.meta.LastModified = DateTime.Now;
+            Core2User user = (Core2User)item;
+            user.Metadata.Created = DateTime.Now;
+            user.Metadata.LastModified = DateTime.Now;
             this.context.Users.Add(user);
             await this.context.SaveChangesAsync().ConfigureAwait(false);
             this.logger.LogInformation(user.UserName);
@@ -110,10 +107,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
         public async Task Replace(Resource old, Resource next)
         {
-            User item = (User)old;
-            User user = (User)next;
-            item.meta.LastModified = DateTime.Now;
-            user.meta = item.meta;
+            Core2User item = (Core2User)old;
+            Core2User user = (Core2User)next;
+            item.Metadata.LastModified = DateTime.Now;
+            user.Metadata = item.Metadata;
             user.Name = item.Name;
             user.ElectronicMailAddresses = item.ElectronicMailAddresses;
             user.PhoneNumbers = item.PhoneNumbers;
@@ -126,7 +123,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
         public async Task Delete(Resource User)
         {
-            this.context.Users.Remove((User)User);
+            this.context.Users.Remove((Core2User)User);
             await this.context.SaveChangesAsync().ConfigureAwait(false);
             this.logger.LogInformation(User.Identifier);
         }
@@ -162,7 +159,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
                             PatchOperation patchOp = PatchOperation.Create(OperationValue.getOperationName(singleValued.OperationName), singleValued.Path.ToString(), singleValued.Value);
                             usertoModify.Apply(patchOp);
-                            usertoModify.meta.LastModified = DateTime.Now;
+                            usertoModify.Metadata.LastModified = DateTime.Now;
                         }
                     }
                 }
@@ -174,7 +171,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                     foreach (var op in patchSimple.Operations)
                     {
                         usertoModify.Apply(op);
-                        usertoModify.meta.LastModified = DateTime.Now;
+                        usertoModify.Metadata.LastModified = DateTime.Now;
                     }
                 }
             }
