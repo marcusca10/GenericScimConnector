@@ -42,10 +42,18 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             IEnumerable<string> requested = this.Request.Query[QueryKeys.Attributes].SelectMany((att) => att.Split(ControllerConstants.DelimiterComma));
             IEnumerable<string> exculted = this.Request.Query[QueryKeys.ExcludedAttributes].SelectMany((att) => att.Split(ControllerConstants.DelimiterComma));
 
-            ListResponse<Resource> list = await this.provider.Query(query, requested, exculted).ConfigureAwait(false);
-
-            this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return list;
+            try
+            {
+                ListResponse<Resource> list = await this.provider.Query(query, requested, exculted).ConfigureAwait(false);
+            
+                this.Response.ContentType = ControllerConstants.DefaultContentType;
+                return list;
+            }
+            catch (Exception)
+            {
+                //TODO: Log the error and return an appropriate exception. Do the same for groups.
+                throw;
+            }
         }
 
         [HttpGet(ControllerConstants.AttributeValueIdentifier)]

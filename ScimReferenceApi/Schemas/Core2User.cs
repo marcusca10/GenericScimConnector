@@ -109,6 +109,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
     {
         public static IQueryable<Core2User> CompleteUsers(this ScimContext context)
         {
+            if (!context.Users.Any())
+            {
+                return context.Users;
+            }
+
             return context.Users.Include(AttributeNames.Metadata)
                     .Include(AttributeNames.AttributeName)
                     .Include(AttributeNames.AttributeEmails)
