@@ -8,31 +8,24 @@ using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
 {
-    public class EnterpriseAttributes
+    public class Core2EnterpriseUserExtension : ExtensionAttributeBase
     {
-        public EnterpriseAttributes()
+        public Core2EnterpriseUserExtension()
         {
         }
 
         [Key]
         public string Id { get; set; }
 
-        [DataMember(Name = AttributeNames.Department, IsRequired = false, EmitDefaultValue = false)]
-        public string Department
-        {
-            get;
-            set;
-        }
-
-        [DataMember(Name = AttributeNames.Manager, IsRequired = false, EmitDefaultValue = false)]
-        public Manager Manager
-        {
-            get;
-            set;
-        }
-
         [DataMember(Name = AttributeNames.CostCenter, IsRequired = false, EmitDefaultValue = false)]
         public string CostCenter
+        {
+            get;
+            set;
+        }
+
+        [DataMember(Name = AttributeNames.Department, IsRequired = false, EmitDefaultValue = false)]
+        public string Department
         {
             get;
             set;
@@ -52,11 +45,19 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
             set;
         }
 
+        [DataMember(Name = AttributeNames.Manager, IsRequired = false, EmitDefaultValue = false)]
+        public Manager Manager
+        {
+            get;
+            set;
+        }
+
         [DataMember(Name = AttributeNames.Organization, IsRequired = false, EmitDefaultValue = false)]
         public string Organization
         {
             get;
             set;
         }
+        public override string ExtensionSchemaName { get; }
     }
 }

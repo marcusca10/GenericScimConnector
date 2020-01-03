@@ -13,28 +13,20 @@ using System.Runtime.Serialization;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
     [DataContract]
-    public class User : Resource
+    public class Core2User : Resource
     {
-
-        public User()
+        public Core2User()
         {
             this.AddSchema(SchemaIdentifiers.Core2User);
-            this.meta =
+            this.Metadata =
                 new Metadata()
                 {
-                    ResourceType = Types.User,
+                    ResourceType = ResourceTypes.User,
                 };
 
             this.Active = true;
         }
-
-        [DataMember(Name = AttributeNames.UserName, EmitDefaultValue = false)]
-        public virtual string UserName
-        {
-            get;
-            set;
-        }
-
+                
         [DataMember(Name = AttributeNames.Active)]
         public virtual bool Active
         {
@@ -64,7 +56,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         }
 
         [DataMember(Name = AttributeNames.Metadata)]
-        public virtual Metadata meta
+        public virtual Metadata Metadata
         {
             get;
             set;
@@ -105,11 +97,17 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             set;
         }
 
+        [DataMember(Name = AttributeNames.UserName, EmitDefaultValue = false)]
+        public virtual string UserName
+        {
+            get;
+            set;
+        }
     }
 
     public static class UserExtensions
     {
-        public static IQueryable<User> CompleteUsers(this ScimContext context)
+        public static IQueryable<Core2User> CompleteUsers(this ScimContext context)
         {
             return context.Users.Include(AttributeNames.Metadata)
                     .Include(AttributeNames.AttributeName)
@@ -121,7 +119,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         }
 
 
-        public static void Apply(this User user, PatchOperation operation)
+        public static void Apply(this Core2User user, PatchOperation operation)
         {
             if (null == operation)
             {
@@ -297,7 +295,20 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             }
         }
 
-        private static void PatchAddresses(this User user, PatchOperation operation)
+        private static string GetSingleValue(PatchOperation operation)
+        {
+            JToken item = operation.Value.First();
+            switch (item.Type)
+            {
+                case Newtonsoft.Json.Linq.JTokenType.String:
+                    return item.ToString();
+                case Newtonsoft.Json.Linq.JTokenType.Object:
+                default:
+                    return item["value"].ToString();
+            }
+        }
+        
+        private static void PatchAddresses(this Core2User user, PatchOperation operation)
         {
             if (null == operation)
             {
@@ -681,20 +692,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             }
         }
 
-        private static string GetSingleValue(PatchOperation operation)
-        {
-            JToken item = operation.Value.First();
-            switch (item.Type)
-            {
-                case Newtonsoft.Json.Linq.JTokenType.String:
-                    return item.ToString();
-                case Newtonsoft.Json.Linq.JTokenType.Object:
-                default:
-                    return item["value"].ToString();
-            }
-        }
-
-        private static void PatchElectronicMailAddresses(this User user, PatchOperation operation)
+        private static void PatchElectronicMailAddresses(this Core2User user, PatchOperation operation)
         {
             user.ElectronicMailAddresses = PatchElectronicMailAddresses(user.ElectronicMailAddresses, operation);
         }
@@ -846,7 +844,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
         }
 
-        private static void PatchName(this User user, PatchOperation operation)
+        private static void PatchName(this Core2User user, PatchOperation operation)
         {
             if (null == operation)
             {
@@ -988,7 +986,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             user.Name = name;
         }
 
-        private static void PatchPhoneNumbers(this User user, PatchOperation operation)
+        private static void PatchPhoneNumbers(this Core2User user, PatchOperation operation)
         {
             if (null == operation)
             {
@@ -1128,7 +1126,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             }
         }
 
-        private static void PatchRoles(this User user, PatchOperation operation)
+        private static void PatchRoles(this Core2User user, PatchOperation operation)
         {
             user.Roles = PatchRoles(user.Roles, operation);
         }

@@ -10,16 +10,16 @@ using System.Runtime.Serialization;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
     [DataContract]
-    public class EnterpriseUser : User
+    public class Core2EnterpriseUser : Core2User
     {
-        protected EnterpriseUser()
+        protected Core2EnterpriseUser()
             : base()
         {
             this.AddSchema(SchemaIdentifiers.Core2EnterpriseUser);
         }
 
         [DataMember(Name = AttributeNames.ExtensionEnterpriseUser2, IsRequired = false, EmitDefaultValue = false)]
-        public EnterpriseAttributes ExtentsionValues
+        public Core2EnterpriseUserExtension ExtentsionValues
         {
             get;
             set;

@@ -50,12 +50,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         }
 
         [HttpGet(ControllerConstants.AttributeValueIdentifier)]
-        public async Task<ActionResult<Group>> Get(string id)
+        public async Task<ActionResult<Core2Group>> Get(string id)
         {
             StringValues requested = this.Request.Query[QueryKeys.Attributes];
             StringValues exculted = this.Request.Query[QueryKeys.ExcludedAttributes];
 
-            Group Group = (Group)await this.provider.GetById(id).ConfigureAwait(false);
+            Core2Group Group = (Core2Group)await this.provider.GetById(id).ConfigureAwait(false);
 
 
             if (Group == null)
@@ -71,7 +71,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Group>> Post(Group item)
+        public async Task<ActionResult<Core2Group>> Post(Core2Group item)
         {
             if (item.DisplayName == null)
             {
@@ -92,7 +92,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         }
 
         [HttpPut(ControllerConstants.AttributeValueIdentifier)]
-        public async Task<ActionResult<Group>> Put(string id, Group item)
+        public async Task<ActionResult<Core2Group>> Put(string id, Core2Group item)
         {
             if (id != item.Identifier)
             {
@@ -100,7 +100,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return this.NotFound(BadRequestError);
             }
 
-            Group group = this.context.CompleteGroups().FirstOrDefault(g => g.Identifier.Equals(id, StringComparison.CurrentCulture));
+            Core2Group group = this.context.CompleteGroups().FirstOrDefault(g => g.Identifier.Equals(id, StringComparison.CurrentCulture));
             await this.provider.Replace(item, group).ConfigureAwait(false);
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
@@ -110,7 +110,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         [HttpDelete(ControllerConstants.AttributeValueIdentifier)]
         public async Task<IActionResult> Delete(string id)
         {
-            Group Group = await this.context.Groups.FindAsync(id).ConfigureAwait(false);
+            Core2Group Group = await this.context.Groups.FindAsync(id).ConfigureAwait(false);
 
             if (Group == null)
             {

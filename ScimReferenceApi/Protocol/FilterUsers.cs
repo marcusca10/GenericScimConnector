@@ -22,9 +22,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             this._context = context;
         }
 
-        public IEnumerable<User> FilterGen(string query)
+        public IEnumerable<Core2User> FilterGen(string query)
         {
-            IEnumerable<User> AllUsers = new List<User>();
+            IEnumerable<Core2User> AllUsers = new List<Core2User>();
             NameValueCollection keyedValues = HttpUtility.ParseQueryString(query);
             IEnumerable<string> keys = keyedValues.AllKeys;
 
@@ -43,14 +43,14 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             return AllUsers;
         }
 
-        public IEnumerable<User> GetUsers(string filterExpression)
+        public IEnumerable<Core2User> GetUsers(string filterExpression)
         {
-            List<User> AllUsers = new List<User>();
+            List<Core2User> AllUsers = new List<Core2User>();
             if (Filter.TryParse(filterExpression, out IReadOnlyCollection<IFilter> results))
             {
                 for (int i = 0; i < results.Count; i++)
                 {
-                    IEnumerable<User> users = this._context.CompleteUsers();
+                    IEnumerable<Core2User> users = this._context.CompleteUsers();
                     Filter currentFilter = (Filter)results.ElementAt(i);
                     while (currentFilter != null)
                     {
@@ -324,7 +324,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                             switch (attribute)
                             {
                                 case AttributeNames.Metadata:
-                                    users = users.Where(p => (DateTime)p.meta[propName] > DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
+                                    users = users.Where(p => (DateTime)p.Metadata[propName] > DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
                                     break;
                                 default:
                                     break;
@@ -335,7 +335,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                             switch (attribute)
                             {
                                 case AttributeNames.Metadata:
-                                    users = users.Where(p => (DateTime)p.meta[propName] >= DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
+                                    users = users.Where(p => (DateTime)p.Metadata[propName] >= DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
                                     break;
                                 default:
                                     break;
@@ -346,7 +346,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                             switch (attribute)
                             {
                                 case AttributeNames.Metadata:
-                                    users = users.Where(p => (DateTime)p.meta[propName] < DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
+                                    users = users.Where(p => (DateTime)p.Metadata[propName] < DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
                                     break;
                                 default:
                                     break;
@@ -357,7 +357,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                             switch (attribute)
                             {
                                 case AttributeNames.Metadata:
-                                    users = users.Where(p => (DateTime)p.meta[propName] <= DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
+                                    users = users.Where(p => (DateTime)p.Metadata[propName] <= DateTime.Parse(value, CultureInfo.CurrentCulture)).ToList();
                                     break;
                                 default:
                                     break;
