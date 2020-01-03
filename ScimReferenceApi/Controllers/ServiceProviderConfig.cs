@@ -8,11 +8,10 @@ using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Config
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
-    [Route(ControllerConstants.DefaultServiceProviderConfigRoute)]
+    [Route(ControllerConstants.DefaultRouteServiceConfiguration)]
     [ApiController]
     public class ServiceProviderConfig : ControllerBase
     {
-
         public ServiceProviderConfig()
         {
         }
@@ -24,8 +23,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             {
                 DocumentationResource = "http://example.com/help/scim.html"
             };
+
             config.AddAuthenticationScheme(SCIMAuthenticationScheme.CreateOpenStandardForAuthorizationBearerTokenScheme());
-            return Ok(config);
+            return this.Ok(config);
         }
     }
 }

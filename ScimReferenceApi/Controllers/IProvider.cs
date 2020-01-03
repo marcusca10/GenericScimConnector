@@ -10,7 +10,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
     public interface IProvider
     {
-        Task<ListResponse<Resource>> Query(string query, IEnumerable<string> requested, IEnumerable<string> exculted);
+        Task<ListResponse<Resource>> Query(string query, IEnumerable<string> requested, IEnumerable<string> excluded);
 
         Task<Resource> GetById(string id);
         Task Add(Resource resource);

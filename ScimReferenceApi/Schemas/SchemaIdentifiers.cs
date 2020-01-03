@@ -25,7 +25,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         public const string Core2EnterpriseUser =
             SchemaIdentifiers.PrefixTypes2 +
             SchemaIdentifiers.ExtensionEnterprise2 +
-            Types.User;
+            ResourceTypes.User;
 
         public const string Core2EnterpriseUserDomainControllerServices =
             "urn:ietf:params:scim:schemas:extension:enterprise:2.0User";
@@ -33,22 +33,22 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         public const string Core2Group =
             SchemaIdentifiers.PrefixTypes2 +
             SchemaIdentifiers.VersionSchemasCore2 +
-            Types.Group;
+            ResourceTypes.Group;
 
         public const string Core2ResourceType =
             SchemaIdentifiers.PrefixTypes2 +
             SchemaIdentifiers.ExtensionEnterprise2 +
-            Types.ResourceType;
+            ResourceTypes.ResourceType;
 
         public const string Core2ServiceConfiguration =
             SchemaIdentifiers.PrefixTypes2 +
             SchemaIdentifiers.VersionSchemasCore2 +
-            Types.ServiceProviderConfiguration;
+            ResourceTypes.ServiceProviderConfiguration;
 
         public const string Core2User =
             SchemaIdentifiers.PrefixTypes2 +
             SchemaIdentifiers.VersionSchemasCore2 +
-            Types.User;
+            ResourceTypes.User;
 
         public const string ListResponse = "urn:ietf:params:scim:api:messages:2.0:ListResponse";
     }

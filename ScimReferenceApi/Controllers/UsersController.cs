@@ -18,20 +18,20 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
 
-    [Route(ControllerConstants.DefaultUsersRoute)]
+    [Route(ControllerConstants.DefaultRouteUsers)]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UsersController : ControllerBase
     {
-        private readonly ScimContext _context;
-        private readonly ILogger<UsersController> _log;
+        private readonly ScimContext context;
+        private readonly ILogger<UsersController> logger;
         private UserProvider provider;
 
-        public UsersController(ScimContext context, ILogger<UsersController> log)
+        public UsersController(ScimContext context, ILogger<UsersController> logger)
         {
-            this._context = context;
-            this._log = log;
-            this.provider = new UserProvider(_context, _log);
+            this.context = context;
+            this.logger = logger;
+            this.provider = new UserProvider(this.context, this.logger);
         }
 
         [HttpGet]
@@ -42,33 +42,33 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             IEnumerable<string> requested = this.Request.Query[QueryKeys.Attributes].SelectMany((att) => att.Split(ControllerConstants.DelimiterComma));
             IEnumerable<string> exculted = this.Request.Query[QueryKeys.ExcludedAttributes].SelectMany((att) => att.Split(ControllerConstants.DelimiterComma));
 
-            ListResponse<Resource> list = await provider.Query(query, requested, exculted).ConfigureAwait(false);
+            ListResponse<Resource> list = await this.provider.Query(query, requested, exculted).ConfigureAwait(false);
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
             return list;
         }
 
-        [HttpGet(ControllerConstants.UriID)]//todo switch to v2
-        public async Task<ActionResult<User>> Get(string id)
+        [HttpGet(ControllerConstants.AttributeValueIdentifier)]
+        public async Task<ActionResult<Core2User>> Get(string id)
         {
 
-            User User = (User)await provider.GetById(id).ConfigureAwait(false);
+            Core2User User = (Core2User)await this.provider.GetById(id).ConfigureAwait(false);
 
             if (User == null)
             {
                 ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
-                return NotFound(notFoundError);
+                return this.NotFound(notFoundError);
             }
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return Ok(User);
+            return this.Ok(User);
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> Post(JObject body)
+        public async Task<ActionResult<Core2User>> Post(JObject body)
         {
 
-            User item = null;
+            Core2User item = null;
             try
             {
                 item = BuildUser(body);
@@ -76,100 +76,100 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             catch (ArgumentException)
             {
                 ErrorResponse invalidJSON = new ErrorResponse(ErrorDetail.Unparsable, ErrorDetail.Status400);
-                return BadRequest(invalidJSON);
+                return this.BadRequest(invalidJSON);
             }
             if (String.IsNullOrWhiteSpace(item.UserName))
             {
                 ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.NoUsername, ErrorDetail.Status400);
-                return BadRequest(badRequestError);
+                return this.BadRequest(badRequestError);
             }
 
-            bool Exists = this._context.Users.Any(x => x.UserName == item.UserName);
+            bool Exists = this.context.Users.Any(x => x.UserName == item.UserName);
             if (Exists == true)
             {
                 ErrorResponse conflictError = new ErrorResponse(ErrorDetail.UsernameConflict, ErrorDetail.Status409);
-                return Conflict(conflictError);
+                return this.Conflict(conflictError);
             }
 
             await this.provider.Add(item).ConfigureAwait(false);
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
+            return this.CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
 
         }
 
-        [HttpPut(ControllerConstants.UriID)]
-        public async Task<ActionResult<User>> Put(string id, User item)
+        [HttpPut(ControllerConstants.AttributeValueIdentifier)]
+        public async Task<ActionResult<Core2User>> Put(string id, Core2User item)
         {
 
             if (id != item.Identifier)
             {
                 ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.Mutability, ErrorDetail.Status400);
-                return BadRequest(badRequestError);
+                return this.BadRequest(badRequestError);
             }
             if (item.UserName == null)
             {
                 ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.NoUsername, ErrorDetail.Status400);
-                return BadRequest(badRequestError);
+                return this.BadRequest(badRequestError);
             }
 
-            var User = this._context.CompleteUsers()
+            var User = this.context.CompleteUsers()
                 .Where(p => p.Identifier == id)
                 .SingleOrDefault();
 
             if (User == null)
             {
                 ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
-                return NotFound(notFoundError);
+                return this.NotFound(notFoundError);
             }
 
             await this.provider.Replace(item, User).ConfigureAwait(false);
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return Ok(User);
+            return this.Ok(User);
         }
 
-        [HttpDelete(ControllerConstants.UriID)]
+        [HttpDelete(ControllerConstants.AttributeValueIdentifier)]
         public async Task<IActionResult> Delete(string id)
         {
-            var User = await this._context.Users.FindAsync(id).ConfigureAwait(false);
+            var User = await this.context.Users.FindAsync(id).ConfigureAwait(false);
             if (User == null)
             {
                 ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
-                return NotFound(notFoundError);
+                return this.NotFound(notFoundError);
             }
 
             await this.provider.Delete(User).ConfigureAwait(false);
 
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return NoContent();
+            return this.NoContent();
         }
 
-        [HttpPatch(ControllerConstants.UriID)]
+        [HttpPatch(ControllerConstants.AttributeValueIdentifier)]
         public IActionResult Patch(string id, JObject body)
         {
 
             this.provider.Update(id, body);
 
-            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
+            return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
         }
 
-        private static User BuildUser(JObject body)
+        private static Core2User BuildUser(JObject body)
         {
             if (body[AttributeNames.Schemas] == null)
             {
                 throw new ArgumentException(AttributeNames.Schemas);
             }
             JEnumerable<JToken> shemas = body[AttributeNames.Schemas].Children();
-            User item;
+            Core2User item;
             if (shemas.Contains(SchemaIdentifiers.Core2EnterpriseUser))
             {
-                item = body.ToObject<EnterpriseUser>();
+                item = body.ToObject<Core2EnterpriseUser>();
             }
             else
             {
-                item = body.ToObject<User>();
+                item = body.ToObject<Core2User>();
             }
 
             return item;

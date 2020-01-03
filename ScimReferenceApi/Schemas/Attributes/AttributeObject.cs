@@ -16,11 +16,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
             get
             {
                 //occasionally scim attribute names do not equal propertyNames use proprty
-                System.Reflection.PropertyInfo property = GetProperty(propertyName);
+                System.Reflection.PropertyInfo property = this.GetProperty(propertyName);
                 return property.GetValue(this, null);
 
             }
-            set { GetProperty(propertyName).SetValue(this, value, null); }
+            set { this.GetProperty(propertyName).SetValue(this, value, null); }
         }
         private System.Reflection.PropertyInfo GetProperty(string propertyName)
         {
