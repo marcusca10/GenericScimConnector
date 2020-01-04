@@ -129,7 +129,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             }
 
             return context.Groups.Include(g => g.Metadata)
-                    .Include(g => g.Metadata);
+                    .Include(g => g.Members);
         }
 
         private static void PatchMembers(this Core2Group group, PatchOperation operation)
