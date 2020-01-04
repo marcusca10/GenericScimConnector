@@ -102,7 +102,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             Core2Group group = (Core2Group)item;
             group.Metadata.Created = DateTime.Now;
             group.Metadata.LastModified = DateTime.Now;
-           // group.Members = new List<Member>();
+
             this._context.Groups.Add(group);
             await this._context.SaveChangesAsync().ConfigureAwait(false);
             this._log.LogInformation(group.Identifier);

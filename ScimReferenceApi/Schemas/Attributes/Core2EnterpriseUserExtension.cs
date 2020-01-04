@@ -17,6 +17,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
         public string Id { get; set; }
 
         [DataMember(Name = AttributeNames.CostCenter, IsRequired = false, EmitDefaultValue = false)]

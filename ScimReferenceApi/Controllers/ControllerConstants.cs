@@ -18,6 +18,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
         public const string DefaultContentType = "application/scim+json";
         public const string DefaultRouteApi = "Scim/";
+
         public const string DefaultRouteGroups = ControllerConstants.DefaultRouteApi + "groups";
         public const string DefaultRouteKey = ControllerConstants.DefaultRouteApi + "key";
         public const string DefaultRouteResourceType = ControllerConstants.DefaultRouteApi + "resourceTypes";

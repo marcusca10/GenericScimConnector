@@ -100,7 +100,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             Core2User user = (Core2User)item;
             user.Metadata.Created = DateTime.Now;
             user.Metadata.LastModified = DateTime.Now;
+
             user.Identifier = Guid.NewGuid().ToString();
+
             this.context.Users.Add(user);
             await this.context.SaveChangesAsync().ConfigureAwait(false);
             this.logger.LogInformation(user.UserName);

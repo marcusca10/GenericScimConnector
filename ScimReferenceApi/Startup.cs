@@ -57,7 +57,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 
         public static void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {            
-
             app.UseHsts();
             loggerFactory.AddFile("Logs/ScimApp-{Date}.txt");
 
