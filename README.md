@@ -18,100 +18,178 @@ Guidance on onboarding samples to docs.microsoft.com/samples: https://review.doc
 Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
 -->
 
-Use this reference code to get started building a [SCIM](https://docs.microsoft.com/azure/active-directory/manage-apps/use-scim-to-provision-users-and-groups) endpoint. It contains all the basic requirements for CRUD operatons on a user and group object. In addition, it contains many useful optional features such as filtering and pagination. This code is intended to help you get started building your SCIM endpoint and is provided "AS IS." It is intended as a reference to get started and there is no gaurantee of actively maintaining or supporting it. 
+Use this reference code to get started on building a [SCIM](https://docs.microsoft.com/azure/active-directory/manage-apps/use-scim-to-provision-users-and-groups) endpoint. It contains guidance on how to implement:
+
+1. Basic requirements for CRUD operations on a user and group object (also known as resources in SCIM). 
+2. Optional features such as filtering and pagination. 
+
+> [!NOTE]
+> This code is intended to help you get started building your SCIM endpoint and is provided "AS IS." It is intended as a reference and there is no guarantee of it being actively maintained or supported. 
 
 ## Capabilities 
 
 |Endpoint|Description|
 |---|---|
-|/User|Perform CRUD operations on a user object. <br/> Create <br/> Update (PUT and PATCH) <br/> Delete <br/> Get <br/> List <br/> Filter <br/> Sort <br/> Patch <br/> Paginate|
-|/Group|Perform CRUD operations on a group object. <br/> Create <br/> Update <br/> Delete <br/> Get <br/> List <br/> Filter <br/> Sort <br/> Patch <br/> Paginate|
-|/Schemas|The set of attributes supported by each client and service provider can vary. While one service provider may include “name”, “title”, and “emails” another service provider may use “name”, “title”, and “phoneNumbers”. The schemas endpoint allows for discovery of the attributes supported. Currently available in the reference code.|
-|/ResourceTypes|Specifies metadata about each resource. Currently available in reference code (returns a file with the supported resource endpoints - schema, name, and id for users and groups)|
-|/ServiceProviderConfig|Provides details about the features of the SCIM standard that are supported. For example it would indicate what resources are supported and the authentication method. Currently available in reference code (lists whether things such as PATCH are supported)|
-|/Bulk|Bulk operations allow you to perform operations on a large collection of resource objects in a single operation (e.g. update memberships for a large group). Currently unavailable in reference code.|
+|/User|**Perform CRUD operations on a user resource:** <br/> 1. Create <br/> 2. Update (PUT and PATCH) <br/> 3. Delete <br/> 4. Get <br/> 5. List <br/> 6. Filter <br/> 7. Sort <br/> 8. Patch <br/> 9. Paginate|
+|/Group|**Perform CRUD operations on a group resource:** <br/> 1. Create <br/> 2. Update <br/> 3. Delete <br/> 4. Get <br/> 5. List <br/> 6. Filter <br/> 7. Sort <br/> 8. Patch <br/> 9. Paginate|
+|/Schemas|**Retrieve one or more supported schemas.**<br/>The set of attributes of a resource supported by each service provider can vary. (e.g. Service Provider A supports “name”, “title”, and “emails” while Service Provider B supports “name”, “title”, and “phoneNumbers” for users).|
+|/ResourceTypes|**Retrieve supported resource types.**<br/>The number and types of resources supported by each service provider can vary. (e.g. Service Provider A supports users while Service Provider B supports users and groups).|
+|/ServiceProviderConfig|**Retrieve service provider's SCIM configuration**<br/>The SCIM features supported by each service provider can vary. (e.g. Service Provider A supports Patch operations while Service Provider B supports Patch Operations and Schema Discovery).|
+|/Bulk|**Bulk updates to one or more resources**<br/>Bulk operations allows clients to send a large collection of resource operations in a single request. (e.g. Update memberships for a large group while also creating new users in a single request).<br/><br/>**Currently unavailable in reference code.**|
+
 ## Prerequisites
 
-* [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) (required)
-* [.NET core 2.2 or above](https://dotnet.microsoft.com/download/dotnet-core/2.2) (required)
-* [IIS](https://www.microsoft.com/download/details.aspx?id=48264) (recommended)
-* Testing platform such as [Postman](https://www.getpostman.com/downloads/) or [Jmeter](https://jmeter.apache.org/download_jmeter.cgi) (recommended)
-    * [Java](https://www.java.com/en/download/) is required if using Jmeter
+1. [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) (required)
+2. [.NET core 3.1 or above](https://dotnet.microsoft.com/download/dotnet-core/3.1) (required)
+3. [IIS](https://www.microsoft.com/download/details.aspx?id=48264) (recommended)
+4. HTTP API testing tool such as:
+    * [Postman](https://www.getpostman.com/downloads/)
+    * [JMeter](https://jmeter.apache.org/download_jmeter.cgi) ([Java](https://www.java.com/en/download/) is required if using Jmeter)
 
-## Clone or fork the repo and build your SCIM endpoint
+## Clone the repo and build your SCIM endpoint
 
-The solution is in the ScimReferenceApi folder and can be built and run from VisualStudio locally or hosted in the cloud.
+The solution is located in the ScimReferenceApi folder and can be built and run from VisualStudio locally or hosted in the cloud.
 
 #### Steps to run the solution locally
-1. Click the clone or download link near the top of the page and copy the link. OR. Click fork near the top of the page to make a copy of the repo for personal use.
-2. Open Visual Studio and choose clone or checkout. 
-3. Use the clone link from Github int the repository link feild and click clone to make a local copy of all files. The solution should open.
-4. Switch views to the SCIMReference.sln
-5. Click IIS Express to execute (the project will launch as a web page with the local host URL)
+1. Click **"Clone or download"** and click **"Open in Desktop"** OR copy the link.
+
+    ![Clone Link VSO](Screenshots/CloneLinkVSO.png)
+    
+2. If you chose to copy the link, open Visual Studio and choose **"Clone or check out code**. 
+
+    ![Clone Link VS](Screenshots/CloneLinkVS.png)
+
+3. Use the copied link from Github to make a local copy of all files.
+
+    ![Clone Link VS](Screenshots/CloneLinkVS-2.png)
+
+4. The Solution Explorer should open. Navigate to **SCIMReference.sln** view by double-clicking on it.
+
+    ![Solution Explorer](Screenshots/SolutionExplorer.png)
+
+5. Click **IIS Express** to execute. The project will launch as a web page with the local host URL.
 
 #### Steps to host the solution in the Azure
 1. Open Visual Studio and sign into the account that has access to your hosting resources. 
-2. Click the solution file in the solution explorer and select publish from the list on the left of the window. Alternatively use the Search (ctrl + q) at the top of the page to search for "publish."
-    1. If the solution has not yet been published this will open a dialog in a new window.
-4. Click create profile.
-    1. Make sure app service is selected and the radio button for "create new" is selected. 
-5. Walk through the options in the dialog. 
-6. Remove the date time numbers from the app name. The name field is used for both the app name and the SCIM URL.
-7. Select the resource group and plan you would like to use and hit publish.
+2. While in the **SCIMReference.sln** view, right-click the **SCIMReferenceApi** file in the Solution Explorer and select **"Publish"**.
 
-All the endpoints are are at the host /scim/ directory and can be interacted with the standard HTTP requests. eg {host}/scim/Users can take a GET reequest that will return all users. The /scim/ route can be changed at the top of each controller.
+    ![Cloud Publiosh](Screenshots/CloudPublish.png)
+
+3. Click create profile. Make sure **App Service** and **"Create new"** is selected. 
+
+    ![Cloud Publish 2](Screenshots/CloudPublish2.png)
+    
+4. Walk through the options in the dialog. 
+5. Rename the app to a desired name of your choice. The name is used for both the app name and the SCIM Endpoint URL.
+
+    ![Cloud Publish 3](Screenshots/CloudPublish3.png)
+
+6. Select the resource group and plan you would like to use and click **"Publish"**.
+
+All the endpoints are are at the **{host}/scim/** directory and can be interacted with standard HTTP requests. The **/scim/** route can be modified in the **ControllerConstant.cs** file located in **AzureADProvisioningSCIMreference > ScimReferenceApi > Controllers**.
 
 ## Test your SCIM endpoint
-This project provides test cases that you can use to ensure your application is SCIM compliant. The test cases have been authored for both Jmeter and Postman.
+Provided below are test cases that you can use to ensure that your SCIM endpoint is compliant with the SCIM RFC. The test cases have been authored for:
 
-#### Postman testing instructions
-1. Download the [Postman collection](https://aka.ms/ProvisioningPostman)
-2. Download the [Postman client](https://www.getpostman.com/downloads/)
-3. Import the postman collection from the link by pasting the link. **Import** > **Import From Link**
-4. Specify the URL for your SCIM endpoint by creating enviroment variables
-    1. When running the project locally, the format is typically (replace 44355 with the port found in the URL that opens up when you execute the project): https://localhost:44355/scim/users. Create the {{Server}}{{Port}}/{{Api}} variables to match.
-    2. When hosting the endpoint in Azure, the URL is typically similar to: https://scimreferenceapi19.azurewebsites.net/scim/users)
-5. Turn off SSL Cert verification. **File** > **Settings** > **SSL certificate verification**
-6. Ensure that you are authorized to make requests to the endpoint
-    1. Option 1: Turn off authorization for your endpoint (this is fine for testing purposes, but there must be some form of authorization for apps being used by customers in production.
-    2. Option 2: POST to key endpoint to retrieve a token
-7. Run your tests
+1. Postman
+2. JMeter
 
-#### Jmeter instructions
-The repository contains a .jmx file that can be used with Jmeter or other simialr tools for testing purposes. The http request default is set to send requests to https://scimreferenceapi19.azurewebsites.net/ but will need to be changed to your specific URI.
+#### Postman instructions
+1. Download the [Postman client](https://www.getpostman.com/downloads/).
+2. Import the Postman collection [here](https://aka.ms/ProvisioningPostman).
 
+    ![Postman](Screenshots/Postman.png)
 
-1. Download [Java](https://www.java.com/en/download/) 
-2. Download [Jmeter](https://jmeter.apache.org/download_jmeter.cgi) (Apache open source testing framework built with java available) 
-3. Add Java to PATH
-3. Unzip the download there and execute the ApacheJMeter.jar file
-4. Once it runs file -> open ~.jmx will load the tests
-5. Under thread group the target URI can be enabled/disabled or changed with the user defined varible options 
-6. While the sample is running, click "ctrl + r" or the "start" button
-7. Review the results in the results tree.
+3. Create a Postman environment for testing by specifying the following variables below:
+    * **If running the project locally**:
+        |Variable|Value|
+        |---|---|
+        |Server|localhost
+        |Port|*The port you are using (e.g. **:44355**).
+        |API|scim
+            
+    * **If hosting the endpoint in Azure**:
+        |Variable|Value|
+        |---|---|
+        |Server|scimreferenceapi19.azurewebsites.net
+        |Port|
+        |API|scim
+
+4. Turn off SSL Cert verification by navigating to  **File > Settings > General > SSL certificate verification**.
+
+    ![Postman2](Screenshots/Postman2.png)
+
+5. Ensure that you are authorized to make requests to the endpoint:
+    * **Option 1**: Turn off authorization for your endpoint (this is fine for testing purposes, but there must be some form of authorization for apps being used by customers in production).
+    * **Option 2**: POST to key endpoint to retrieve a token.
+
+6. Run your tests!
+
+#### JMeter instructions
+1. Download [Java](https://www.java.com/en/download/).
+2. Download [JMeter](https://jmeter.apache.org/download_jmeter.cgi).
+3. Launch JMeter by unzipping the downloaded file and executing the **ApacheJMeter.jar** file located in the **bin** folder.
+4. Load the JMeter test cases by navigating to **File > Open**. Choose the **FullUserTest.jmx** file located in the cloned or forked repository.
+
+   ![JMeter](Screenshots/JMeter.png)
+
+5. Create a JMeter environment for testing by modifying the following variables below in the pre-created **Thread Groups**:
+
+   ![JMeter2](Screenshots/JMeter2.png)
+
+    * **If running the project locally**, modify **User Defined local**:
+        |Variable|Value|
+        |---|---|
+        |externalId|${__UUID}
+        |server|localhost
+        |displayName|localhost
+        |port|*The port you are using (e.g. **:44381**).
+        |protocol|https
+        |api|scim
+    
+    * **If hosting the endpoint in Azure**:
+
+        |Variable|Value|
+        |---|---|
+        |externalId|${__UUID}
+        |server|scimreferenceapi19.azurewebsites.net
+        |displayName|localhost
+        |port|*The port you are using (e.g. **:443**).
+        |protocol|https
+        |api|scim
+
+6. Run your tests!
 
 #### Tests executed
 
-* CRUD operations on a user
-* Filtering
-* Attribute filtering
+|Test|Description|
+|---|---|
+|CRUD operations on a user|lorem ipsum|
+|Resource filtering|lorem ipsum|
+|Attribute filtering|lorem ipsum|
 
 ## Navigating the reference code
 
-This reference code was developed as a .Net core MVC web API for SCIM provisioning. The three main folders are Schemas, Controllers, and Protocol. 
-* The **Schemas** folder includes the models for the User and Group resources along with some abstract classes like Schematized for shared functionality. Schemas also contains an Attributes folder which contains the class definitions for complex attributes of Users and Groups such as address
-* The **Controllers** folder contains the controllers for the various SCIM endpoints. Here again the Users and Groups are the most important aspect to consider as SCIM was designed for resource provisioning. Both resource controllers include HTTP verbs to perform CRUD operations on the resource (GETP, POST, PUT, PATCH, DELETE). 
-* The **Protocol** folder contains the code for actions relating to the way resources are returned according to the SCIM RFC. Such as returning multiple resources as a list or returning only specific resources based on a filter.
-Here there is also the most of the logic. For example FilterExpression contians the logic for turning a query into a list of linked lists of single filters. There is also the logic for turning a patch request into an operation with attributes 
-pertating to the value path and the type of operation that can then be used to apply changes to resource objects.
-Currently the user extension enterpriseUser is handled at the user endpoint as well by checking the schemas included with a post to determine the type of user. Therefore to add another extension one would have to include another schema with it and check for its existance in the post as well.
+This reference code was developed as a .Net core MVC web API for SCIM provisioning. The three main folders are Schemas, Controllers, and Protocol.
+
+1. The **Schemas** folder includes:
+    * The models for the User and Group resources along with some abstract classes like Schematized for shared functionality.
+    * An Attributes folder which contains the class definitions for complex attributes of Users and Groups such as addresses.
+2. The **Controllers** folder contains:
+    * The controllers for the various SCIM endpoints. Resource controllers include HTTP verbs to perform CRUD operations on the resource (GET, POST, PUT, PATCH, DELETE). 
+3. The **Protocol** folder contains logic for actions relating to the way resources are returned according to the SCIM RFC such as:
+    * Returning multiple resources as a list.
+    * Returning only specific resources based on a filter.
+    * Turning a query into a list of linked lists of single filters.
+    * Turning a PATCH request into an operation with attributes pertaining to the value path. 
+    * Defining the type of operation that can be used to apply changes to resource objects.
 
 ## Common scenarios
 |Scenario|How-to|
 |---|---|
-|Enable / disable authorization|Navigate to the UsersController.cs and GroupController.cs files and comment / uncomment out the authorize command.|
-|Add additional filterable attributes|Navigate to the FilterUsers.cs or FilterGroups.cs file and update the method to include the attrbutes that you would like to support filtering for. |
-|Support extensions beyond enterpriseUser| 1. Copy the enterpriseUser class 2. Change the class to your custom extension name 3. Update the schema to match the desired naming convention 4. Mirror what was done with the enterpriseAttributes and replace with the attributes that you need.|
+|Enable or disable authorization|**Steps**<br/>1. Navigate to the **UsersController.cs** or **GroupController.cs** files located in **ScimReferenceApi > Controllers**.<br/>2. Comment or uncomment out the authorize command.|
+|Add additional filterable attributes|**Steps**<br/>1. Navigate to the **FilterUsers.cs** or **FilterGroups.cs** files located in **ScimReferenceApi > Protocol**.<br/>2. Update the method to include the attributes that you would like to support filtering for. |
+|Support additional user resource extensions|**Steps**<br/>1. Copy the **EnterpriseUser.cs** file located in **ScimReferenceApi > Schemas**.<br/>2. Rename the class to your custom extension name (e.g. customExtensionName.cs)<br/>3. Update the schema to match the desired naming convention.<br/>4. Repeat steps 1 - 3 with the **EnterpriseAttributes.cs** file (located in ScimReferenceApi > Schemas > Attributes) and update it with the attributes that you need.|
 
 ## Contents
 
@@ -119,22 +197,17 @@ Currently the user extension enterpriseUser is handled at the user endpoint as w
 | File/folder       | Description                                |
 |-------------------|--------------------------------------------|
 | `ScimRefrenceAPI` | Sample source code.                        |
+| `Screenshots`     | Screenshots for README.      |
 | `.gitignore`      | Define what to ignore at commit time.      |
 | `CHANGELOG.md`    | List of changes to the sample.             |
 | `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
 | `README.md`       | This README file.                          |
 | `LICENSE`         | The license for the sample.                |
 
-## Contributing
+## Contributing to the reference code
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
+This project welcomes contributions and suggestions! Like other open source contributions, you will need to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
 
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+When submitting a pull request, a CLA bot will automatically determine whether you need to provide a CLA and decorate the PR appropriately (e.g. status check, comment). Simply follow the instructions provided by the bot. You will only need to do this once across all repos using our CLA.
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
