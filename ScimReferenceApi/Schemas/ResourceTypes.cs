@@ -4,10 +4,11 @@
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
-    public static class ControllerConfiguration
+    public static class ResourceTypes
     {
-        public const string DefaultStartIndexString = "1";
-        public const string DefaultContentType = "application/scim+json";
-        public const string UriID = "{id}";
+        public const string Group = "Group";
+        public const string ResourceType = "ResourceType";
+        public const string ServiceProviderConfiguration = "ServiceProviderConfig";
+        public const string User = "User";
     }
 }

@@ -5,6 +5,7 @@
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.GroupAttributes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
@@ -22,7 +23,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
     {
         private readonly ScimContext _context;
         private readonly ILogger<UsersController> _log;
-        private string[] allwaysRetuned = ControllerConstants.AllwaysRetunedAttributes;
+        private string[] allwaysRetuned = ControllerConstants.AlwaysRetunedAttributes;
         private int DefaultStartIndex = 1;
 
         public GroupProvider(ScimContext context, ILogger<UsersController> log)
@@ -34,10 +35,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 
         public async Task<ListResponse<Resource>> Query(string query, IEnumerable<string> requested, IEnumerable<string> exculted)
         {
-            IEnumerable<Group> groups;
+            IEnumerable<Core2Group> groups;
             if (!string.IsNullOrWhiteSpace(query))
             {
-                groups = new FilterGroups(_context).FilterGen(query);
+                groups = new FilterGroups(this._context).FilterGen(query);
             }
             else
             {
@@ -56,9 +57,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 
             int start = int.Parse(startIndex, CultureInfo.InvariantCulture);
 
-            if (start < DefaultStartIndex)
+            if (start < this.DefaultStartIndex)
             {
-                start = DefaultStartIndex;
+                start = this.DefaultStartIndex;
             }
 
             int? count = null;
@@ -92,15 +93,16 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 
         public async Task<Resource> GetById(string id)
         {
-            Group group = await this._context.CompleteGroups().FirstOrDefaultAsync(i => i.Identifier.Equals(id, StringComparison.Ordinal)).ConfigureAwait(false);
+            Core2Group group = await this._context.CompleteGroups().FirstOrDefaultAsync(i => i.Identifier.Equals(id, StringComparison.Ordinal)).ConfigureAwait(false);
             return group;
         }
 
         public async Task Add(Resource item)
         {
-            Group group = (Group)item;
-            group.meta.Created = DateTime.Now;
-            group.meta.LastModified = DateTime.Now;
+            Core2Group group = (Core2Group)item;
+            group.Metadata.Created = DateTime.Now;
+            group.Metadata.LastModified = DateTime.Now;
+
             this._context.Groups.Add(group);
             await this._context.SaveChangesAsync().ConfigureAwait(false);
             this._log.LogInformation(group.Identifier);
@@ -108,18 +110,18 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 
         public async Task Replace(Resource old, Resource newresorce)
         {
-            Group item = (Group)old;
-            Group group = (Group)newresorce;
+            Core2Group item = (Core2Group)old;
+            Core2Group group = (Core2Group)newresorce;
             group.DisplayName = item.DisplayName;
             group.Members = item.Members;
-            group.meta.LastModified = DateTime.Now;
+            group.Metadata.LastModified = DateTime.Now;
             group.ExternalIdentifier = item.ExternalIdentifier;
             await this._context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public async Task Delete(Resource resource)
         {
-            Group Group = (Group)resource;
+            Core2Group Group = (Core2Group)resource;
             this._context.Groups.Remove(Group);
             await this._context.SaveChangesAsync().ConfigureAwait(false);
             this._log.LogInformation(Group.Identifier);
@@ -145,7 +147,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                 throw new NotSupportedException(unsupportedPatchTypeName);
             }
 
-            Group groupToModify = this._context.CompleteGroups().FirstOrDefault((group) => group.Identifier.Equals(id, StringComparison.Ordinal));
+            Core2Group groupToModify = this._context.CompleteGroups().FirstOrDefault((group) => group.Identifier.Equals(id, StringComparison.Ordinal));
 
             if (groupToModify != null)
             {
@@ -156,7 +158,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 
                         PatchOperation patchOp = PatchOperation.Create(OperationValue.getOperationName(op.OperationName), op.Path.ToString(), op.Value);
                         groupToModify.Apply(patchOp);
-                        groupToModify.meta.LastModified = DateTime.Now;
+                        groupToModify.Metadata.LastModified = DateTime.Now;
 
                     }
                 }
@@ -165,7 +167,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                     foreach (var op in patchSimple.Operations)
                     {
                         groupToModify.Apply(op);
-                        groupToModify.meta.LastModified = DateTime.Now;
+                        groupToModify.Metadata.LastModified = DateTime.Now;
                     }
                 }
             }

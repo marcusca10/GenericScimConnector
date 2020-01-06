@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
-    [Route(ControllerConstants.DefaultResourceTypesRoute)]
+    [Route(ControllerConstants.DefaultRouteResourceType)]
     [ApiController]
     public class ResourceTypesController : ControllerBase
     {

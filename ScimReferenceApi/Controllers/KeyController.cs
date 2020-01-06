@@ -2,21 +2,25 @@
 // Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
-using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
     //Controller for generating a bearer token for authorization during testing
     //This is not meant to replace proper Oauth for authentication purposes. 
     //Instead this is meant to validate the bearer token authorization set up
-    [Route(ControllerConstants.DefaultKeyRoute)]
+    [Route(ControllerConstants.DefaultRouteKey)]
     public class KeyController : ControllerBase
     {
+        private const string TokenAudience = "Microsoft.Security.Bearer";
+        private const string TokenIssuer = "Microsoft.Security.Bearer";
+        private const int TokenLifetimeInMins = 120;
+
         //make more secure.
         [HttpPost]
         public ActionResult POST([FromBody]string login)
@@ -24,25 +28,30 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             if (login == "SecureLogin")
             {
                 string tokenString = GenerateJSONWebToken();
-                return Ok(new { token = tokenString });
+                return this.Ok(new { token = tokenString });
             }
-            return BadRequest();
+
+            return this.BadRequest();
         }
 
         private static string GenerateJSONWebToken()
         {
-            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Microsoft.Security.Bearer"));
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KeyController.TokenIssuer));
             SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            
+            DateTime startTime = DateTime.UtcNow;
+            DateTime expiryTime = startTime.AddMinutes(KeyController.TokenLifetimeInMins);
 
-            JwtSecurityToken token = new JwtSecurityToken("Microsoft.Security.Bearer",
-              "Microsoft.Security.Bearer",
-              null,
-              expires: DateTime.Now.AddMinutes(120),
-              signingCredentials: credentials);
+            JwtSecurityToken token = 
+                new JwtSecurityToken(
+                    KeyController.TokenIssuer,
+                    KeyController.TokenAudience,
+                    null,
+                    notBefore: startTime,
+                    expires: expiryTime,
+                    signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
-
     }
 }

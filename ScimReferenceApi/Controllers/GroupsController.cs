@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,21 +17,21 @@ using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
 
-    [Route(ControllerConstants.DefaultGroupsRoute)]
+    [Route(ControllerConstants.DefaultRouteGroups)]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class GroupsController : ControllerBase
     {
-        private readonly ScimContext _context;
-        private readonly ILogger<UsersController> _log;
+        private readonly ScimContext context;
+        private readonly ILogger<UsersController> logger;
         private GroupProvider provider;
-        private string[] allwaysRetuned = ControllerConstants.AllwaysRetunedAttributes;
+        private string[] alwaysRetuned = ControllerConstants.AlwaysRetunedAttributes;
 
-        public GroupsController(ScimContext context, ILogger<UsersController> log)
+        public GroupsController(ScimContext context, ILogger<UsersController> logger)
         {
-            this._context = context;
-            this._log = log;
-            this.provider = new GroupProvider(_context, _log);
+            this.context = context;
+            this.logger = logger;
+            this.provider = new GroupProvider(this.context, this.logger);
         }
 
         [HttpGet]
@@ -43,95 +42,95 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             StringValues requested = this.Request.Query[QueryKeys.Attributes];
             StringValues exculted = this.Request.Query[QueryKeys.ExcludedAttributes];
 
-            ListResponse<Resource> list = await provider.Query(query, requested, exculted).ConfigureAwait(false);
+            ListResponse<Resource> list = await this.provider.Query(query, requested, exculted).ConfigureAwait(false);
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
             return list;
 
         }
 
-        [HttpGet(ControllerConstants.UriID)]
-        public async Task<ActionResult<Group>> Get(string id)
+        [HttpGet(ControllerConstants.AttributeValueIdentifier)]
+        public async Task<ActionResult<Core2Group>> Get(string id)
         {
             StringValues requested = this.Request.Query[QueryKeys.Attributes];
             StringValues exculted = this.Request.Query[QueryKeys.ExcludedAttributes];
 
-            Group Group = (Group)await this.provider.GetById(id).ConfigureAwait(false);
+            Core2Group Group = (Core2Group)await this.provider.GetById(id).ConfigureAwait(false);
 
 
             if (Group == null)
             {
                 ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
-                return NotFound(notFoundError);
+                return this.NotFound(notFoundError);
             }
 
-            Group = ColumnsUtility.FilterAttributes(requested, exculted, Group, this.allwaysRetuned);
+            Group = ColumnsUtility.FilterAttributes(requested, exculted, Group, this.alwaysRetuned);
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
             return Group;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Group>> Post(Group item)
+        public async Task<ActionResult<Core2Group>> Post(Core2Group item)
         {
             if (item.DisplayName == null)
             {
-                return BadRequest();
+                return this.BadRequest();
             }
 
-            bool Exists = this._context.Groups.Any(x => x.DisplayName == item.DisplayName);
+            bool Exists = this.context.Groups.Any(x => x.DisplayName == item.DisplayName);
             if (Exists == true)
             {
                 ErrorResponse conflictError = new ErrorResponse(ErrorDetail.DisplaynameConflict, ErrorDetail.Status409);
-                return NotFound(conflictError);
+                return this.NotFound(conflictError);
             }
 
             await this.provider.Add(item).ConfigureAwait(false);
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return CreatedAtAction(nameof(Get), new { id = item.DisplayName }, item);
+            return this.CreatedAtAction(nameof(Get), new { id = item.DisplayName }, item);
         }
 
-        [HttpPut(ControllerConstants.UriID)]
-        public async Task<ActionResult<Group>> Put(string id, Group item)
+        [HttpPut(ControllerConstants.AttributeValueIdentifier)]
+        public async Task<ActionResult<Core2Group>> Put(string id, Core2Group item)
         {
             if (id != item.Identifier)
             {
                 ErrorResponse BadRequestError = new ErrorResponse(ErrorDetail.Mutability, ErrorDetail.Status400);
-                return NotFound(BadRequestError);
+                return this.NotFound(BadRequestError);
             }
 
-            Group group = this._context.CompleteGroups().FirstOrDefault(g => g.Identifier.Equals(id, StringComparison.CurrentCulture));
+            Core2Group group = this.context.CompleteGroups().FirstOrDefault(g => g.Identifier.Equals(id, StringComparison.CurrentCulture));
             await this.provider.Replace(item, group).ConfigureAwait(false);
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return Ok(group);
+            return this.Ok(group);
         }
 
-        [HttpDelete(ControllerConstants.UriID)]
+        [HttpDelete(ControllerConstants.AttributeValueIdentifier)]
         public async Task<IActionResult> Delete(string id)
         {
-            Group Group = await this._context.Groups.FindAsync(id).ConfigureAwait(false);
+            Core2Group Group = await this.context.Groups.FindAsync(id).ConfigureAwait(false);
 
             if (Group == null)
             {
                 ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
-                return NotFound(notFoundError);
+                return this.NotFound(notFoundError);
             }
 
             await this.provider.Delete(Group).ConfigureAwait(false);
 
             this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return NoContent();
+            return this.NoContent();
         }
 
-        [HttpPatch(ControllerConstants.UriID)]
+        [HttpPatch(ControllerConstants.AttributeValueIdentifier)]
         public IActionResult Patch(string id, JObject body)
         {
 
             this.provider.Update(id, body);
 
-            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
+            return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
         }
     }
 }

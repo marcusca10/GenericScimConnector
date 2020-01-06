@@ -2,12 +2,12 @@
 // Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.Serialization;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 {

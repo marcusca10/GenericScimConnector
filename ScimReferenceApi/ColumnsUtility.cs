@@ -2,12 +2,12 @@
 // Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 {
@@ -16,7 +16,167 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
         public static T FilterAttributes<T>(IEnumerable<string> requestedAttributes, IEnumerable<string> excludedAttributes, T projectedResouce, string[] allwaysRetuned) where T : Resource
         {
 
-            return BuildResouce(requestedAttributes, excludedAttributes, allwaysRetuned, projectedResouce);
+            return ColumnsUtility.BuildResouce(requestedAttributes, excludedAttributes, allwaysRetuned, projectedResouce);
+        }
+        private static void AddArray(JObject finalObject, IPath attributePath, JToken itemValue)
+        {
+            finalObject.Add(attributePath.AttributePath, new JArray());
+            JArray jarray = (JArray)finalObject[attributePath.AttributePath];
+            List<JToken> children = itemValue.Children().ToList();
+            foreach (JToken child in children)
+            {
+                if (MatchArrayItem(child, attributePath))
+                {
+                    jarray.Add(child);
+                }
+            }
+
+        }
+
+        private static void AddObject(JObject finalObject, IPath attributePath, JToken itemValue)
+        {
+            JObject jobject = (JObject)finalObject[attributePath.AttributePath];
+
+            IPath nextlevelAttribe = attributePath.ValuePath;
+
+            if (nextlevelAttribe == null)
+            {
+                finalObject.Add(attributePath.AttributePath, jobject);
+            }
+            else
+            {
+                JObject emptyObject = new JObject();
+                finalObject.Add(attributePath.AttributePath, emptyObject);
+                JToken item = itemValue[nextlevelAttribe.AttributePath];
+                ColumnsUtility.AddObject(emptyObject, nextlevelAttribe, item);
+            }
+        }
+
+        private static T BuildResouce<T>(IEnumerable<string> requestedAttributes, IEnumerable<string> excludedAttributes, string[] allwaysRetuned, T resource)
+        {
+            JObject result = new JObject();
+            Type objectType = resource.GetType();
+            JObject projectedResrouce = JObject.FromObject(resource);
+            if (!requestedAttributes.Any() && !excludedAttributes.Any())
+            {
+                return resource;
+            }
+            foreach (string requestedAtt in requestedAttributes)
+            {
+                if (Path.TryParse(requestedAtt, out IPath attributePath))
+                {
+                    JToken itemValue = projectedResrouce[attributePath.AttributePath];
+                    if (itemValue != null)
+                    {
+                        switch (itemValue.Type)
+                        {
+                            case JTokenType.Array:
+                                if (!attributePath.SubAttributes.Any())
+                                {
+                                    result.Add(attributePath.AttributePath, itemValue);
+                                }
+                                else
+                                {
+                                    AddArray(result, attributePath, itemValue);
+                                }
+                                break;
+                            case JTokenType.Object:
+                                ColumnsUtility.AddObject(result, attributePath, itemValue);
+                                break;
+                            default:
+                                result.Add(attributePath.AttributePath, itemValue);
+                                break;
+                        }
+                    }
+                }
+            }
+
+            foreach (string requestedAtt in allwaysRetuned)
+            {
+                if (Path.TryParse(requestedAtt, out IPath attributePath))
+                {
+                    JToken itemValue = projectedResrouce[attributePath.AttributePath];
+                    if (itemValue != null)
+                    {
+                        switch (itemValue.Type)
+                        {
+                            case JTokenType.Array:
+                                if (!attributePath.SubAttributes.Any())
+                                {
+                                    result.Add(attributePath.AttributePath, itemValue);
+                                }
+                                else
+                                {
+                                    ColumnsUtility.AddArray(result, attributePath, itemValue);
+                                }
+                                break;
+                            case JTokenType.Object:
+                                ColumnsUtility.AddObject(result, attributePath, itemValue);
+                                break;
+                            default:
+                                result.Add(attributePath.AttributePath, itemValue);
+                                break;
+                        }
+                    }
+                }
+            }
+
+            if (!requestedAttributes.Any() && excludedAttributes.Any())
+            {
+                result = projectedResrouce;
+            }
+
+            foreach (string excluded in excludedAttributes)
+            {
+                if (Path.TryParse(excluded, out IPath attributePath))
+                {
+                    JToken itemValue = projectedResrouce[attributePath.AttributePath];
+                    if (itemValue != null)
+                    {
+                        switch (itemValue.Type)
+                        {
+                            case JTokenType.Array:
+                                if (!attributePath.SubAttributes.Any())
+                                {
+                                    result[attributePath.AttributePath].Remove();
+                                }
+                                else
+                                {
+                                    ClearArray(result, attributePath);
+                                }
+                                break;
+                            case JTokenType.Object:
+                                if (attributePath.ValuePath == null)
+                                {
+                                    result[attributePath.AttributePath].Remove();
+                                }
+                                else
+                                {
+                                    ColumnsUtility.ClearObject(result, attributePath);
+                                }
+                                break;
+                            default:
+                                result[attributePath.AttributePath].Remove();
+                                break;
+                        }
+                    }
+                }
+            }
+            return (T)result.ToObject(objectType);
+        }
+
+        private static void ClearArray(JObject finalObject, IPath attributePath)
+        {
+            JToken array = (JArray)finalObject[attributePath.AttributePath];
+            List<JToken> arrayItems = array.Children().ToList();
+
+            foreach (JToken arItem in arrayItems)
+            {
+                if (ColumnsUtility.MatchArrayItem(arItem, attributePath))
+                {
+                    arItem.Remove();
+                }
+            }
         }
 
         private static void ClearArray(JToken child, IReadOnlyCollection<string> requestedAttributes, IReadOnlyCollection<string> excludedAttributes, string[] allwaysRetuned)
@@ -95,6 +255,22 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
             }
         }
 
+        private static void ClearObject(JToken finalObject, IPath attributePath)
+        {
+            //Assume that object allreay exists
+            JToken token = finalObject[attributePath.AttributePath];
+            IPath nextLevelAttribute = attributePath.ValuePath;
+            JToken internalProperty = token[nextLevelAttribute.AttributePath];
+            if (nextLevelAttribute.ValuePath != null)
+            {
+                internalProperty.Remove();
+            }
+            else
+            {
+                ColumnsUtility.ClearObject(token, nextLevelAttribute);
+            }
+        }
+
         private static bool MatchArrayItem(JToken arrayItem, IPath internalyRequested)
         {
             IFilter filter = internalyRequested.SubAttributes.FirstOrDefault();//Cuts support for deeper attribute filters, very very rare use case
@@ -127,183 +303,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
             else
             {
                 throw new NotImplementedException();
-            }
-        }
-
-        private static T BuildResouce<T>(IEnumerable<string> requestedAttributes, IEnumerable<string> excludedAttributes, string[] allwaysRetuned, T resource)
-        {
-            JObject FinalObject = new JObject();
-            Type objectType = resource.GetType();
-            JObject projectedResrouce = JObject.FromObject(resource);
-            if (!requestedAttributes.Any() && !excludedAttributes.Any())
-            {
-                return resource;
-            }
-            foreach (string requestedAtt in requestedAttributes)
-            {
-                if (Path.TryParse(requestedAtt, out IPath attributePath))
-                {
-                    JToken itemValue = projectedResrouce[attributePath.AttributePath];
-                    if (itemValue != null)
-                    {
-                        switch (itemValue.Type)
-                        {
-                            case JTokenType.Array:
-                                if (!attributePath.SubAttributes.Any())
-                                {
-                                    FinalObject.Add(attributePath.AttributePath, itemValue);
-                                }
-                                else
-                                {
-                                    AddArray(FinalObject, attributePath, itemValue);
-                                }
-                                break;
-                            case JTokenType.Object:
-                                AddObject(FinalObject, attributePath, itemValue);
-                                break;
-                            default:
-                                FinalObject.Add(attributePath.AttributePath, itemValue);
-                                break;
-                        }
-                    }
-                }
-            }
-            foreach (string requestedAtt in allwaysRetuned)
-            {
-                if (Path.TryParse(requestedAtt, out IPath attributePath))
-                {
-                    JToken itemValue = projectedResrouce[attributePath.AttributePath];
-                    if (itemValue != null)
-                    {
-                        switch (itemValue.Type)
-                        {
-                            case JTokenType.Array:
-                                if (!attributePath.SubAttributes.Any())
-                                {
-                                    FinalObject.Add(attributePath.AttributePath, itemValue);
-                                }
-                                else
-                                {
-                                    AddArray(FinalObject, attributePath, itemValue);
-                                }
-                                break;
-                            case JTokenType.Object:
-                                AddObject(FinalObject, attributePath, itemValue);
-                                break;
-                            default:
-                                FinalObject.Add(attributePath.AttributePath, itemValue);
-                                break;
-                        }
-                    }
-                }
-            }
-
-            if (!requestedAttributes.Any() && excludedAttributes.Any())
-            {
-                FinalObject = projectedResrouce;
-            }
-            foreach (string excluded in excludedAttributes)
-            {
-                if (Path.TryParse(excluded, out IPath attributePath))
-                {
-                    JToken itemValue = projectedResrouce[attributePath.AttributePath];
-                    if (itemValue != null)
-                    {
-                        switch (itemValue.Type)
-                        {
-                            case JTokenType.Array:
-                                if (!attributePath.SubAttributes.Any())
-                                {
-                                    FinalObject[attributePath.AttributePath].Remove();
-
-                                }
-                                else
-                                {
-                                    ClearArray(FinalObject, attributePath);
-                                }
-                                break;
-                            case JTokenType.Object:
-                                if (attributePath.ValuePath == null)
-                                {
-                                    FinalObject[attributePath.AttributePath].Remove();
-                                }
-                                else
-                                {
-                                    ClearObject(FinalObject, attributePath);
-                                }
-                                break;
-                            default:
-                                FinalObject[attributePath.AttributePath].Remove();
-                                break;
-                        }
-                    }
-                }
-            }
-            return (T)FinalObject.ToObject(objectType);
-        }
-
-        private static void ClearObject(JToken finalObject, IPath attributePath)
-        {
-            //Assume that object allreay exists
-            JToken token = finalObject[attributePath.AttributePath];
-            IPath nextLevelAttribute = attributePath.ValuePath;
-            JToken internalProperty = token[nextLevelAttribute.AttributePath];
-            if (nextLevelAttribute.ValuePath != null)
-            {
-                internalProperty.Remove();
-            }
-            else
-            {
-                ClearObject(token, nextLevelAttribute);
-            }
-        }
-
-        private static void ClearArray(JObject finalObject, IPath attributePath)
-        {
-            JToken array = (JArray)finalObject[attributePath.AttributePath];
-            List<JToken> arrayItems = array.Children().ToList();
-
-            foreach (JToken arItem in arrayItems)
-            {
-                if (MatchArrayItem(arItem, attributePath))
-                {
-                    arItem.Remove();
-                }
-            }
-        }
-
-        private static void AddArray(JObject finalObject, IPath attributePath, JToken itemValue)
-        {
-            finalObject.Add(attributePath.AttributePath, new JArray());
-            JArray jarray = (JArray)finalObject[attributePath.AttributePath];
-            List<JToken> children = itemValue.Children().ToList();
-            foreach (JToken child in children)
-            {
-                if (MatchArrayItem(child, attributePath))
-                {
-                    jarray.Add(child);
-                }
-            }
-
-        }
-
-        private static void AddObject(JObject finalObject, IPath attributePath, JToken itemValue)
-        {
-
-            JObject jobject = (JObject)finalObject[attributePath.AttributePath];
-
-            IPath nextlevelAttribe = attributePath.ValuePath;
-
-            if (nextlevelAttribe == null)
-            {
-                finalObject.Add(attributePath.AttributePath, jobject);
-            }
-            else
-            {
-                JObject emptyObject = new JObject();
-                finalObject.Add(attributePath.AttributePath, emptyObject);
-                JToken item = itemValue[nextlevelAttribe.AttributePath];
-                AddObject(emptyObject, nextlevelAttribe, item);
             }
         }
     }

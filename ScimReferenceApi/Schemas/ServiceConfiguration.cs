@@ -38,7 +38,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             this.Metadata =
                 new Metadata()
                 {
-                    ResourceType = Types.ServiceProviderConfiguration,
+                    ResourceType = ResourceTypes.ServiceProviderConfiguration,
                     Created = DateTime.Now,
                     LastModified = DateTime.Now
                 };
