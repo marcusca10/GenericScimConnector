@@ -104,6 +104,7 @@ Provided below are test cases that you can use to ensure that your SCIM endpoint
     * **If running the project locally**:
         |Variable|Value|
         |---|---|
+        |/User|**Perform CRUD operations on a user resource:** <br/> 1. Create <br/> 2. Update (PUT and PATCH) <br/> 3. Delete <br/> 4. Get <br/> 5. List <br/> 6. Filter <br/> 7. Sort <br/> 8. Patch <br/> 9. Paginate|
         |Server|localhost|
         |Port|*The port you are using (e.g. **:44355**)|
         |API|scim|
@@ -140,7 +141,6 @@ Provided below are test cases that you can use to ensure that your SCIM endpoint
     * **If running the project locally**, modify **User Defined local**:
         |Variable|Value|
         |---|---|
-        |/User|**Perform CRUD operations on a user resource:** <br/> 1. Create <br/> 2. Update (PUT and PATCH) <br/> 3. Delete <br/> 4. Get <br/> 5. List <br/> 6. Filter <br/> 7. Sort <br/> 8. Patch <br/> 9. Paginate|
         |externalId|${__UUID}
         |server|localhost
         |displayName|localhost
