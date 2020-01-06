@@ -3,6 +3,7 @@
 //------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.UserAttributes
@@ -13,6 +14,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Us
         [Key]
         [DataMember]
         [ScaffoldColumn(false)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
         [DataMember(Name = AttributeNames.Value)]
         public string Value

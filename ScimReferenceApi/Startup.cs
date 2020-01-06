@@ -50,17 +50,25 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
                     };                
             });
 
+            services.AddControllers().AddNewtonsoftJson();
 
-            services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            //services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
         public static void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {            
             app.UseHsts();
             loggerFactory.AddFile("Logs/ScimApp-{Date}.txt");
-            //app.UseHttpsRedirection();
+
+            app.UseRouting();
+            app.UseHttpsRedirection();
             app.UseAuthentication();
-            app.UseMvc();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints => { 
+                endpoints.MapDefaultControllerRoute(); 
+            });
+            //app.UseMvc();
         }
     }
 }

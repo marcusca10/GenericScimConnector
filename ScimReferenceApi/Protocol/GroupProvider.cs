@@ -5,6 +5,7 @@
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.GroupAttributes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
@@ -101,6 +102,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             Core2Group group = (Core2Group)item;
             group.Metadata.Created = DateTime.Now;
             group.Metadata.LastModified = DateTime.Now;
+
             this._context.Groups.Add(group);
             await this._context.SaveChangesAsync().ConfigureAwait(false);
             this._log.LogInformation(group.Identifier);

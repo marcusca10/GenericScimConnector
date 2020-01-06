@@ -3,6 +3,7 @@
 //------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
@@ -15,6 +16,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
         [DataMember(Name = AttributeNames.Identifier)]
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Identifier { get; set; }
     }
 }

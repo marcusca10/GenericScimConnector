@@ -4,6 +4,7 @@
 
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
@@ -12,6 +13,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
     public abstract class TypedItem : AttributeObject
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
 
         [DataMember(Name = AttributeNames.Type)]
