@@ -103,18 +103,19 @@ Provided below are test cases that you can use to ensure that your SCIM endpoint
 3. Create a Postman environment for testing by specifying the following variables below:
     * **If running the project locally**:
 
-|Variable|Value|
-|---|---|
-|Server|localhost|
-|Port|*The port you are using (e.g. **:44355**)|
-|API|scim|
+   |Variable|Value|
+   |---|---|
+   |Server|localhost|
+   |Port|*The port you are using (e.g. **:44355**)|
+   |API|scim|
             
     * **If hosting the endpoint in Azure**:
-        |Variable|Value|
-        |---|---|
-        |Server|scimreferenceapi19.azurewebsites.net|
-        |Port||
-        |API|scim|
+        
+|Variable|Value|
+|---|---|
+|Server|scimreferenceapi19.azurewebsites.net|
+|Port||
+|API|scim|
 
 4. Turn off SSL Cert verification by navigating to  **File > Settings > General > SSL certificate verification**.
 
