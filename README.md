@@ -102,12 +102,12 @@ Provided below are test cases that you can use to ensure that your SCIM endpoint
 
 3. Create a Postman environment for testing by specifying the following variables below:
     * **If running the project locally**:
-        |Variable|Value|
-        |---|---|
-        |/User|**Perform CRUD operations on a user resource:** <br/> 1. Create <br/> 2. Update (PUT and PATCH) <br/> 3. Delete <br/> 4. Get <br/> 5. List <br/> 6. Filter <br/> 7. Sort <br/> 8. Patch <br/> 9. Paginate|
-        |Server|localhost|
-        |Port|*The port you are using (e.g. **:44355**)|
-        |API|scim|
+
+|Variable|Value|
+|---|---|
+|Server|localhost|
+|Port|*The port you are using (e.g. **:44355**)|
+|API|scim|
             
     * **If hosting the endpoint in Azure**:
         |Variable|Value|
