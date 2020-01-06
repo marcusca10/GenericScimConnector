@@ -39,7 +39,6 @@ Use this reference code to get started on building a [SCIM](https://docs.microso
 
 ## Prerequisites
 
-=======
 1. [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) (required)
 2. [.NET core 3.1 or above](https://dotnet.microsoft.com/download/dotnet-core/3.1) (required)
 3. [IIS](https://www.microsoft.com/download/details.aspx?id=48264) (recommended)
