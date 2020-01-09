@@ -49,8 +49,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 this.Response.ContentType = ControllerConstants.DefaultContentType;
                 return list;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogError(e.ToString());
+                ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
+                return this.StatusCode(500, databaseException);
                 //TODO: Log the error and return an appropriate exception. Do the same for groups.
                 throw;
             }
