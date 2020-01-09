@@ -167,9 +167,9 @@ Provided below are test cases that you can use to ensure that your SCIM endpoint
 
 |Test|Description|
 |---|---|
-|CRUD operations on a user|lorem ipsum|
-|Resource filtering|lorem ipsum|
-|Attribute filtering|lorem ipsum|
+|CRUD operations on a Resource|Test resources can be made, modified, then deleted|
+|Resource filtering|Test that only items with specified value are returned ?filters=DisplayName+eq+%22BobIsAmazing%22|
+|Attribute filtering|Test that only requested attributes are returned ?attributes=userName,emails|
 
 ## Navigating the reference code
 
