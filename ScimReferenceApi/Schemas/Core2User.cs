@@ -120,8 +120,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     .Include(AttributeNames.AttributePhones)
                     .Include(AttributeNames.AttributeRoles)
                     .Include(AttributeNames.ExtentsionValues)
-                    .Include(AttributeNames.AttributeAddresses)
-                    .Include("NOTreal");
+                    .Include(AttributeNames.AttributeAddresses);
         }
 
 

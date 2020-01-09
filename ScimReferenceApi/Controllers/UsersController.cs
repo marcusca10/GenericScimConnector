@@ -54,7 +54,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 logger.LogError(e.ToString());
                 ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
                 return this.StatusCode(500, databaseException);
-                //TODO: Log the error and return an appropriate exception. Do the same for groups.
                 throw;
             }
         }
@@ -62,9 +61,17 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         [HttpGet(ControllerConstants.AttributeValueIdentifier)]
         public async Task<ActionResult<Core2User>> Get(string id)
         {
-
-            Core2User User = (Core2User)await this.provider.GetById(id).ConfigureAwait(false);
-
+            try
+            {
+                Core2User User = (Core2User)await this.provider.GetById(id).ConfigureAwait(false);
+            }
+            catch(Exception e)
+            {
+                logger.LogError(e.ToString());
+                ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
+                return this.StatusCode(500, databaseException);
+                throw;
+            }
             if (User == null)
             {
                 ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
@@ -102,12 +109,20 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return this.Conflict(conflictError);
             }
 
-            //this.context.Users.Add(item);
-            //await context.SaveChangesAsync().ConfigureAwait(false);
-            await this.provider.Add(item).ConfigureAwait(false);
+            try
+            {
+                await this.provider.Add(item).ConfigureAwait(false);
 
-            this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return this.CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
+                this.Response.ContentType = ControllerConstants.DefaultContentType;
+                return this.CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
+            }
+            catch(Exception e)
+            {
+                logger.LogError(e.ToString());
+                ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
+                return this.StatusCode(500, databaseException);
+                throw;
+            }
 
         }
 
@@ -136,10 +151,21 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return this.NotFound(notFoundError);
             }
 
-            await this.provider.Replace(item, User).ConfigureAwait(false);
 
-            this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return this.Ok(User);
+            try
+            {
+                await this.provider.Replace(item, User).ConfigureAwait(false);
+
+                this.Response.ContentType = ControllerConstants.DefaultContentType;
+                return this.Ok(User);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.ToString());
+                ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
+                return this.StatusCode(500, databaseException);
+                throw;
+            }
         }
 
         [HttpDelete(ControllerConstants.AttributeValueIdentifier)]
@@ -152,20 +178,38 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return this.NotFound(notFoundError);
             }
 
-            await this.provider.Delete(User).ConfigureAwait(false);
+            try
+            {
+                await this.provider.Delete(User).ConfigureAwait(false);
 
-
-            this.Response.ContentType = ControllerConstants.DefaultContentType;
-            return this.NoContent();
+                this.Response.ContentType = ControllerConstants.DefaultContentType;
+                return this.NoContent();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.ToString());
+                ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
+                return this.StatusCode(500, databaseException);
+                throw;
+            }
         }
 
         [HttpPatch(ControllerConstants.AttributeValueIdentifier)]
         public IActionResult Patch(string id, JObject body)
         {
+            try
+            {
+                this.provider.Update(id, body);
 
-            this.provider.Update(id, body);
-
-            return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
+                return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.ToString());
+                ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
+                return this.StatusCode(500, databaseException);
+                throw;
+            }
         }
 
         private static Core2User BuildUser(JObject body)
