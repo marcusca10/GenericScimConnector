@@ -73,9 +73,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Core2Group>> Post(Core2Group item)
         {
-            if (item.DisplayName == null)
+            if (String.IsNullOrWhiteSpace(item.DisplayName))
             {
-                return this.BadRequest();
+                ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.NoUsername, ErrorDetail.Status400);
+                return this.BadRequest(badRequestError);
             }
 
             bool Exists = this.context.Groups.Any(x => x.DisplayName == item.DisplayName);
