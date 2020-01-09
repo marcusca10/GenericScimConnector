@@ -96,7 +96,7 @@ Provided below are test cases that you can use to ensure that your SCIM endpoint
 
 #### Postman instructions
 1. Download the [Postman client](https://www.getpostman.com/downloads/).
-2. Import the Postman collection [here](https://aka.ms/ProvisioningPostman).
+2. Import the Postman collection by copying the link [here](https://aka.ms/ProvisioningPostman) and pasting it into Postman as shown below:
 
     ![Postman](Screenshots/Postman.png)
 
