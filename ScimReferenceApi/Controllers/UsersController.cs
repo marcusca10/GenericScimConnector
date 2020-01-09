@@ -61,9 +61,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         [HttpGet(ControllerConstants.AttributeValueIdentifier)]
         public async Task<ActionResult<Core2User>> Get(string id)
         {
+            Core2User User;
             try
             {
-                Core2User User = (Core2User)await this.provider.GetById(id).ConfigureAwait(false);
+                User = (Core2User)await this.provider.GetById(id).ConfigureAwait(false);
             }
             catch(Exception e)
             {
