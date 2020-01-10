@@ -55,6 +55,14 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             set;
         }
 
+
+        [DataMember(Name = AttributeNames.ExtentsionValues, IsRequired = false, EmitDefaultValue = false)]
+        public virtual IEnumerable<ExtensionAttributeBase> Extensions
+        {
+            get;
+            set;
+        }
+
         [DataMember(Name = AttributeNames.Metadata)]
         public virtual Metadata Metadata
         {

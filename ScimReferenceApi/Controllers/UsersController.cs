@@ -219,9 +219,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             {
                 throw new ArgumentException(AttributeNames.Schemas);
             }
-            JEnumerable<JToken> shemas = body[AttributeNames.Schemas].Children();
+            JEnumerable<JToken> schemas = body[AttributeNames.Schemas].Children();
             Core2User item;
-            if (shemas.Contains(SchemaIdentifiers.Core2EnterpriseUser))
+
+            if (schemas.Contains(SchemaIdentifiers.Core2EnterpriseUser))
             {
                 item = body.ToObject<Core2EnterpriseUser>();
             }
