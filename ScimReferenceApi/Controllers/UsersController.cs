@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
@@ -25,14 +26,13 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
     {
         private readonly ScimContext _context;
         private readonly ILogger<UsersController> _logger;
-
-        private UserProvider provider;
+        private readonly IProviderService<Core2User> _provider;
 
         public UsersController(ScimContext context, ILogger<UsersController> logger)
         {
             this._context = context;
             this._logger = logger;
-            this.provider = new UserProvider(this._context, this._logger);
+            this._provider = new UserProviderService(this._context, this._logger);
         }
 
         [HttpGet]
@@ -45,14 +45,14 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             try
             {
-                ListResponse<Resource> list = await this.provider.Query(query, requested, exculted).ConfigureAwait(false);
+                ListResponse<Resource> list = await this._provider.Query(query, requested, exculted).ConfigureAwait(false);
             
                 this.Response.ContentType = ControllerConstants.DefaultContentType;
                 return list;
             }
             catch (Exception e)
             {
-                logger.LogError(e.ToString());
+                _logger.LogError(e.ToString());
                 ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
                 return this.StatusCode(500, databaseException);
                 throw;
@@ -65,11 +65,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             Core2User User;
             try
             {
-                User = (Core2User)await this.provider.GetById(id).ConfigureAwait(false);
+                User = (Core2User)await this._provider.GetById(id).ConfigureAwait(false);
             }
             catch(Exception e)
             {
-                logger.LogError(e.ToString());
+                _logger.LogError(e.ToString());
                 ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
                 return this.StatusCode(500, databaseException);
                 throw;
@@ -113,14 +113,14 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             try
             {
-                await this.provider.Add(item).ConfigureAwait(false);
+                await this._provider.Add(item).ConfigureAwait(false);
 
                 this.Response.ContentType = ControllerConstants.DefaultContentType;
                 return this.CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
             }
             catch(Exception e)
             {
-                logger.LogError(e.ToString());
+                _logger.LogError(e.ToString());
                 ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
                 return this.StatusCode(500, databaseException);
                 throw;
@@ -156,14 +156,14 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             try
             {
-                await this.provider.Replace(item, User).ConfigureAwait(false);
+                await this._provider.Replace(item, User).ConfigureAwait(false);
 
                 this.Response.ContentType = ControllerConstants.DefaultContentType;
                 return this.Ok(User);
             }
             catch (Exception e)
             {
-                logger.LogError(e.ToString());
+                _logger.LogError(e.ToString());
                 ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
                 return this.StatusCode(500, databaseException);
                 throw;
@@ -182,14 +182,14 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
             try
             {
-                await this.provider.Delete(User).ConfigureAwait(false);
+                await this._provider.Delete(User).ConfigureAwait(false);
 
                 this.Response.ContentType = ControllerConstants.DefaultContentType;
                 return this.NoContent();
             }
             catch (Exception e)
             {
-                logger.LogError(e.ToString());
+                _logger.LogError(e.ToString());
                 ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
                 return this.StatusCode(500, databaseException);
                 throw;
@@ -201,13 +201,13 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         {
             try
             {
-                this.provider.Update(id, body);
+                this._provider.Update(id, body);
 
                 return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
             }
             catch (Exception e)
             {
-                logger.LogError(e.ToString());
+                _logger.LogError(e.ToString());
                 ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
                 return this.StatusCode(500, databaseException);
                 throw;

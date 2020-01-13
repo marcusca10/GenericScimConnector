@@ -4,6 +4,7 @@
 
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.GroupAttributes;
 using Microsoft.EntityFrameworkCore;
@@ -17,16 +18,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
+namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Services
 {
-    public class GroupProvider : IProvider
+    public class GroupProviderService : IProviderService<Core2Group>
     {
         private readonly ScimContext _context;
         private readonly ILogger<UsersController> _log;
         private string[] allwaysRetuned = ControllerConstants.AlwaysRetunedAttributes;
         private int DefaultStartIndex = 1;
 
-        public GroupProvider(ScimContext context, ILogger<UsersController> log)
+        public GroupProviderService(ScimContext context, ILogger<UsersController> log)
         {
             this._context = context;
             this._log = log;

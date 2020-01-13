@@ -6,9 +6,9 @@ using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
+namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Services
 {
-    public interface IProvider
+    public interface IProviderService<T>
     {
         Task<ListResponse<Resource>> Query(string query, IEnumerable<string> requested, IEnumerable<string> excluded);
 

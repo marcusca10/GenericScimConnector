@@ -2,6 +2,7 @@
 // Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
@@ -16,16 +17,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
+namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Services
 {
-    public class UserProvider : IProvider
+    public class UserProviderService : IProviderService<Core2User>
     {
         private string[] alwaysRetuned = ControllerConstants.AlwaysRetunedAttributes;
         private readonly ScimContext context;
         private int defaultStartIndex = 1;
         private readonly ILogger<UsersController> logger;
 
-        public UserProvider(ScimContext context, ILogger<UsersController> log)
+        public UserProviderService(ScimContext context, ILogger<UsersController> log)
         {
             this.context = context;
             this.logger = log;

@@ -4,6 +4,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Services;
 using Microsoft.Extensions.Logging;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
@@ -12,12 +13,14 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
     [ApiController]
     public class MeController : ControllerBase
     {
-        private readonly ScimContext _context;
+        private readonly IProviderService<Core2User> _provider;
+        //private readonly ScimContext _context;
         private readonly ILogger<UsersController> _logger;
 
-        public MeController(ScimContext context, ILogger<UsersController> log)
+        public MeController(IProviderService<Core2User> provider, ILogger<UsersController> log)
         {
-            this._context = context;
+            this._provider = provider;
+            //this._context = context;
             this._logger = log;
         }
 

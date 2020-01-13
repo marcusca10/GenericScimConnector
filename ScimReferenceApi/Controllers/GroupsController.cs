@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
@@ -21,17 +22,16 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 	//[Authorize]
 	public class GroupsController : ControllerBase
 	{
-    private readonly ScimContext _context;
-    private readonly ILogger<UsersController> _logger;
-
-		private GroupProvider provider;
+		private readonly ScimContext _context;
+		private readonly ILogger<UsersController> _logger;
+		private readonly IProviderService<Core2Group> _provider;
 		private string[] alwaysRetuned = ControllerConstants.AlwaysRetunedAttributes;
 
 		public GroupsController(ScimContext context, ILogger<UsersController> logger)
 		{
 			this._context = context;
 			this._logger = logger;
-			this.provider = new GroupProvider(this._context, this._logger);
+			this._provider = new GroupProviderService(this._context, this._logger);
 		}
 
 		[HttpGet]
@@ -43,7 +43,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
 			try
 			{
-				ListResponse<Resource> list = await this.provider.Query(query, requested, exculted).ConfigureAwait(false);
+				ListResponse<Resource> list = await this._provider.Query(query, requested, exculted).ConfigureAwait(false);
 
 				this.Response.ContentType = ControllerConstants.DefaultContentType;
 				return list;
@@ -65,7 +65,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
 			try
 			{
-				Core2Group Group = (Core2Group)await this.provider.GetById(id).ConfigureAwait(false);
+				Core2Group Group = (Core2Group)await this._provider.GetById(id).ConfigureAwait(false);
 
 				if (Group == null)
 				{
@@ -105,7 +105,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 
 			try
 			{
-				await this.provider.Add(item).ConfigureAwait(false);
+				await this._provider.Add(item).ConfigureAwait(false);
 
 				this.Response.ContentType = ControllerConstants.DefaultContentType;
 				return this.CreatedAtAction(nameof(Get), new { id = item.DisplayName }, item);
@@ -131,7 +131,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 			try
 			{
 				Core2Group group = this._context.CompleteGroups().FirstOrDefault(g => g.Identifier.Equals(id, StringComparison.CurrentCulture));
-				await this.provider.Replace(item, group).ConfigureAwait(false);
+				await this._provider.Replace(item, group).ConfigureAwait(false);
 
 				this.Response.ContentType = ControllerConstants.DefaultContentType;
 				return this.Ok(group);
@@ -158,7 +158,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 					return this.NotFound(notFoundError);
 				}
 
-				await this.provider.Delete(Group).ConfigureAwait(false);
+				await this._provider.Delete(Group).ConfigureAwait(false);
 
 				this.Response.ContentType = ControllerConstants.DefaultContentType;
 				return this.NoContent();
@@ -177,7 +177,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 		{
 			try
 			{
-				this.provider.Update(id, body);
+				this._provider.Update(id, body);
 
 				return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent);
 			}

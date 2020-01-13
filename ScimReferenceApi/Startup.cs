@@ -29,6 +29,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
         {
             services.AddDbContext<ScimContext>((DbContextOptionsBuilder opt) => opt.UseInMemoryDatabase("ONAD"));
 
+            services.AddProviderService();
+
             services.AddAuthentication(options => 
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
