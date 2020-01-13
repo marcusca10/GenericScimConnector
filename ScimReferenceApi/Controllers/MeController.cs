@@ -12,13 +12,13 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
     [ApiController]
     public class MeController : ControllerBase
     {
-        private readonly ScimContext context;
-        private readonly ILogger<UsersController> logger;
+        private readonly ScimContext _context;
+        private readonly ILogger<UsersController> _logger;
 
         public MeController(ScimContext context, ILogger<UsersController> log)
         {
-            this.context = context;
-            this.logger = log;
+            this._context = context;
+            this._logger = log;
         }
 
         [HttpDelete(ControllerConstants.AttributeValueIdentifier)]
