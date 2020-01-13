@@ -52,7 +52,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             }
             catch (Exception e)
             {
-                logger.LogError(e.ToString());
+                this._logger.LogError(e.ToString());
                 ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
                 return this.StatusCode(500, databaseException);
                 throw;
@@ -69,7 +69,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             }
             catch(Exception e)
             {
-                logger.LogError(e.ToString());
+                this._logger.LogError(e.ToString());
                 ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
                 return this.StatusCode(500, databaseException);
                 throw;
@@ -120,7 +120,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             }
             catch(Exception e)
             {
-                logger.LogError(e.ToString());
+                this._logger.LogError(e.ToString());
                 ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
                 return this.StatusCode(500, databaseException);
                 throw;
@@ -163,7 +163,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             }
             catch (Exception e)
             {
-                logger.LogError(e.ToString());
+                this._logger.LogError(e.ToString());
                 ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
                 return this.StatusCode(500, databaseException);
                 throw;
@@ -189,7 +189,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             }
             catch (Exception e)
             {
-                logger.LogError(e.ToString());
+                this._logger.LogError(e.ToString());
                 ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
                 return this.StatusCode(500, databaseException);
                 throw;
@@ -207,7 +207,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             }
             catch (Exception e)
             {
-                logger.LogError(e.ToString());
+                this._logger.LogError(e.ToString());
                 ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
                 return this.StatusCode(500, databaseException);
                 throw;
