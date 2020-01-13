@@ -88,6 +88,24 @@ The solution is located in the ScimReferenceApi folder and can be built and run 
 
 All the endpoints are are at the **{host}/scim/** directory and can be interacted with standard HTTP requests. The **/scim/** route can be modified in the **ControllerConstant.cs** file located in **AzureADProvisioningSCIMreference > ScimReferenceApi > Controllers**.
 
+## Authorization
+The SCIM standard leaves authentication and authorization relatively open. You could use cookies, basic authentication, TLS client authentication, or any of the other methods listed [here](https://tools.ietf.org/html/rfc7644#section-2). You should take into consideration security and industry best practices when choosing an authentication/authorization method. Avoid insecure methods such as username and password in favor of more secure methods such as OAuth. Azure AD supports long-lived bearer tokens (for gallery and non-gallery applications) as well as the OAuth authorization grant (for applications published in the app gallery). This reference code allows you to either turn authorization off to simplify testing, generate a bearer token, or bring your own bearer token. 
+
+**Option 1**: Turn off authorization (this should only be used for testing) 
+* Navigate to the **UsersController.cs** or **GroupController.cs** files located in **ScimReferenceApi > Controllers**.<br/>2. Comment out the authorize command.
+
+**Option 2**: Get a bearer token signed by Microsoft security bearer (should only be used for testing, not in production) 
+* Post to to the key endpoint with the string "SecureLogin" to retrieve a token. The token is valid for 120 minutes (the validity can be changed in the key controller). 
+
+**Option 3**: Bring your own token
+* **Option 3a**: Generate your own token that matches the specifications of the reference code. 
+  * By default the issuer, audience, and signer must be "Microsoft.Security.Bearer"
+  * These are defaults to get started testing quickly. They should not be relied on in production. 
+* **Option 3b**: Generate your own token and update the specifications of the reference code to match your token. 
+  * Change the specifications in the configure service section of the startup.cs class.
+  * Specify the authorization settings you would like to validate. 
+  * Generate a token on your own that matches those specifications. 
+
 ## Test your SCIM endpoint
 Provided below are test cases that you can use to ensure that your SCIM endpoint is compliant with the SCIM RFC. The test cases have been authored for:
 
