@@ -12,10 +12,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         public const string DisplaynameConflict = "DisplayName already exists";
         public const string Mutability = "Attribute 'id' is read only";
         public const string NotFound = "Resource {0} not found";
+        public const string DatabaseError = "A request to the database could not be processed";
 
         public const string Status400 = "400";
         public const string Status401 = "401";
         public const string Status404 = "404";
         public const string Status409 = "409";
+        public const string Status500 = "500";
     }
 }

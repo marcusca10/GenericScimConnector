@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+using System.Globalization;
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
@@ -36,7 +38,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             TypeScheme item = items.FirstOrDefault(sch => sch.Identifier.Equals(id, StringComparison.InvariantCultureIgnoreCase) || sch.Identifier.EndsWith(id, StringComparison.InvariantCultureIgnoreCase));
             if (item == null)
             {
-                return this.NotFound();
+                ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
+                return this.NotFound(notFoundError);
             }
             return item;
         }
