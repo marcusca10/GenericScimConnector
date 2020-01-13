@@ -23,15 +23,16 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
     //[Authorize]
     public class UsersController : ControllerBase
     {
-        private readonly ScimContext context;
-        private readonly ILogger<UsersController> logger;
+        private readonly ScimContext _context;
+        private readonly ILogger<UsersController> _logger;
+
         private UserProvider provider;
 
         public UsersController(ScimContext context, ILogger<UsersController> logger)
         {
-            this.context = context;
-            this.logger = logger;
-            this.provider = new UserProvider(this.context, this.logger);
+            this._context = context;
+            this._logger = logger;
+            this.provider = new UserProvider(this._context, this._logger);
         }
 
         [HttpGet]
@@ -103,7 +104,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return this.BadRequest(badRequestError);
             }
 
-            bool Exists = this.context.Users.Any(x => x.UserName == item.UserName);
+            bool Exists = this._context.Users.Any(x => x.UserName == item.UserName);
             if (Exists == true)
             {
                 ErrorResponse conflictError = new ErrorResponse(ErrorDetail.UsernameConflict, ErrorDetail.Status409);
@@ -142,7 +143,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return this.BadRequest(badRequestError);
             }
 
-            var User = this.context.CompleteUsers()
+            var User = this._context.CompleteUsers()
                 .Where(p => p.Identifier == id)
                 .SingleOrDefault();
 
@@ -172,7 +173,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         [HttpDelete(ControllerConstants.AttributeValueIdentifier)]
         public async Task<IActionResult> Delete(string id)
         {
-            var User = await this.context.Users.FindAsync(id).ConfigureAwait(false);
+            var User = await this._context.Users.FindAsync(id).ConfigureAwait(false);
             if (User == null)
             {
                 ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
