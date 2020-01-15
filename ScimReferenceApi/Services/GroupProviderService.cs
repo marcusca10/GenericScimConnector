@@ -4,6 +4,7 @@
 
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch;
+using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
 using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.GroupAttributes;
 using Microsoft.EntityFrameworkCore;
@@ -17,23 +18,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
+namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Services
 {
-    public class GroupProvider : IProvider
+    public class GroupProviderService : IProviderService<Core2Group>
     {
         private readonly ScimContext _context;
-        private readonly ILogger<UsersController> _log;
+        private readonly ILogger<GroupsController> _log;
         private string[] allwaysRetuned = ControllerConstants.AlwaysRetunedAttributes;
         private int DefaultStartIndex = 1;
 
-        public GroupProvider(ScimContext context, ILogger<UsersController> log)
+        public GroupProviderService(ScimContext context, ILogger<GroupsController> log)
         {
             this._context = context;
             this._log = log;
         }
 
 
-        public async Task<ListResponse<Resource>> Query(string query, IEnumerable<string> requested, IEnumerable<string> exculted)
+        public async Task<ListResponse<Resource>> Query(string query, IEnumerable<string> requested, IEnumerable<string> excluded)
         {
             IEnumerable<Core2Group> groups;
             if (!string.IsNullOrWhiteSpace(query))
@@ -74,7 +75,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             }
 
             groups = groups.Select(u =>
-                ColumnsUtility.FilterAttributes(requested, exculted, u, this.allwaysRetuned)).ToList();
+                ColumnsUtility.FilterAttributes(requested, excluded, u, this.allwaysRetuned)).ToList();
 
 
 
@@ -93,7 +94,13 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 
         public async Task<Resource> GetById(string id)
         {
-            Core2Group group = await this._context.CompleteGroups().FirstOrDefaultAsync(i => i.Identifier.Equals(id, StringComparison.Ordinal)).ConfigureAwait(false);
+            Core2Group group = await this._context.CompleteGroups().FirstOrDefaultAsync(i => i.Identifier.Equals(id, StringComparison.OrdinalIgnoreCase)).ConfigureAwait(false);
+            return group;
+        }
+
+        public async Task<Resource> GetByName(string name)
+        {
+            Core2Group group = await this._context.CompleteGroups().FirstOrDefaultAsync(i => i.DisplayName.Equals(name, StringComparison.OrdinalIgnoreCase)).ConfigureAwait(false);
             return group;
         }
 
