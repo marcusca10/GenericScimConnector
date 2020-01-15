@@ -13,6 +13,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Services
         Task<ListResponse<Resource>> Query(string query, IEnumerable<string> requested, IEnumerable<string> excluded);
 
         Task<Resource> GetById(string id);
+        Task<Resource> GetByName(string name);
         Task Add(Resource resource);
         Task Replace(Resource old, Resource newresorce);
         Task Delete(Resource resource);

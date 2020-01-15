@@ -20,7 +20,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         public MeController(IProviderService<Core2User> provider, ILogger<UsersController> log)
         {
             this._provider = provider;
-            //this._context = context;
             this._logger = log;
         }
 

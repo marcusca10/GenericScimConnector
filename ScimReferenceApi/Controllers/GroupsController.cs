@@ -22,16 +22,14 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 	//[Authorize]
 	public class GroupsController : ControllerBase
 	{
-		private readonly ScimContext _context;
-		private readonly ILogger<UsersController> _logger;
 		private readonly IProviderService<Core2Group> _provider;
+		private readonly ILogger<GroupsController> _logger;
 		private string[] alwaysRetuned = ControllerConstants.AlwaysRetunedAttributes;
 
-		public GroupsController(ScimContext context, ILogger<UsersController> logger)
+		public GroupsController(IProviderService<Core2Group> provider, ILogger<GroupsController> logger)
 		{
-			this._context = context;
+			this._provider = provider;
 			this._logger = logger;
-			this._provider = new GroupProviderService(this._context, this._logger);
 		}
 
 		[HttpGet]
@@ -39,11 +37,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 		{
 			string query = this.Request.QueryString.ToUriComponent();
 			StringValues requested = this.Request.Query[QueryKeys.Attributes];
-			StringValues exculted = this.Request.Query[QueryKeys.ExcludedAttributes];
+			StringValues excluded = this.Request.Query[QueryKeys.ExcludedAttributes];
 
 			try
 			{
-				ListResponse<Resource> list = await this._provider.Query(query, requested, exculted).ConfigureAwait(false);
+				ListResponse<Resource> list = await this._provider.Query(query, requested, excluded).ConfigureAwait(false);
 
 				this.Response.ContentType = ControllerConstants.DefaultContentType;
 				return list;
@@ -61,22 +59,22 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 		public async Task<ActionResult<Core2Group>> Get(string id)
 		{
 			StringValues requested = this.Request.Query[QueryKeys.Attributes];
-			StringValues exculted = this.Request.Query[QueryKeys.ExcludedAttributes];
+			StringValues excluded = this.Request.Query[QueryKeys.ExcludedAttributes];
 
 			try
 			{
-				Core2Group Group = (Core2Group)await this._provider.GetById(id).ConfigureAwait(false);
+				Core2Group group = (Core2Group)await this._provider.GetById(id).ConfigureAwait(false);
 
-				if (Group == null)
+				if (group == null)
 				{
 					ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
 					return this.NotFound(notFoundError);
 				}
 
-				Group = ColumnsUtility.FilterAttributes(requested, exculted, Group, this.alwaysRetuned);
+				group = ColumnsUtility.FilterAttributes(requested, excluded, group, this.alwaysRetuned);
 
 				this.Response.ContentType = ControllerConstants.DefaultContentType;
-				return Group;
+				return group;
 			}
 			catch (Exception e)
 			{
@@ -96,8 +94,8 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 				return this.BadRequest(badRequestError);
 			}
 
-			bool Exists = this._context.Groups.Any(x => x.DisplayName == item.DisplayName);
-			if (Exists == true)
+			var group = await this._provider.GetByName(item.DisplayName).ConfigureAwait(false);
+			if (group != null)
 			{
 				ErrorResponse conflictError = new ErrorResponse(ErrorDetail.DisplaynameConflict, ErrorDetail.Status409);
 				return this.NotFound(conflictError);
@@ -124,13 +122,13 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 		{
 			if (id != item.Identifier)
 			{
-				ErrorResponse BadRequestError = new ErrorResponse(ErrorDetail.Mutability, ErrorDetail.Status400);
-				return this.NotFound(BadRequestError);
+				ErrorResponse badRequestError = new ErrorResponse(ErrorDetail.Mutability, ErrorDetail.Status400);
+				return this.NotFound(badRequestError);
 			}
 
 			try
 			{
-				Core2Group group = this._context.CompleteGroups().FirstOrDefault(g => g.Identifier.Equals(id, StringComparison.CurrentCulture));
+				Core2Group group = (Core2Group)await this._provider.GetById(id).ConfigureAwait(false);
 				await this._provider.Replace(item, group).ConfigureAwait(false);
 
 				this.Response.ContentType = ControllerConstants.DefaultContentType;
@@ -150,15 +148,14 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 		{
 			try
 			{
-				Core2Group Group = await this._context.Groups.FindAsync(id).ConfigureAwait(false);
-
-				if (Group == null)
+				var group = await this._provider.GetById(id).ConfigureAwait(false);
+				if (group == null)
 				{
 					ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
 					return this.NotFound(notFoundError);
 				}
 
-				await this._provider.Delete(Group).ConfigureAwait(false);
+				await this._provider.Delete(group).ConfigureAwait(false);
 
 				this.Response.ContentType = ControllerConstants.DefaultContentType;
 				return this.NoContent();

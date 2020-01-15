@@ -22,28 +22,28 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Services
     public class UserProviderService : IProviderService<Core2User>
     {
         private string[] alwaysRetuned = ControllerConstants.AlwaysRetunedAttributes;
-        private readonly ScimContext context;
+        private readonly ScimContext _context;
         private int defaultStartIndex = 1;
-        private readonly ILogger<UsersController> logger;
+        private readonly ILogger<UsersController> _logger;
 
         public UserProviderService(ScimContext context, ILogger<UsersController> log)
         {
-            this.context = context;
-            this.logger = log;
+            this._context = context;
+            this._logger = log;
         }
 
-        public async Task<ListResponse<Resource>> Query(string query, IEnumerable<string> requested, IEnumerable<string> exculted)
+        public async Task<ListResponse<Resource>> Query(string query, IEnumerable<string> requested, IEnumerable<string> excluded)
         {
 
             IEnumerable<Core2User> users;
 
             if (!string.IsNullOrWhiteSpace(query))
             {
-                users = new FilterUsers(this.context).FilterGen(query);
+                users = new FilterUsers(this._context).FilterGen(query);
             }
             else
             {
-                users = await this.context.CompleteUsers().ToListAsync().ConfigureAwait(false);
+                users = await this._context.CompleteUsers().ToListAsync().ConfigureAwait(false);
             }
 
             NameValueCollection keyedValues = HttpUtility.ParseQueryString(query);
@@ -74,7 +74,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Services
             }
 
             users = users.Select(u =>
-                ColumnsUtility.FilterAttributes(requested, exculted, u, this.alwaysRetuned)).ToList();
+                ColumnsUtility.FilterAttributes(requested, excluded, u, this.alwaysRetuned)).ToList();
             
             ListResponse<Resource> list = new ListResponse<Resource>()
             {
@@ -92,8 +92,14 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Services
 
         public async Task<Resource> GetById(string id)
         {
-            Core2User User = await this.context.CompleteUsers().FirstOrDefaultAsync(i => i.Identifier.Equals(id, StringComparison.Ordinal)).ConfigureAwait(false);
+            Core2User User = await this._context.CompleteUsers().FirstOrDefaultAsync(i => i.Identifier.Equals(id, StringComparison.OrdinalIgnoreCase)).ConfigureAwait(false);
             return User;
+        }
+
+        public async Task<Resource> GetByName(string name)
+        {
+            Core2User user = await this._context.CompleteUsers().FirstOrDefaultAsync(i => i.UserName.Equals(name, StringComparison.OrdinalIgnoreCase)).ConfigureAwait(false);
+            return user;
         }
 
         public async Task Add(Resource item)
@@ -104,9 +110,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Services
 
             user.Identifier = Guid.NewGuid().ToString();
 
-            this.context.Users.Add(user);
-            await this.context.SaveChangesAsync().ConfigureAwait(false);
-            this.logger.LogInformation(user.UserName);
+            this._context.Users.Add(user);
+            await this._context.SaveChangesAsync().ConfigureAwait(false);
+            this._logger.LogInformation(user.UserName);
         }
 
         public async Task Replace(Resource old, Resource next)
@@ -120,16 +126,16 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Services
             user.PhoneNumbers = item.PhoneNumbers;
             user.Roles = item.Roles;
             user.Addresses = item.Addresses;
-            this.context.Entry(user).CurrentValues.SetValues(item);
-            await this.context.SaveChangesAsync().ConfigureAwait(false);
-            this.logger.LogInformation(item.UserName);
+            this._context.Entry(user).CurrentValues.SetValues(item);
+            await this._context.SaveChangesAsync().ConfigureAwait(false);
+            this._logger.LogInformation(item.UserName);
         }
 
-        public async Task Delete(Resource User)
+        public async Task Delete(Resource user)
         {
-            this.context.Users.Remove((Core2User)User);
-            await this.context.SaveChangesAsync().ConfigureAwait(false);
-            this.logger.LogInformation(User.Identifier);
+            this._context.Users.Remove((Core2User)user);
+            await this._context.SaveChangesAsync().ConfigureAwait(false);
+            this._logger.LogInformation(user.Identifier);
         }
 
         public void Update(string id, JObject body)
@@ -151,7 +157,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Services
                 throw new NotSupportedException(unsupportedPatchTypeName);
             }
 
-            var usertoModify = this.context.CompleteUsers().FirstOrDefault((user) => user.Identifier.Equals(id, StringComparison.Ordinal));
+            var usertoModify = this._context.CompleteUsers().FirstOrDefault((user) => user.Identifier.Equals(id, StringComparison.Ordinal));
             if (patchRequest != null)
             {
                 if (usertoModify != null)
@@ -179,7 +185,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Services
                     }
                 }
             }
-            this.context.SaveChanges();
+            this._context.SaveChanges();
         }
     }
 }
