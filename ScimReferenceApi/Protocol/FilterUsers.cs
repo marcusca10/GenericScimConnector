@@ -1,20 +1,19 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
-
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Linq;
-using System.Web;
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.Globalization;
+    using System.Linq;
+    using System.Web;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+
     public class FilterUsers
     {
-
         private readonly ScimContext _context;
 
         public FilterUsers(ScimContext context)

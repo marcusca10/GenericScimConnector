@@ -1,23 +1,21 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Services;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Logging;
+    using Newtonsoft.Json.Linq;
 
     [Route(ControllerConstants.DefaultRouteUsers)]
     [ApiController]
@@ -44,7 +42,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             try
             {
                 ListResponse<Resource> list = await this._provider.Query(query, requested, excluded).ConfigureAwait(false);
-            
+
                 this.Response.ContentType = ControllerConstants.DefaultContentType;
                 return list;
             }
@@ -65,7 +63,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
             {
                 user = (Core2User)await this._provider.GetById(id).ConfigureAwait(false);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 this._logger.LogError(e.ToString());
                 ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
@@ -102,7 +100,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return this.BadRequest(badRequestError);
             }
 
-            var user = await this._provider.GetByName(item.UserName).ConfigureAwait(false);
+            Resource user = await this._provider.GetByName(item.UserName).ConfigureAwait(false);
             if (user != null)
             {
                 ErrorResponse conflictError = new ErrorResponse(ErrorDetail.UsernameConflict, ErrorDetail.Status409);
@@ -116,7 +114,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 this.Response.ContentType = ControllerConstants.DefaultContentType;
                 return this.CreatedAtAction(nameof(Get), new { id = item.Identifier }, item);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 this._logger.LogError(e.ToString());
                 ErrorResponse databaseException = new ErrorResponse(ErrorDetail.DatabaseError, ErrorDetail.Status500);
@@ -141,7 +139,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
                 return this.BadRequest(badRequestError);
             }
 
-            var user = (Core2User)await this._provider.GetById(id).ConfigureAwait(false);
+            Core2User user = (Core2User)await this._provider.GetById(id).ConfigureAwait(false);
             if (user == null)
             {
                 ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);
@@ -168,7 +166,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         [HttpDelete(ControllerConstants.AttributeValueIdentifier)]
         public async Task<IActionResult> Delete(string id)
         {
-            var User = await this._provider.GetById(id).ConfigureAwait(false);
+            Resource User = await this._provider.GetById(id).ConfigureAwait(false);
             if (User == null)
             {
                 ErrorResponse notFoundError = new ErrorResponse(string.Format(CultureInfo.InvariantCulture, ErrorDetail.NotFound, id), ErrorDetail.Status404);

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
+﻿namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public abstract class ExtensionAttributeBase
     {
         [Key]
@@ -15,7 +11,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
         public abstract string ExtensionSchemaName
         {
-            get;            
-        }        
+            get;
+        }
     }
 }

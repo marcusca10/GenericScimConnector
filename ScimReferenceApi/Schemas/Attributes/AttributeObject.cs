@@ -1,14 +1,14 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
-
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Reflection;
-using System;
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes
 {
+    using System;
+    using System.Linq;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+
     public class AttributeObject
     {
         public object this[string propertyName]

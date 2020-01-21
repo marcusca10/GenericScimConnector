@@ -1,16 +1,16 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
-using Newtonsoft.Json.Linq;
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+    using Newtonsoft.Json.Linq;
+
     public static class ColumnsUtility
     {
         public static T FilterAttributes<T>(IEnumerable<string> requestedAttributes, IEnumerable<string> excludedAttributes, T projectedResouce, string[] allwaysRetuned) where T : Resource
@@ -30,7 +30,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
                     jarray.Add(child);
                 }
             }
-
         }
 
         private static void AddObject(JObject finalObject, IPath attributePath, JToken itemValue)
@@ -142,7 +141,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
                                 }
                                 else
                                 {
-                                    ClearArray(result, attributePath);
+                                    ColumnsUtility.ClearArray(result, attributePath);
                                 }
                                 break;
                             case JTokenType.Object:
@@ -214,7 +213,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
             JArray jArray = (JArray)(child.Children().First());
             if (directRequested.Any(testing => !testing.SubAttributes.Any()))
             {
-                return;//Requested just the entire array do not remve elemnts 
+                return;//Requested just the entire array do not remve elemnts
             }
             if (directExclude.Any(testing => !testing.SubAttributes.Any()))
             {

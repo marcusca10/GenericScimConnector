@@ -27,11 +27,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    
+
     <Compile Remove="Util\**" />
-    
+
     <Compile Remove="wwwroot\**" />
-    
+
     <Content Remove="Util\**" />
     <Content Remove="wwwroot\**" />
     <EmbeddedResource Remove="Util\**" />
@@ -61,7 +61,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0" />
-    
+
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

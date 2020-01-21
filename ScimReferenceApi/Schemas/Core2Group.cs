@@ -1,17 +1,17 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.GroupAttributes;
-using Microsoft.EntityFrameworkCore;
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.Serialization;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.GroupAttributes;
+    using Microsoft.EntityFrameworkCore;
+
     [DataContract]
     public class Core2Group : Resource
     {
@@ -139,7 +139,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
             group.Members = PatchMembers(group.Members, operation);
             if (operation.Value.Count > 1)
             {
-                var list = operation.Value.ToList();
+                List<Newtonsoft.Json.Linq.JToken> list = operation.Value.ToList();
                 list.RemoveAt(0);
                 operation.Value = list;
                 group.PatchMembers(operation);

@@ -1,17 +1,14 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
+    using System.Collections.Generic;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+    using Newtonsoft.Json;
+
     [Route(ControllerConstants.DefaultRouteResourceType)]
     [ApiController]
     public class ResourceTypesController : ControllerBase

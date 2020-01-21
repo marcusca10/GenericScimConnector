@@ -1,39 +1,39 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
-
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 {
-    // Parses filter expressions into a doubly-linked list.  
-    // A collection of IFilter objects can be obtained from the fully-parsed expression.  
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+
+    // Parses filter expressions into a doubly-linked list.
+    // A collection of IFilter objects can be obtained from the fully-parsed expression.
     //
-    // Brackets, that is, '(' and '),' characters demarcate groups.  
-    // So, each expression has a group identifier.  
-    // Group identifiers are integers, 
-    // but the group identifier may be consisted a "nominal variable," 
-    // in the terminology of applied statistics: https://en.wikipedia.org/wiki/Level_of_measurement.  
-    // Specifically, it does not matter that group 4 is followed by group 6, 
-    // but merely that the expressions of group six are not in group 4.  
+    // Brackets, that is, '(' and '),' characters demarcate groups.
+    // So, each expression has a group identifier.
+    // Group identifiers are integers,
+    // but the group identifier may be consisted a "nominal variable,"
+    // in the terminology of applied statistics: https://en.wikipedia.org/wiki/Level_of_measurement.
+    // Specifically, it does not matter that group 4 is followed by group 6,
+    // but merely that the expressions of group six are not in group 4.
     //
-    // Brackets also demarcate levels.  
-    // So, each expression has a zero-based level number, 
-    // zero being the top level.  
-    // Thus, in the filter expression, 
+    // Brackets also demarcate levels.
+    // So, each expression has a zero-based level number,
+    // zero being the top level.
+    // Thus, in the filter expression,
     // a eq 1 and (b eq 2 or c eq 3) and (d eq 4 or e eq 5),
     // the clause, a eq 1,
-    // has the level number 0, 
-    // while the bracketed clauses have the level number 1.  
-    // The clause, a eq 1 is one group, 
-    // the first pair of bracketed clauses are in a second group, 
-    // and the second pair of bracketed clauses are in a third group.  
+    // has the level number 0,
+    // while the bracketed clauses have the level number 1.
+    // The clause, a eq 1 is one group,
+    // the first pair of bracketed clauses are in a second group,
+    // and the second pair of bracketed clauses are in a third group.
     internal sealed class FilterExpression : IFilterExpression
     {
         private const char BracketClose = ')';
@@ -396,9 +396,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             return left;
         }
 
-        // Convert the doubly-linked list into a collection of IFilter objects.  
-        // There are three cases that may be encountered as the conversion proceeds through the linked list of clauses.  
-        // Those cases are documented by comments below.  
+        // Convert the doubly-linked list into a collection of IFilter objects.
+        // There are three cases that may be encountered as the conversion proceeds through the linked list of clauses.
+        // Those cases are documented by comments below.
         private IReadOnlyCollection<IFilter> Convert()
         {
             List<IFilter> result = new List<IFilter>();
@@ -409,11 +409,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             {
                 if (this.Level == current.Level)
                 {
-                    // The current clause has the same level number as the initial clause, 
-                    // such as 
+                    // The current clause has the same level number as the initial clause,
+                    // such as
                     // b eq 2
-                    // in the expression 
-                    // a eq 1 and b eq 2.  
+                    // in the expression
+                    // a eq 1 and b eq 2.
                     IFilter filter = current.ToFilter();
                     switch (current.Previous.logicalOperator)
                     {
@@ -432,11 +432,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                 }
                 else if (this.Level > current.Level)
                 {
-                    // The current clause has a lower level number than the initial clause, 
-                    // such as 
+                    // The current clause has a lower level number than the initial clause,
+                    // such as
                     // c eq 3
-                    // in the expression 
-                    // (a eq 1 and b eq 2) or c eq 3.  
+                    // in the expression
+                    // (a eq 1 and b eq 2) or c eq 3.
                     IReadOnlyCollection<IFilter> superiors = current.Convert();
                     switch (current.Previous.logicalOperator)
                     {
@@ -457,40 +457,40 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                 }
                 else
                 {
-                    // The current clause has a higher level number than the initial clause, 
-                    // such as 
+                    // The current clause has a higher level number than the initial clause,
+                    // such as
                     // b eq 2
-                    // in the expression 
+                    // in the expression
                     // a eq 1 and (b eq 2 or c eq 3) and (d eq 4 or e eq 5)
-                    // 
-                    // In this case, the linked list is edited, 
-                    // so that 
-                    // c eq 3 
-                    // has no next link, 
-                    // while the next link of 
-                    // a eq 1 
-                    // refers to 
-                    // d eq 4.  
-                    // Thereby, 
-                    // b eq 2 or c eq 3
-                    // can be converted to filters and combined with the filter composed from 
-                    // a eq 1, 
-                    // after which conversion will continue with the conversion of 
-                    // d eq 4.  
-                    // It is the change in group number between 
-                    // c eq 3
-                    // and 
-                    // d eq 4
-                    // that identifies the end of current group, 
-                    // despite the two clauses having the same level number.  
                     //
-                    // It is because of the editing of the linked list that the public method, 
+                    // In this case, the linked list is edited,
+                    // so that
+                    // c eq 3
+                    // has no next link,
+                    // while the next link of
+                    // a eq 1
+                    // refers to
+                    // d eq 4.
+                    // Thereby,
+                    // b eq 2 or c eq 3
+                    // can be converted to filters and combined with the filter composed from
+                    // a eq 1,
+                    // after which conversion will continue with the conversion of
+                    // d eq 4.
+                    // It is the change in group number between
+                    // c eq 3
+                    // and
+                    // d eq 4
+                    // that identifies the end of current group,
+                    // despite the two clauses having the same level number.
+                    //
+                    // It is because of the editing of the linked list that the public method,
                     // ToFilters(),
-                    // makes a copy of the linked list before initiating conversion; 
-                    // so that, 
+                    // makes a copy of the linked list before initiating conversion;
+                    // so that,
                     // ToFilters()
-                    // can be called on a FilterExpression any number of times, 
-                    // to yield the same output.  
+                    // can be called on a FilterExpression any number of times,
+                    // to yield the same output.
                     FilterExpression subordinate = current;
                     while (current != null && this.Level < current.Level && subordinate.Group == current.Group)
                     {
@@ -683,21 +683,21 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
             return result;
         }
 
-        // This function attempts to parse the comparison value out of the text to the right of a given comparison operator.  
-        // For example, given the expression, 
+        // This function attempts to parse the comparison value out of the text to the right of a given comparison operator.
+        // For example, given the expression,
         // a eq 1 and (b eq 2 or c eq 3) and (d eq 4 or e eq 5),
-        // the text to the right of the first comparison operator will be, 
+        // the text to the right of the first comparison operator will be,
         // " 1 and (b eq 2 or c eq 3) and (d eq 4 or e eq 5),"
-        // and this function should yield "1" as the comparison value.  
+        // and this function should yield "1" as the comparison value.
         //
-        // The function aims, first, to correctly parse out arbitrarily complex comparison values that are correctly formatted. 
-        // Such values may include nested quotes, nested spaces and nested text matching the logical operators, "and" and "or."  
-        // However, for compatibility with prior behavior, the function also accepts values that are not correctly formatted, 
-        // but are within expressions that conform to certain assumptions.  
-        // For example, 
+        // The function aims, first, to correctly parse out arbitrarily complex comparison values that are correctly formatted.
+        // Such values may include nested quotes, nested spaces and nested text matching the logical operators, "and" and "or."
+        // However, for compatibility with prior behavior, the function also accepts values that are not correctly formatted,
+        // but are within expressions that conform to certain assumptions.
+        // For example,
         // a = Hello, World!,
-        // is accepted, 
-        // whereas the expression should be, 
+        // is accepted,
+        // whereas the expression should be,
         // a = "Hello, World!".
         private static bool TryParse(string input, out string comparisonValue)
         {
@@ -725,12 +725,12 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                         continue;
                     }
 
-                    // If incorrectly-escaped, string comparison values were to be rejected, 
-                    // which they should be, strictly, 
-                    // then the following check to verify that the current quote mark is the last character, 
-                    // or followed by a space or closing bracket, 
-                    // would not be necessary.  
-                    // Alas, invalid filters have been accepted in the past.  
+                    // If incorrectly-escaped, string comparison values were to be rejected,
+                    // which they should be, strictly,
+                    // then the following check to verify that the current quote mark is the last character,
+                    // or followed by a space or closing bracket,
+                    // would not be necessary.
+                    // Alas, invalid filters have been accepted in the past.
                     int nextCharacterIndex = index + 1;
                     if
                     (
@@ -752,11 +752,11 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
                 int index = input.IndexOf(FilterExpression.Space, StringComparison.Ordinal);
                 if (index >= 0)
                 {
-                    // If unquoted string comparison values were to be rejected, 
-                    // which they should be, strictly, 
+                    // If unquoted string comparison values were to be rejected,
+                    // which they should be, strictly,
                     // then the following check to verify that the current space is followed by a logical operator
-                    // would not be necessary.  
-                    // Alas, invalid filters have been accepted in the past. 
+                    // would not be necessary.
+                    // Alas, invalid filters have been accepted in the past.
                     if
                     (
                             input.LastIndexOf(FilterExpression.LogicalOperatorAnd.Value, StringComparison.Ordinal) < index

@@ -1,13 +1,13 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
-
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Patch
 {
+    using System.Collections.Generic;
+    using System.Runtime.Serialization;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+
     [DataContract]
     public sealed class PatchRequest2Compliant : PatchRequest2Base<PatchOperation2SingleValued>
     {

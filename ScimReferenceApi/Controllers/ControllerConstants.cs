@@ -1,19 +1,19 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
     public static class ControllerConstants
     {
-        public static readonly string[] AlwaysRetunedAttributes = 
+        public static readonly string[] AlwaysRetunedAttributes =
         {
             AttributeNames.Identifier,
             AttributeNames.Schemas,
             AttributeNames.Active,
-            AttributeNames.Metadata 
+            AttributeNames.Metadata
         };//TODO: Read from schema
-        
+
         public const string AttributeValueIdentifier = "{id}";
 
         public const string DefaultContentType = "application/scim+json";
@@ -26,9 +26,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
         public const string DefaultRouteServiceConfiguration = ControllerConstants.DefaultRouteApi + "serviceConfiguration";
         public const string DefaultRouteUsers = ControllerConstants.DefaultRouteApi + "users";
         public const string DefaultStartIndexString = "1";
-        
+
         public const char DelimiterComma = ',';
-                
+
         public const string ReferenceCodeSchemaFilePath = "./JsonConstants/ReferenceCodeSchema.json";
         public const string ResourceTypeFilePath = "./JsonConstants/resourceTypes.json";
     }

@@ -1,11 +1,11 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
-
-using Microsoft.EntityFrameworkCore;
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
+    using Microsoft.EntityFrameworkCore;
+
     public class ScimContext : DbContext
     {
         protected override void OnModelCreating(ModelBuilder modelBuilder)

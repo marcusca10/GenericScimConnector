@@ -1,21 +1,20 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
-
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.EntityFrameworkCore;
-using System.Text;
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 {
+    using System.Text;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.IdentityModel.Tokens;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -31,7 +30,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
 
             services.AddProviderService();
 
-            services.AddAuthentication(options => 
+            services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -46,10 +45,10 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
                         ValidateAudience = false,
                         ValidateLifetime = false,
                         ValidateIssuerSigningKey = false,
-                        ValidIssuer = "Microsoft.Security.Bearer",
-                        ValidAudience = "Microsoft.Security.Bearer",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Microsoft.Security.Bearer"))
-                    };                
+                        ValidIssuer = KeyController.TokenIssuer,
+                        ValidAudience = KeyController.TokenAudience,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KeyController.TokenIssuer))
+                    };
             });
 
             services.AddControllers().AddNewtonsoftJson();
@@ -58,7 +57,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
         }
 
         public static void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
-        {            
+        {
             app.UseHsts();
             loggerFactory.AddFile("Logs/ScimApp-{Date}.txt");
 
@@ -67,8 +66,9 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { 
-                endpoints.MapDefaultControllerRoute(); 
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
             });
             //app.UseMvc();
         }

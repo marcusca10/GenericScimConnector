@@ -30,18 +30,17 @@ Use this reference code to get started on building a [SCIM](https://docs.microso
 
 |Endpoint|Description|
 |---|---|
-|/User|**Perform CRUD operations on a user resource:** <br/> 1. Create <br/> 2. Update (PUT and PATCH) <br/> 3. Delete <br/> 4. Get <br/> 5. List <br/> 6. Filter <br/> 7. Sort <br/> 8. Patch <br/> 9. Paginate|
-|/Group|**Perform CRUD operations on a group resource:** <br/> 1. Create <br/> 2. Update <br/> 3. Delete <br/> 4. Get <br/> 5. List <br/> 6. Filter <br/> 7. Sort <br/> 8. Patch <br/> 9. Paginate|
+|/User|**Perform CRUD operations on a user resource:** <br/> 1. Create <br/> 2. Update <br/> 3. Delete <br/> 4. Get <br/> 5. List <br/> 6. Filter|
+|/Group|**Perform CRUD operations on a group resource:** <br/> 1. Create <br/> 2. Update <br/> 3. Delete <br/> 4. Get <br/> 5. List <br/> 6. Filter |
 |/Schemas|**Retrieve one or more supported schemas.**<br/>The set of attributes of a resource supported by each service provider can vary. (e.g. Service Provider A supports “name”, “title”, and “emails” while Service Provider B supports “name”, “title”, and “phoneNumbers” for users).|
 |/ResourceTypes|**Retrieve supported resource types.**<br/>The number and types of resources supported by each service provider can vary. (e.g. Service Provider A supports users while Service Provider B supports users and groups).|
 |/ServiceProviderConfig|**Retrieve service provider's SCIM configuration**<br/>The SCIM features supported by each service provider can vary. (e.g. Service Provider A supports Patch operations while Service Provider B supports Patch Operations and Schema Discovery).|
-|/Bulk|**Bulk updates to one or more resources**<br/>Bulk operations allows clients to send a large collection of resource operations in a single request. (e.g. Update memberships for a large group while also creating new users in a single request).<br/><br/>**Currently unavailable in reference code.**|
 
 ## Prerequisites
 
 1. [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) (required)
 2. [.NET core 3.1 or above](https://dotnet.microsoft.com/download/dotnet-core/3.1) (required)
-3. [IIS](https://www.microsoft.com/download/details.aspx?id=48264) (recommended)
+3. [IIS](https://www.microsoft.com/download/details.aspx?id=48264) (required)
 4. HTTP API testing tool such as:
     * [Postman](https://www.getpostman.com/downloads/)
     * [JMeter](https://jmeter.apache.org/download_jmeter.cgi) ([Java](https://www.java.com/en/download/) is required if using Jmeter)

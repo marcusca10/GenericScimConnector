@@ -1,13 +1,13 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Configuration;
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas.Attributes.Configuration;
+
     [Route(ControllerConstants.DefaultRouteServiceConfiguration)]
     [ApiController]
     public class ServiceProviderConfig : ControllerBase

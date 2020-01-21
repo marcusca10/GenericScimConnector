@@ -1,18 +1,18 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
-using System.Globalization;
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+    using Newtonsoft.Json;
+
     [Route(ControllerConstants.DefaultRouteSchemas)]
     [ApiController]
     public class SchemasController : ControllerBase

@@ -1,14 +1,14 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Services;
-using Microsoft.Extensions.Logging;
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Services;
+    using Microsoft.Extensions.Logging;
+
     [Route("api/Me")]
     [ApiController]
     public class MeController : ControllerBase
@@ -51,6 +51,6 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Controllers
         public IActionResult Put()
         {
             return this.StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status501NotImplemented);
-        }        
+        }
     }
 }

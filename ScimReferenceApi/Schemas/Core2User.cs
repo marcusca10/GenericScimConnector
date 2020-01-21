@@ -1,17 +1,17 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
-
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.Serialization;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol;
+    using Microsoft.EntityFrameworkCore;
+    using Newtonsoft.Json.Linq;
+
     [DataContract]
     public class Core2User : Resource
     {
@@ -26,7 +26,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
 
             this.Active = true;
         }
-                
+
         [DataMember(Name = AttributeNames.Active)]
         public virtual bool Active
         {
@@ -152,8 +152,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     if (operation.Name != OperationName.Remove)
                     {
                         value = operation.Value.SingleOrDefault().ToObject<OperationValue>();
-                        bool active = default(bool);
-                        if (value != null && !string.IsNullOrWhiteSpace(value.Value) && bool.TryParse(value.Value, out active))
+                        if (value != null && !string.IsNullOrWhiteSpace(value.Value) && bool.TryParse(value.Value, out bool active))
                         {
                             user.Active = active;
                         }
@@ -320,7 +319,7 @@ namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas
                     return item["value"].ToString();
             }
         }
-        
+
         private static void PatchAddresses(this Core2User user, PatchOperation operation)
         {
             if (null == operation)

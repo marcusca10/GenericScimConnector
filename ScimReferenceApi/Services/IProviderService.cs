@@ -1,23 +1,28 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Services
 {
-    public interface IProviderService<T>
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+    using Newtonsoft.Json.Linq;
+
+    public interface IProviderService<T> where T : Resource
     {
-        Task<ListResponse<Resource>> Query(string query, IEnumerable<string> requested, IEnumerable<string> excluded);
+        Task Add(Resource resource);
+
+        Task Delete(Resource resource);
 
         Task<Resource> GetById(string id);
-        Task<Resource> GetByName(string name);
-        Task Add(Resource resource);
-        Task Replace(Resource old, Resource newresorce);
-        Task Delete(Resource resource);
-        void Update(string id, JObject body);
 
+        Task<Resource> GetByName(string name);
+
+        Task<ListResponse<Resource>> Query(string query, IEnumerable<string> requested, IEnumerable<string> excluded);
+
+        Task Replace(Resource old, Resource newresorce);
+
+        void Update(string id, JObject body);
     }
 }

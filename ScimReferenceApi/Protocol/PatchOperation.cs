@@ -1,16 +1,16 @@
-﻿//------------------------------------------------------------
-// Copyright (c) 2020 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------
-
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Runtime.Serialization;
-using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
-using Newtonsoft.Json.Linq;
+﻿//----------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//----------------------------------------------------------------
 
 namespace Microsoft.AzureAD.Provisioning.ScimReference.Api.Protocol
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Runtime.Serialization;
+    using Microsoft.AzureAD.Provisioning.ScimReference.Api.Schemas;
+    using Newtonsoft.Json.Linq;
+
     [DataContract]
     public sealed class PatchOperation : PatchOperationBase
     {
