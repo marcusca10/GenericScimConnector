@@ -197,6 +197,11 @@ This reference code was developed as a .Net core MVC web API for SCIM provisioni
     * An Attributes folder which contains the class definitions for complex attributes of Users and Groups such as addresses.
 2. The **Controllers** folder contains:
     * The controllers for the various SCIM endpoints. Resource controllers include HTTP verbs to perform CRUD operations on the resource (GET, POST, PUT, PATCH, DELETE). 
+    * Controllers rely on services to perform the actions.
+3.	The **Services** folder contains logic for actions relating to the way resources are queried and updated.
+    * The service methods are exposed via the IProviderService interface.
+    * The reference code has services to return users and groups.
+    * The services are based on Entity Framework and DbContext is defined by the class ScimContext.
 3. The **Protocol** folder contains logic for actions relating to the way resources are returned according to the SCIM RFC such as:
     * Returning multiple resources as a list.
     * Returning only specific resources based on a filter.
